@@ -1,0 +1,13 @@
+https://en.cppreference.com/w/cpp/iterator/iterator_traits
+"The template can be specialized for user-defined iterators so that the information about the iterator can be retrieved even if the type does not provide the usual typedefs."
+
+Je sais pas si c'est à faire mais surement ?
+ATTENTION :
+"If Iter does not have pointer, but has all other four member types, then the member types are declared as follows:"
+
+
+"Otherwise, if Iter satisfies the exposition-only concept __LegacyInputIterator, the member types are declared as follows:"
+
+Membres types :
+template <Class Iter>
+Doit etre inclu sous forme Iter::type ?
