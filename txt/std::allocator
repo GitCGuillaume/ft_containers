@@ -14,6 +14,11 @@ https://en.cppreference.com/w/cpp/memory/allocator
 std::allocator:
 The std::allocator class template is the default Allocator used by all standard library containers if no user-specified allocator is provided. The default allocator is stateless, that is, all instances of the given allocator are interchangeable, compare equal and can deallocate memory allocated by any other instance of the same allocator type. 
 
+https://www.geeksforgeeks.org/stdallocator-in-cpp-with-examples/
+Allocators are objects responsible for encapsulating memory management.
+std::allocator is used when you want to separate allocation and do construction in two steps.
+It is also used when separate destruction and deallocation is done in two steps.
+
 std::allocator est un template, initialisable comme ca :
 	std::allocator<T> alloc;
 Lire les fonctions membres.
