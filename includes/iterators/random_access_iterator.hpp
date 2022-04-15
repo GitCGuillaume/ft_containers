@@ -65,11 +65,44 @@ namespace ft
                 ptr++;
                 return (tmp);
             }
-            It operator--(It)
+
+            reference operator+=(reference const rhs)
+            {
+                this->ptr = this->ptr + this->ptr;
+            }
+            reference operator-=(reference const rhs)
+            {
+                this->ptr = this->ptr - this->ptr;
+            }
+            It  operator+(difference_type n)
+            {
+                return (this->ptr + n);
+            }
+            //Peut être pas bersoin de la partie dif +
+            /*difference_type  operator+(reference const rhs)
+            {
+                return (this->ptr + rhs.ptr);
+            }*/
+             /* https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator
+            b - a */
+            It  operator-(difference_type n)
+            {
+                return (this->ptr - n);
+            }
+            difference_type operator-(reference const rhs)
+            {
+                    return (this->ptr - rhs.ptr);
+            }
+
+            const reference operator--(It)
             {
                 RandomAccessIterator tmp = *this;
                 ptr--;
                 return (tmp);
+            }
+            reference   operator[](std::size_t n)
+            {
+                return (*(this->ptr + n));
             }
             /* https://en.cppreference.com/w/cpp/named_req/EqualityComparable */
             bool    operator==(reference const rhs)
