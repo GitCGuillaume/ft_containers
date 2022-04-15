@@ -1,19 +1,23 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
+#include "../iterators/RandomAccessIterator.hpp"
+
 namespace ft
 {
 	template<class T, class Allocator = std::allocator<T>> class	vector
 	{
 		public:
-			T		value_type;
-			Allocator	allocator_type;
-			allocator_type::reference	reference;
-			allocator_type::const_reference	const_reference;
-			Allocator::pointer	pointer;
-			Alocator::const_pointer	const_pointer;
-			std::ptrdiff_t	diffrence_type;
-			std::size_t	size_type;
+			typedef T		value_type;
+			typedef Allocator	allocator_type;
+			typedef typename Allocator::reference	reference;
+			typedef typename Allocator::const_reference	const_reference;
+			typedef typename Allocator::pointer	pointer;
+			typedef typename Allocator::const_pointer	const_pointer;
+			typedef ft::RandomAccessIterator<value_type>	iterator;
+			typedef ft::RandomAccessIterator<const value_type>	const_iterator;
+			typedef std::ptrdiff_t	difference_type;
+			typedef std::size_t	size_type;
 	};
 }
 
