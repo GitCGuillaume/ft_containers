@@ -6,7 +6,7 @@
 namespace ft
 {
 	template <class Iter>
-	class	iterator_traits
+	struct	iterator_traits
 	{
 		typedef typename Iter::difference_type	difference_type;
 		typedef typename Iter::value_type	value_type;
@@ -16,7 +16,7 @@ namespace ft
 	};
 
 	template <typename T>
-	class	iterator_traits<T*>
+	struct	iterator_traits<T*>
 	{
 		typedef typename std::ptrdiff_t	difference_type;
 		typedef T		value_type;
@@ -26,7 +26,7 @@ namespace ft
 	};
 
 	template <typename T>
-	class	iterator_traits<const T*>
+	struct	iterator_traits<const T*>
 	{
 		typedef typename std::ptrdiff_t	difference_type;
 		typedef T		value_type;

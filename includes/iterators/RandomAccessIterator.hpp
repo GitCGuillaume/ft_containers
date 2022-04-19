@@ -14,16 +14,13 @@ namespace ft
             value_type, the type denoted by std::iterator_traits<It>::value_type
             [...]
         */
-        private:
-            typedef typename ft::iterator_traits<It>::value_type    value_type;
-            typedef typename ft::iterator_traits<It>::difference_type   difference_type;
-            typedef typename ft::iterator_traits<It>::reference     reference;
-            typedef typename ft::iterator_traits<It>::pointer       pointer;
-            typedef typename ft::iterator_traits<It>::iterator_category iterator_category;
-            pointer ptr;
-
         public:
-            RandomAccessIterator();
+            typedef It		value_type;
+            typedef typename std::ptrdiff_t	difference_type;
+            typedef It&		reference;
+            typedef It*		pointer;
+            typedef std::random_access_iterator_tag	iterator_category;
+            RandomAccessIterator(){};
             RandomAccessIterator(RandomAccessIterator const & rhs)
             {
                 if (this != &rhs)
@@ -38,7 +35,7 @@ namespace ft
                 }
                 return (*this);
             };
-            ~RandomAccessIterator();
+            ~RandomAccessIterator(){};
             pointer operator*()
             {
                 return (*this->ptr);
@@ -133,6 +130,8 @@ namespace ft
             {
                  return ((this->ptr <= rhs.ptr) ? true : false);
             }
+        private:
+            pointer ptr;
     };
 }
 #endif
