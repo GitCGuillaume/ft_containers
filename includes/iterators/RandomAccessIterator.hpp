@@ -36,11 +36,11 @@ namespace ft
                 return (*this);
             };
             ~RandomAccessIterator(){};
-            reference operator*()
+            reference operator*() const
             {
                 return (*this->_ptr);
             }
-            pointer operator->()
+            pointer operator->() const
             {
                 return (this->_ptr);
             }
@@ -71,22 +71,22 @@ namespace ft
             {
                 this->_ptr = this->_ptr - this->_ptr;
             }
-            It  operator+(difference_type n)
+            It  operator+(difference_type n) const
             {
                 return (this->_ptr + n);
             }
             //Peut être pas bersoin de la partie dif +
-            /*difference_type  operator+(reference const rhs)
+            /*difference_type  operator+(reference const rhs) const
             {
                 return (this->_ptr + rhs._ptr);
             }*/
              /* https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator
             b - a */
-            It  operator-(difference_type n)
+            It  operator-(difference_type n) const
             {
                 return (this->_ptr - n);
             }
-            difference_type operator-(reference const rhs)
+            difference_type operator-(reference const rhs) const
             {
                     return (this->_ptr - rhs._ptr);
             }
@@ -97,7 +97,7 @@ namespace ft
                 _ptr--;
                 return (tmp);
             }
-            reference   operator[](std::size_t n)
+            reference   operator[](std::size_t n) const
             {
                 return (*(this->_ptr + n));
             }

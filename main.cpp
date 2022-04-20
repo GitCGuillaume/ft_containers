@@ -5,6 +5,9 @@
 #include "includes/iterators/reverse_iterator.hpp"
 #include <vector>
 
+/*
+	std::vector<int>	lst = {1,2} == C++11
+*/
 int	main(void)
 {
 	std::vector<int>	lst;
@@ -19,9 +22,13 @@ int	main(void)
 	for (std::vector<int>::reverse_iterator	it1 = lst.rbegin(); it1 != lst.rend(); it1++)
 	{
 		std::cout << *it1 << std::endl;
-		std::cout << "base : " << *it1.base() << std::endl;
+		//std::cout << "base : " << *it1.base() << std::endl;
 	}
 	ft::vector<int>::iterator	it2;
 	ft::vector<int>::reverse_iterator	it3;
+	ft::vector<int>	test;
+	ft::vector<int>	test2;
+	test = test2;
+	
 	return (0);
 }
