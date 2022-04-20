@@ -35,12 +35,109 @@ namespace ft
             /* essayer de tester out of range */
             iterator_type   base() const
             {
-                return ();
+                return (&*(this->_current + 1));
             }
+            reference  operator*() const
+            {
+                return (this->_current);
+            }
+            pointer  operator->() const
+            {
+                return (this->_current);
+            }
+            reference   operator[](std::size_t n) const
+            {
+                return (*(this->base()[-n - 1]));
+            }
+            /* PRE */
+            reverse_iterator&   operator++()
+            {
+                this->_current = this->_current - 1;
+                return (*this);
+            }
+            reverse_iterator&   operator--()
+            {
+                this->_current = this->_current + 1;
+                return (*this);
+            }
+            /* POST */
+            reverse_iterator    operator++(int)
+            {
+                reverse_iterator    tmp = *this;
 
-        private:
-            
+                this->_current = this->_current - 1;
+                return (tmp);
+            }
+            reverse_iterator    operator--(int)
+            {
+                reverse_iterator    tmp = *this;
+
+                this->_current = this->_current + 1;
+                return (tmp);
+            }
+            reverse_iterator    operator+(difference_type n) const
+            {
+                return (this->_current - n);
+            }
+            reverse_iterator    operator-(difference_type n) const
+            {
+                return (this->_current + n);
+            }
+            reverse_iterator&    operator+=(difference_type n)
+            {
+                return (this->_current - n);
+            }
+            reverse_iterator&   operator-=(difference_type n)
+            {
+                return (this->_current + n);
+            }
+        protected:
+            pointer _current;
     };
+    template<class Iterator1, class Iterator2>
+    bool    operator==(const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
+    {
+        if (lhs.base() == rhs.base())
+            return true;
+        return (false);
+    }
+    template<class Iterator1, class Iterator2>
+    bool    operator!=(const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
+    {
+        if (lhs.base() != rhs.base())
+            return true;
+        return (false);
+    }
+    template<class Iterator1, class Iterator2>
+    bool    operator<(const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
+    {
+        return ((lhs.base() < rhs.base()) ? true : false);
+    }
+    template<class Iterator1, class Iterator2>
+    bool    operator>(const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
+    {
+        return (rhs < lhs);
+    }
+    template<class Iterator1, class Iterator2>
+    bool    operator<=(const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
+    {
+        return ((lhs.base() <= rhs.base()) ? true : false);
+    }
+    template<class Iterator1, class Iterator2>
+    bool    operator>=(const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
+    {
+        return (rhs <= lhs);
+    }
+    template<class Iter>
+    reverse_iterator<Iter>  operator+(typename reverse_iterator<Iter>::difference_type n, const reverse_iterator<Iter>& it)
+    {
+        return (it.base() - n);
+    }
+    template<class Iter>
+    reverse_iterator<Iter>  operator-(typename reverse_iterator<Iter>::difference_type n, const reverse_iterator<Iter>& it)
+    {
+        return (it.base() + n);
+    }
 }
 
 #endif

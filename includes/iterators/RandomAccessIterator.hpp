@@ -31,107 +31,107 @@ namespace ft
             {
                 if (this != &rhs)
                 {
-                    *this->ptr = rhs->ptr;
+                    *this->_ptr = rhs->_ptr;
                 }
                 return (*this);
             };
             ~RandomAccessIterator(){};
-            pointer operator*()
+            reference operator*()
             {
-                return (*this->ptr);
+                return (*this->_ptr);
             }
             pointer operator->()
             {
-                return (this->ptr);
+                return (this->_ptr);
             }
             /* PREFIX */
             reference operator++()
             {
-                ptr++;
+                _ptr++;
                 return (this);
             }
             reference operator--()
             {
-                ptr--;
+                _ptr--;
                 return (this);
             }
             /* POSTFIX*/
             It operator++(It)
             {
                 RandomAccessIterator tmp = *this;
-                ptr++;
+                _ptr++;
                 return (tmp);
             }
 
             reference operator+=(reference const rhs)
             {
-                this->ptr = this->ptr + this->ptr;
+                this->_ptr = this->_ptr + this->_ptr;
             }
             reference operator-=(reference const rhs)
             {
-                this->ptr = this->ptr - this->ptr;
+                this->_ptr = this->_ptr - this->_ptr;
             }
             It  operator+(difference_type n)
             {
-                return (this->ptr + n);
+                return (this->_ptr + n);
             }
             //Peut être pas bersoin de la partie dif +
             /*difference_type  operator+(reference const rhs)
             {
-                return (this->ptr + rhs.ptr);
+                return (this->_ptr + rhs._ptr);
             }*/
              /* https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator
             b - a */
             It  operator-(difference_type n)
             {
-                return (this->ptr - n);
+                return (this->_ptr - n);
             }
             difference_type operator-(reference const rhs)
             {
-                    return (this->ptr - rhs.ptr);
+                    return (this->_ptr - rhs._ptr);
             }
 
             const reference operator--(It)
             {
                 RandomAccessIterator tmp = *this;
-                ptr--;
+                _ptr--;
                 return (tmp);
             }
             reference   operator[](std::size_t n)
             {
-                return (*(this->ptr + n));
+                return (*(this->_ptr + n));
             }
             /* https://en.cppreference.com/w/cpp/named_req/EqualityComparable */
             bool    operator==(reference const rhs)
             {
-                if (this->ptr == rhs.ptr)
+                if (this->_ptr == rhs._ptr)
                     return (true);
                 return (false);
             }
             bool    operator!=(reference const rhs)
             {
-                if (this->ptr != rhs.ptr)
+                if (this->_ptr != rhs._ptr)
                     return (true);
                 return (false);
             }
             bool    operator>(reference const rhs)
             {
-                return ((this->ptr > rhs.ptr) ? true : false);
+                return ((this->_ptr > rhs._ptr) ? true : false);
             }
             bool    operator<(reference const rhs)
             {
-                return ((this->ptr < rhs.ptr) ? true : false);
+                return ((this->_ptr < rhs._ptr) ? true : false);
             }
             bool    operator>=(reference const rhs)
             {
-                return ((this->ptr >= rhs.ptr) ? true : false);
+                return ((this->_ptr >= rhs._ptr) ? true : false);
             }
             bool    operator<=(reference const rhs)
             {
-                 return ((this->ptr <= rhs.ptr) ? true : false);
+                 return ((this->_ptr <= rhs._ptr) ? true : false);
             }
         private:
-            pointer ptr;
+            pointer _ptr;
     };
 }
 #endif
