@@ -97,21 +97,21 @@ namespace ft
     template<class Iterator1, class Iterator2>
     bool    operator==(const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
     {
-        if (lhs._ptr() == rhs._ptr())
+        if (lhs.base() == rhs.base())
             return true;
         return (false);
     }
     template<class Iterator1, class Iterator2>
     bool    operator!=(const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
     {
-        if (lhs._ptr() != rhs._ptr())
+        if (lhs.base() != rhs.base())
             return true;
         return (false);
     }
     template<class Iterator1, class Iterator2>
     bool    operator<(const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
     {
-        return ((lhs._ptr() < rhs._ptr()) ? true : false);
+        return ((lhs.base() < rhs.base()) ? true : false);
     }
     template<class Iterator1, class Iterator2>
     bool    operator>(const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
@@ -121,7 +121,7 @@ namespace ft
     template<class Iterator1, class Iterator2>
     bool    operator<=(const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
     {
-        return ((lhs._ptr() <= rhs._ptr()) ? true : false);
+        return ((lhs.base() <= rhs.base()) ? true : false);
     }
     template<class Iterator1, class Iterator2>
     bool    operator>=(const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
@@ -131,12 +131,12 @@ namespace ft
     template<class Iter>
     reverse_iterator<Iter>  operator+(typename reverse_iterator<Iter>::difference_type n, const reverse_iterator<Iter>& it)
     {
-        return (it._ptr() - n);
+        return (it.base() - n);
     }
     template<class Iter>
     reverse_iterator<Iter>  operator-(typename reverse_iterator<Iter>::difference_type n, const reverse_iterator<Iter>& it)
     {
-        return (it._ptr() + n);
+        return (it.base() + n);
     }
 }
 

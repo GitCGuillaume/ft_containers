@@ -23,11 +23,8 @@ namespace ft
 			typedef std::ptrdiff_t	difference_type;
 			typedef std::size_t	size_type;
 			/* MEMBERS FUNCTIONS */
-			vector(){}
-			explicit	vector(const Allocator& alloc)
-			{
-				_allocator = alloc;
-			}
+			vector() : _capacity_allocator(0), _size(0){}
+			explicit	vector(const Allocator& alloc) : _allocator(alloc){}
 			explicit	vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator())
 			{
 				//
@@ -45,7 +42,15 @@ namespace ft
 				//
 				return ;
 			}
-			virtual	~vector(){}
+			virtual	~vector()
+			{
+				if (_capacity_allocator > 0)
+				{
+					for (size_type i = 0; i < _size; i++)
+						_allocator.destroy(_vec + i);
+					_allocator.deallocate(_vec, _capacity_allocator);
+				}
+			}
 			vector&	operator=(const vector& other)
 			{
 				if (this != &other)
@@ -54,22 +59,67 @@ namespace ft
 				}
 				return (*this);
 			}
+			/* Oublie pas de mettre les fonctions dans le bon ordre */
 			void	assign(size_type count, const T& value)
 			{
-				_allocator.deallocate();
-				for (size_t i = 0; i < count; i++)
+				//TRY CATCH ?
+				size_type i = 0;
+
+				for (; i < _size; i++)
 				{
-					
+					_allocator.destroy(_vec + i);
 				}
+				if (this->capacity() <= count)
+				{
+					if (this->capacity() > 0)
+						_allocator.deallocate(_vec, _capacity_allocator);
+					_capacity_allocator = count;
+					_vec = _allocator.allocate(_capacity_allocator);
+				}
+				for (i = 0; i < count; i++)
+				{
+					_allocator.construct(_vec + i, value);
+				}
+				_size = count;
 			}
 			template<class InputIt>
 			void	assign(InputIt first, InputIt last)
 			{
 
 			}
+			iterator	begin()
+			{
+				return (&this->_vec[0]);
+			}
+			const_iterator	begin() const
+			{
+
+			}
+			iterator	end()
+			{
+				return (&this->_vec[_size]);
+			}
+			const_iterator	end() const
+			{
+
+			}
+			size_type	capacity() const
+			{
+				return (_capacity_allocator);
+			}
 		private:
+			pointer			_vec;
 			allocator_type	_allocator;
+			size_type		_capacity_allocator;
+			size_type		_size;
 	};
+	template<class T, class Alloc>
+	bool	operator!=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+	{
+		if (lhs->_size != rhs->_size)
+			return (true);
+		return (false);
+	}
 }
 
 #endif

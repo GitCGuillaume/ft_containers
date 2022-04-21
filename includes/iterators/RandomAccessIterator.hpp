@@ -17,10 +17,14 @@ namespace ft
         public:
             typedef It		value_type;
             typedef typename std::ptrdiff_t	difference_type;
-            typedef It&		reference;
-            typedef It*		pointer;
+            typedef value_type&		reference;
+            typedef value_type*		pointer;
             typedef std::random_access_iterator_tag	iterator_category;
             RandomAccessIterator(){};
+            RandomAccessIterator(pointer ptr)
+            {
+                this->_ptr = ptr;
+            }
             RandomAccessIterator(RandomAccessIterator const & rhs)
             {
                 if (this != &rhs)
@@ -31,11 +35,11 @@ namespace ft
             {
                 if (this != &rhs)
                 {
-                    *this->_ptr = rhs->_ptr;
+                    this->_ptr = rhs._ptr;
                 }
                 return (*this);
             };
-            ~RandomAccessIterator(){};
+            virtual ~RandomAccessIterator(){};
             reference operator*() const
             {
                 return (*this->_ptr);
@@ -56,13 +60,12 @@ namespace ft
                 return (this);
             }
             /* POSTFIX*/
-            It operator++(It)
+            RandomAccessIterator operator++(It)
             {
                 RandomAccessIterator tmp = *this;
                 _ptr++;
                 return (tmp);
             }
-
             reference operator+=(reference const rhs)
             {
                 this->_ptr = this->_ptr + this->_ptr;
@@ -102,36 +105,45 @@ namespace ft
                 return (*(this->_ptr + n));
             }
             /* https://en.cppreference.com/w/cpp/named_req/EqualityComparable */
-            bool    operator==(reference const rhs)
-            {
-                if (this->_ptr == rhs._ptr)
-                    return (true);
-                return (false);
-            }
-            bool    operator!=(reference const rhs)
-            {
-                if (this->_ptr != rhs._ptr)
-                    return (true);
-                return (false);
-            }
-            bool    operator>(reference const rhs)
-            {
-                return ((this->_ptr > rhs._ptr) ? true : false);
-            }
-            bool    operator<(reference const rhs)
-            {
-                return ((this->_ptr < rhs._ptr) ? true : false);
-            }
-            bool    operator>=(reference const rhs)
-            {
-                return ((this->_ptr >= rhs._ptr) ? true : false);
-            }
-            bool    operator<=(reference const rhs)
-            {
-                 return ((this->_ptr <= rhs._ptr) ? true : false);
-            }
         private:
             pointer _ptr;
     };
+    template<class Iterator1, class Iterator2>
+    bool    operator!=(const ft::RandomAccessIterator<Iterator1>& lhs, const ft::RandomAccessIterator<Iterator2>& rhs)
+    {
+        if (*lhs != *rhs)
+            return true;
+        return (false);
+    }
+    template<class Iterator1, class Iterator2>
+    bool    operator<(const ft::RandomAccessIterator<Iterator1>& lhs, const ft::RandomAccessIterator<Iterator2>& rhs)
+    {
+        return ((*lhs < *rhs) ? true : false);
+    }
+    template<class Iterator1, class Iterator2>
+    bool    operator>(const ft::RandomAccessIterator<Iterator1>& lhs, const ft::RandomAccessIterator<Iterator2>& rhs)
+    {
+        return (rhs < lhs);
+    }
+    template<class Iterator1, class Iterator2>
+    bool    operator<=(const ft::RandomAccessIterator<Iterator1>& lhs, const ft::RandomAccessIterator<Iterator2>& rhs)
+    {
+        return ((*lhs <= *rhs) ? true : false);
+    }
+    template<class Iterator1, class Iterator2>
+    bool    operator>=(const ft::RandomAccessIterator<Iterator1>& lhs, const ft::RandomAccessIterator<Iterator2>& rhs)
+    {
+        return (rhs <= lhs);
+    }
+    template<class Iter>
+    RandomAccessIterator<Iter>  operator+(typename RandomAccessIterator<Iter>::difference_type n, const RandomAccessIterator<Iter>& it)
+    {
+        return *(it - n);
+    }
+    template<class Iter>
+    RandomAccessIterator<Iter>  operator-(typename RandomAccessIterator<Iter>::difference_type n, const RandomAccessIterator<Iter>& it)
+    {
+        return *(it + n);
+    }
 }
 #endif
