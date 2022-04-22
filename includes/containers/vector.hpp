@@ -3,6 +3,7 @@
 
 #include "../iterators/RandomAccessIterator.hpp"
 #include "../iterators/reverse_iterator.hpp"
+#include <iterator>
 
 namespace ft
 {
@@ -66,9 +67,7 @@ namespace ft
 				size_type i = 0;
 
 				for (; i < _size; i++)
-				{
 					_allocator.destroy(_vec + i);
-				}
 				if (this->capacity() <= count)
 				{
 					if (this->capacity() > 0)
@@ -77,19 +76,34 @@ namespace ft
 					_vec = _allocator.allocate(_capacity_allocator);
 				}
 				for (i = 0; i < count; i++)
-				{
 					_allocator.construct(_vec + i, value);
-				}
 				_size = count;
 			}
 			template<class InputIt>
 			void	assign(InputIt first, InputIt last)
 			{
+				size_type	i = 0;
+				size_type	count = 0;
 
+				count = std::distance(first, last);
+				for (; i < _size; i++)
+					_allocator.destroy(_vec + i);
+				if (this->capacity() <= count)
+				{
+					if (this->capacity() > 0)
+						_allocator.deallocate(_vec, _capacity_allocator);
+					_capacity_allocator = count;
+					_vec = _allocator.allocate(_capacity_allocator);
+				}
+				while (first != last)
+				{
+					_allocator.construct(_vec + i);
+					first++;
+				}
 			}
 			iterator	begin()
 			{
-				return (&this->_vec[0]);
+				return (this->_vec);
 			}
 			const_iterator	begin() const
 			{
@@ -97,7 +111,9 @@ namespace ft
 			}
 			iterator	end()
 			{
-				return (&this->_vec[_size]);
+				if (_size == 0)
+					return (this->_vec);
+				return (this->_vec + _size);
 			}
 			const_iterator	end() const
 			{

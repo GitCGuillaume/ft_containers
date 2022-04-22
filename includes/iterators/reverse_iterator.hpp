@@ -134,9 +134,9 @@ namespace ft
         return (it.base() - n);
     }
     template<class Iter>
-    reverse_iterator<Iter>  operator-(typename reverse_iterator<Iter>::difference_type n, const reverse_iterator<Iter>& it)
+    typename    reverse_iterator<Iter>::difference_type operator-(const reverse_iterator<Iter>& lhs, const reverse_iterator<Iter>& rhs)
     {
-        return (it.base() + n);
+        return (rhs.base() - lhs.base());
     }
 }
 
