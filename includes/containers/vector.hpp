@@ -83,9 +83,9 @@ namespace ft
 			void	assign(InputIt first, InputIt last)
 			{
 				size_type	i = 0;
-				size_type	count = 0;
+				difference_type	count = 0;
 
-				count = std::distance(first, last);
+				count = std::distance(last, first);
 				for (; i < _size; i++)
 					_allocator.destroy(_vec + i);
 				if (this->capacity() <= count)
@@ -95,11 +95,13 @@ namespace ft
 					_capacity_allocator = count;
 					_vec = _allocator.allocate(_capacity_allocator);
 				}
+				i = 0;
 				while (first != last)
 				{
-					_allocator.construct(_vec + i);
+					_allocator.construct(_vec + (i++), *first);
 					first++;
 				}
+				_size = count;
 			}
 			iterator	begin()
 			{
