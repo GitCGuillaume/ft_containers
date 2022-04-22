@@ -4,6 +4,7 @@
 #include "../iterators/RandomAccessIterator.hpp"
 #include "../iterators/reverse_iterator.hpp"
 #include <iterator>
+#include <exception>
 
 namespace ft
 {
@@ -101,7 +102,18 @@ namespace ft
 					_allocator.construct(_vec + (i++), *first);
 					first++;
 				}
-				_size = count;
+				_size = static_cast<size_type>(count);
+			}
+			allocator_type	get_allocator() const
+			{
+				return (_allocator);
+			}
+			/* ELEMENTS ACCESS */
+			reference	at(size_type pos)
+			{
+				if (!(pos < this->size()))
+					throw std::out_of_range();
+				return (&_vec[pos]);
 			}
 			iterator	begin()
 			{
@@ -121,6 +133,11 @@ namespace ft
 			{
 
 			}
+			size_type	size() const
+			{
+				return (_size);
+			}
+
 			size_type	capacity() const
 			{
 				return (_capacity_allocator);
@@ -134,7 +151,7 @@ namespace ft
 	template<class T, class Alloc>
 	bool	operator!=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
-		if (lhs->_size != rhs->_size)
+		if (lhs/*->_size*/ != rhs/*->_size*/)
 			return (true);
 		return (false);
 	}
