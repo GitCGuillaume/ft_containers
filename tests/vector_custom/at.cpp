@@ -4,7 +4,7 @@ void    at_custom_ok()
 {
     ft::vector<int>vec;
 
-    vec.assign(2, 1);
+  //  vec.assign(2, 1);
     //std::cout << "at(1) " << vec.at(1) << std::endl;
     //std::cout << "at(0) " << vec.at(0) << std::endl;
     

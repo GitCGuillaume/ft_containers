@@ -9,7 +9,11 @@
 #include "tests/vector/iterator_forward.hpp"
 #include "tests/vector/iterator_backward.hpp"
 #include "tests/vector/at.hpp"
+#include "includes/library_headers/is_integral.hpp"
 
+#include <iostream>
+#include <type_traits>
+#include <stdint.h>
 int	main(void)
 {
 	test_std_assign1_forward();
@@ -20,7 +24,8 @@ int	main(void)
 	test_ft_assign1_backward();
 	test_std_assign_it_backward();
 	test_ft_assign_it_backward();
-	at_ok();
-	at_out_of_range();
+	//at_ok();
+	//at_out_of_range();
+	std::cout << ft::is_integral<unsigned long long int>::value;
 	return (0);
 }
