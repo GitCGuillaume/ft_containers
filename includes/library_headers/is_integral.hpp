@@ -19,10 +19,11 @@ namespace ft
     struct  is_integral<bool> : public true_type{};
     template<>
     struct  is_integral<char> : public true_type{};
-    template<>
-    struct  is_integral<char16_t> : public true_type{};
-    template<>
-    struct  is_integral<char32_t> : public true_type{};
+    /* Voir si moyen d'implémenter avec c++98 */
+    //template<>
+    //struct  is_integral<char16_t> : public true_type{};
+    //template<>
+    //struct  is_integral<char32_t> : public true_type{};
     template<>
     struct  is_integral<wchar_t> : public true_type{};
     template<>

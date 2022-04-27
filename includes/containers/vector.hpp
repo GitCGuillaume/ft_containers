@@ -3,8 +3,11 @@
 
 #include "../iterators/RandomAccessIterator.hpp"
 #include "../iterators/reverse_iterator.hpp"
+#include "../library_headers/is_integral.hpp"
+#include "../library_headers/enable_if.hpp"
 #include <iterator>
 #include <exception>
+#include <sstream>
 
 namespace ft
 {
@@ -34,14 +37,18 @@ namespace ft
 			}
 			template<class InputIt>
 			vector(InputIt first, InputIt last,
-				const Allocator& alloc = Allocator())
+				const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 			{
 				//
 				return ;
 			}
 			vector(const vector& other)
 			{
-				//
+				_vec = _allocator.allocate(other.capacity());
+				_capacity_allocator = other.capacity();
+				_size = other.size();
+				for (size_type i = 0; i < other.size(); i++)
+					_allocator.construct(_vec + i, other.at(i));
 				return ;
 			}
 			virtual	~vector()
@@ -80,8 +87,10 @@ namespace ft
 					_allocator.construct(_vec + i, value);
 				_size = count;
 			}
+			/* ::type* = 0 () */
 			template<class InputIt>
-			void	assign(InputIt first, InputIt last)
+			void	assign(InputIt first, InputIt last,
+				typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 			{
 				size_type	i = 0;
 				difference_type	count = 0;
@@ -111,9 +120,72 @@ namespace ft
 			/* ELEMENTS ACCESS */
 			reference	at(size_type pos)
 			{
+				std::stringstream	oss;
+				std::string err_msg;
+				std::string	concat_msg;
+
 				if (!(pos < this->size()))
-					throw std::out_of_range();
-				return (&_vec[pos]);
+				{
+					err_msg = "vector::_M_check_range: __n (which is ";
+					oss << pos;
+					std::getline(oss, concat_msg);
+					err_msg += concat_msg + ") >= this->size() (which is ";
+					concat_msg.clear();
+					oss.clear();
+					oss << this->size();
+					std::getline(oss, concat_msg);
+					err_msg += concat_msg + ")";
+					oss.clear();
+					throw std::out_of_range(err_msg);
+				}
+				return (_vec[pos]);
+			}
+			/* ELEMENTS ACCESS */
+			const_reference	at(size_type pos) const
+			{
+				std::stringstream	oss;
+				std::string err_msg;
+				std::string	concat_msg;
+
+				if (!(pos < this->size()))
+				{
+					err_msg = "vector::_M_check_range: __n (which is ";
+					oss << pos;
+					std::getline(oss, concat_msg);
+					err_msg += concat_msg + ") >= this->size() (which is ";
+					concat_msg.clear();
+					oss.clear();
+					oss << this->size();
+					std::getline(oss, concat_msg);
+					err_msg += concat_msg + ")";
+					oss.clear();
+					throw std::out_of_range(err_msg);
+				}
+				return (_vec[pos]);
+			}
+			reference	operator[](size_type pos)
+			{
+				return (_vec[pos]);
+			}
+			const_reference	operator[](size_type pos) const
+			{
+				return (_vec[pos]);
+			}
+			reference	front()
+			{
+				return (_vec[0]);
+			}
+			const_reference	front() const
+			{
+				return (_vec[0]);
+			}
+			reference	back()
+			{
+				return (_vec[_size - 1]);
+			}
+			const_reference	back() const
+			{
+				return (_vec[_size - 1]);
 			}
 			iterator	begin()
 			{
@@ -121,7 +193,7 @@ namespace ft
 			}
 			const_iterator	begin() const
 			{
-
+				return (this->_vec);
 			}
 			iterator	end()
 			{
@@ -131,7 +203,9 @@ namespace ft
 			}
 			const_iterator	end() const
 			{
-
+				if (_size == 0)
+					return (this->_vec);
+				return (this->_vec + _size);
 			}
 			size_type	size() const
 			{

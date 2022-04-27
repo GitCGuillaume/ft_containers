@@ -5,6 +5,7 @@
 #include <iostream>
 
 void    at_custom_ok();
+void    at_custom_const_ok();
 void    at_custom_out_of_range();
 
 #endif

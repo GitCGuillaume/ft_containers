@@ -9,10 +9,13 @@
 #include "tests/vector/iterator_forward.hpp"
 #include "tests/vector/iterator_backward.hpp"
 #include "tests/vector/at.hpp"
+#include "tests/vector_custom/at.hpp"
 #include "includes/library_headers/is_integral.hpp"
-
+#include "includes/library_headers/enable_if.hpp"
+#include "tests/vector/front_back.hpp"
+#include "tests/vector_custom/front_back.hpp"
 #include <iostream>
-#include <type_traits>
+//#include <type_traits>
 #include <stdint.h>
 int	main(void)
 {
@@ -24,8 +27,15 @@ int	main(void)
 	test_ft_assign1_backward();
 	test_std_assign_it_backward();
 	test_ft_assign_it_backward();
-	//at_ok();
-	//at_out_of_range();
-	std::cout << ft::is_integral<unsigned long long int>::value;
+	at_ok();
+	at_const_ok();
+	at_out_of_range();
+	at_custom_ok();
+	at_custom_const_ok();
+	at_custom_out_of_range();
+	front();
+	back();
+	front_custom();
+	back_custom();
 	return (0);
 }
