@@ -20,3 +20,11 @@ void    allocator_constructor()
     std::cout << "Capacity allocator constructor : " << vec_alloc.capacity() << std::endl;
     std::cout << "Size allocator constructor : " << vec_alloc.size() << std::endl;
 }
+
+void    allocator_count_copy_constructor()
+{
+    std::cout << "Allocator count copies" << std::endl;
+    std::vector<std::string> vec(3, "str value");
+	for (std::vector<std::string>::iterator	it = vec.begin(); it != vec.end(); it++)
+		std::cout << *it << std::endl;
+}

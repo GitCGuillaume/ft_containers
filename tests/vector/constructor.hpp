@@ -6,5 +6,6 @@
 
 void    default_constructor();
 void    allocator_constructor();
+void    allocator_count_copy_constructor();
 
 #endif

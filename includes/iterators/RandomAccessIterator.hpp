@@ -59,13 +59,13 @@ namespace ft
                 return (*this);
             }
             /* POSTFIX*/
-            RandomAccessIterator operator++(It)
+            RandomAccessIterator operator++(int)
             {
                 RandomAccessIterator tmp = *this;
                 _ptr++;
                 return (tmp);
             }
-            RandomAccessIterator   operator--(It)
+            RandomAccessIterator   operator--(int)
             {
                 RandomAccessIterator tmp = *this;
                 _ptr--;

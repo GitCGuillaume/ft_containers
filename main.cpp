@@ -43,5 +43,7 @@ int	main(void)
 	default_custom_constructor();
 	allocator_constructor();
 	allocator_custom_constructor();
+	allocator_count_copy_constructor();
+	allocator_custom_count_copy_constructor();
 	return (0);
 }

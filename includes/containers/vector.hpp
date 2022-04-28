@@ -35,7 +35,10 @@ namespace ft
 			explicit	vector(const Allocator& alloc) : _capacity_allocator(0), _size(0), _vec(NULL), _allocator(alloc){}
 			explicit	vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator())
 			{
-				//
+				_vec = NULL;
+				_capacity_allocator = 0;
+				_size = 0;
+				this->assign(count, value);
 				return ;
 			}
 			template<class InputIt>
@@ -56,8 +59,9 @@ namespace ft
 			}
 			virtual	~vector()
 			{
-				for (size_type i = 0; i < _size; i++)
-					_allocator.destroy(_vec + i);
+				if (_vec)
+					for (size_type i = 0; i < _size; i++)
+						_allocator.destroy(_vec + i);
 				_allocator.deallocate(_vec, _capacity_allocator);
 			}
 			vector&	operator=(const vector& other)
@@ -78,7 +82,8 @@ namespace ft
 					_allocator.destroy(_vec + i);
 				if (this->capacity() <= count)
 				{
-					_allocator.deallocate(_vec, _capacity_allocator);
+					if (_vec)
+						_allocator.deallocate(_vec, _capacity_allocator);
 					_capacity_allocator = count;
 					_vec = _allocator.allocate(_capacity_allocator);
 				}
@@ -99,7 +104,8 @@ namespace ft
 					_allocator.destroy(_vec + i);
 				if (this->capacity() <= count)
 				{
-					_allocator.deallocate(_vec, _capacity_allocator);
+					if (_vec)
+						_allocator.deallocate(_vec, _capacity_allocator);
 					_capacity_allocator = count;
 					_vec = _allocator.allocate(_capacity_allocator);
 				}
