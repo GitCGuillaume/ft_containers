@@ -32,20 +32,26 @@ namespace ft
 			{
 				_vec = _allocator.allocate(0);
 			}
+			/* TESTER CAPACITY ALLOCATORS */
 			explicit	vector(const Allocator& alloc) : _capacity_allocator(0), _size(0), _vec(NULL), _allocator(alloc){}
 			explicit	vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator())
 			{
 				_vec = NULL;
 				_capacity_allocator = 0;
 				_size = 0;
-				this->assign(count, value);
+				_capacity_allocator = count;
+				_vec = _allocator.allocate(_capacity_allocator);
+				//this->assign(count, value);
 				return ;
 			}
 			template<class InputIt>
 			vector(InputIt first, InputIt last,
 				const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 			{
-				//
+				_vec = NULL;
+				_capacity_allocator = 0;
+				_size = 0;
+				this->assign(first, last);
 				return ;
 			}
 			vector(const vector& other)

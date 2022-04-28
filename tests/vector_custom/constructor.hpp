@@ -6,6 +6,7 @@
 
 void    default_custom_constructor();
 void    allocator_custom_constructor();
-void    allocator_custom_count_copy_constructor();
+void    allocator_custom_count_constructor();
+void    allocator_custom_iterator();
 
 #endif

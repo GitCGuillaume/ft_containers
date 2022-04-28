@@ -21,10 +21,23 @@ void    allocator_custom_constructor()
     std::cout << "Size custom allocator constructor : " << vec_alloc.size() << std::endl;
 }
 
-void    allocator_custom_count_copy_constructor()
+void    allocator_custom_count_constructor()
 {
-    std::cout << "Allocator custom count copies" << std::endl;
+    std::cout << "Allocator custom count" << std::endl;
 	ft::vector<std::string> vec(3, "str value");
+    std::cout << "Capacity custom count allocator constructor : " << vec.capacity() << std::endl;
+    std::cout << "Size custom count allocator constructor : " << vec.size() << std::endl;
     for (ft::vector<std::string>::iterator	it = vec.begin(); it != vec.end(); it++)
+		std::cout << *it << std::endl;
+}
+
+void    allocator_custom_iterator()
+{
+    std::cout << "Allocator custom iterator" << std::endl;
+    ft::vector<float>  vec(3, 1.000000);
+    ft::vector<float>  vec_2(vec.begin(), vec.end());
+    std::cout << "Capacity custom count allocator constructor : " << vec_2.capacity() << std::endl;
+    std::cout << "Size custom count allocator constructor : " << vec_2.size() << std::endl;
+    for (ft::vector<float>::iterator	it = vec_2.begin(); it != vec_2.end(); it++)
 		std::cout << *it << std::endl;
 }
