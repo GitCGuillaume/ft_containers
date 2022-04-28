@@ -28,8 +28,11 @@ namespace ft
 			typedef std::ptrdiff_t	difference_type;
 			typedef std::size_t	size_type;
 			/* MEMBERS FUNCTIONS */
-			vector() : _capacity_allocator(0), _size(0){}
-			explicit	vector(const Allocator& alloc) : _allocator(alloc){}
+			vector() : _capacity_allocator(0), _size(0), _vec(NULL)
+			{
+				_vec = _allocator.allocate(0);
+			}
+			explicit	vector(const Allocator& alloc) : _capacity_allocator(0), _size(0), _vec(NULL), _allocator(alloc){}
 			explicit	vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator())
 			{
 				//
@@ -53,12 +56,9 @@ namespace ft
 			}
 			virtual	~vector()
 			{
-				if (_capacity_allocator > 0)
-				{
-					for (size_type i = 0; i < _size; i++)
-						_allocator.destroy(_vec + i);
-					_allocator.deallocate(_vec, _capacity_allocator);
-				}
+				for (size_type i = 0; i < _size; i++)
+					_allocator.destroy(_vec + i);
+				_allocator.deallocate(_vec, _capacity_allocator);
 			}
 			vector&	operator=(const vector& other)
 			{
@@ -78,8 +78,7 @@ namespace ft
 					_allocator.destroy(_vec + i);
 				if (this->capacity() <= count)
 				{
-					if (this->capacity() > 0)
-						_allocator.deallocate(_vec, _capacity_allocator);
+					_allocator.deallocate(_vec, _capacity_allocator);
 					_capacity_allocator = count;
 					_vec = _allocator.allocate(_capacity_allocator);
 				}
@@ -100,8 +99,7 @@ namespace ft
 					_allocator.destroy(_vec + i);
 				if (this->capacity() <= count)
 				{
-					if (this->capacity() > 0)
-						_allocator.deallocate(_vec, _capacity_allocator);
+					_allocator.deallocate(_vec, _capacity_allocator);
 					_capacity_allocator = count;
 					_vec = _allocator.allocate(_capacity_allocator);
 				}

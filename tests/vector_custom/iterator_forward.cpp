@@ -5,6 +5,7 @@ void	test_ft_assign1_forward()
 	ft::vector<int>	vec;
 
 	vec.assign(3, 'b');
+	vec.assign(3, 'b');
 	ft::vector<int>::iterator	it_1 = vec.begin();
 	ft::vector<int>::iterator	it_2 = vec.end();
 	std::cout << "TEST_FT_ASSIGN1_FORWARD" << std::endl;

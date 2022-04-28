@@ -5,6 +5,7 @@ void	test_std_assign1_forward()
 	std::vector<int>	vec;
 
 	vec.assign(3, 'b');
+	vec.assign(3, 'b');
 	std::vector<int>::iterator	it_1 = vec.begin();
 	std::vector<int>::iterator	it_2 = vec.end();
 	std::cout << "TEST_STD_ASSIGN1_FORWARD" << std::endl;

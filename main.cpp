@@ -14,6 +14,8 @@
 #include "includes/library_headers/enable_if.hpp"
 #include "tests/vector/front_back.hpp"
 #include "tests/vector_custom/front_back.hpp"
+#include "tests/vector/constructor.hpp"
+#include "tests/vector_custom/constructor.hpp"
 #include <iostream>
 //#include <type_traits>
 #include <stdint.h>
@@ -37,5 +39,9 @@ int	main(void)
 	back();
 	front_custom();
 	back_custom();
+	default_constructor();
+	default_custom_constructor();
+	allocator_constructor();
+	allocator_custom_constructor();
 	return (0);
 }
