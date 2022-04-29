@@ -7,10 +7,10 @@ void	test_std_assign1_forward()
 	vec.assign(3, 'b');
 	vec.assign(3, 'b');
 	std::vector<int>::iterator	it_1 = vec.begin();
-	std::vector<int>::iterator	it_2 = vec.end();
 	std::cout << "TEST_STD_ASSIGN1_FORWARD" << std::endl;
 	std::cout << *it_1 << std::endl;
 	//undefined behavior
+	//std::vector<int>::iterator	it_2 = vec.end();
 	//std::cout << *it_2 << std::endl;
 	std::cout << "POSTFIX" << std::endl;
 	for (std::vector<int>::iterator	it_1 = vec.begin(); it_1 != vec.end(); it_1++)

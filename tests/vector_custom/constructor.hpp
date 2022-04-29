@@ -8,5 +8,6 @@ void    default_custom_constructor();
 void    allocator_custom_constructor();
 void    allocator_custom_count_constructor();
 void    allocator_custom_iterator();
+void    copy_custom_constructor();
 
 #endif

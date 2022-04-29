@@ -28,30 +28,39 @@ namespace ft
 			typedef std::ptrdiff_t	difference_type;
 			typedef std::size_t	size_type;
 			/* MEMBERS FUNCTIONS */
-			vector() : _capacity_allocator(0), _size(0), _vec(NULL)
+			vector() : _capacity_allocator(0), _size(0)
 			{
 				_vec = _allocator.allocate(0);
 			}
 			/* TESTER CAPACITY ALLOCATORS */
-			explicit	vector(const Allocator& alloc) : _capacity_allocator(0), _size(0), _vec(NULL), _allocator(alloc){}
-			explicit	vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator())
+			explicit	vector(const Allocator& alloc) : _vec(NULL), _allocator(alloc), _capacity_allocator(0), _size(0){}
+			explicit	vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator()) :
+				_allocator(alloc), _capacity_allocator(count), _size(count)
 			{
-				_vec = NULL;
-				_capacity_allocator = 0;
-				_size = 0;
-				_capacity_allocator = count;
 				_vec = _allocator.allocate(_capacity_allocator);
-				//this->assign(count, value);
+				for (size_type i = 0; i < this->size(); i++)
+					_allocator.construct(_vec + i, value);
 				return ;
 			}
 			template<class InputIt>
 			vector(InputIt first, InputIt last,
-				const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
+				const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0) :
+				_allocator(alloc)
 			{
-				_vec = NULL;
-				_capacity_allocator = 0;
-				_size = 0;
-				this->assign(first, last);
+				size_type	count = 0;
+
+				count = std::distance(last, first);
+				_capacity_allocator = count;
+				_vec = _allocator.allocate(_capacity_allocator);
+				for (size_type i = 0; i < count; i++)
+				{
+					if (first != last)
+					{
+						_allocator.construct(_vec + i, *first);
+						first++;
+					}
+				}
+				_size = count;
 				return ;
 			}
 			vector(const vector& other)
@@ -108,7 +117,7 @@ namespace ft
 				count = std::distance(last, first);
 				for (; i < _size; i++)
 					_allocator.destroy(_vec + i);
-				if (this->capacity() <= count)
+				if (this->capacity() <= static_cast<unsigned>(count))
 				{
 					if (_vec)
 						_allocator.deallocate(_vec, _capacity_allocator);
