@@ -9,5 +9,6 @@ void    allocator_constructor();
 void    allocator_count_constructor();
 void    allocator_iterator();
 void    copy_constructor();
+void    operator_assignation_constructor();
 
 #endif

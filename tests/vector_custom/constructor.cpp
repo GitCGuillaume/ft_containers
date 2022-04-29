@@ -53,3 +53,15 @@ void    copy_custom_constructor()
     for (ft::vector<float>::iterator	it = vec_cpy.begin(); it != vec_cpy.end(); it++)
 		std::cout << *it << std::endl;
 }
+
+void    operator_custom_assignation_constructor()
+{
+    std::cout << "Constructor custom assignation" << std::endl;
+    ft::vector<int> vec;
+    ft::vector<int> vec2;
+
+    vec.assign(5, 1);
+    vec2 = vec;
+    for (ft::vector<int>::iterator	it = vec2.begin(); it != vec2.end(); it++)
+		std::cout << *it << std::endl;
+}

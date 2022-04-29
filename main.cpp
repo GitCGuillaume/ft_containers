@@ -16,6 +16,10 @@
 #include "tests/vector_custom/front_back.hpp"
 #include "tests/vector/constructor.hpp"
 #include "tests/vector_custom/constructor.hpp"
+#include "tests/vector/data.hpp"
+#include "tests/vector_custom/data.hpp"
+#include "tests/vector/capacities.hpp"
+#include "tests/vector_custom/capacities.hpp"
 #include <iostream>
 //#include <type_traits>
 #include <stdint.h>
@@ -49,5 +53,18 @@ int	main(void)
 	allocator_custom_iterator();
 	copy_constructor();
 	copy_custom_constructor();
+	operator_assignation_constructor();
+	operator_custom_assignation_constructor();
+	test_data();
+	test_const_data();
+	test_custom_data();
+	test_custom_const_data();
+	empty();
+	empty_custom();
+	max_size();
+	max_size_custom();
+	reserve_error();
+	reserve_test();
+	reserve_test_custom();
 	return (0);
 }

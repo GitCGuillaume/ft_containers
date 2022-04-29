@@ -8,6 +8,7 @@
 #include <iterator>
 #include <exception>
 #include <sstream>
+#include <limits>
 
 namespace ft
 {
@@ -65,6 +66,7 @@ namespace ft
 			}
 			vector(const vector& other)
 			{
+				_allocator = other.get_allocator();
 				_vec = _allocator.allocate(other.capacity());
 				_capacity_allocator = other.capacity();
 				_size = other.size();
@@ -83,7 +85,18 @@ namespace ft
 			{
 				if (this != &other)
 				{
-					//*this = other;
+					if (_vec)
+					{
+						for (size_type i = 0; i < _size; i++)
+							_allocator.destroy(_vec + i);
+						_allocator.deallocate(_vec, _capacity_allocator);
+						_allocator = other.get_allocator();
+						_vec = _allocator.allocate(other.capacity());
+					}
+					_capacity_allocator = other.capacity();
+					_size = other.size();
+					for (size_type i = 0; i < other.size(); i++)
+						_allocator.construct(_vec + i, other.at(i));
 				}
 				return (*this);
 			}
@@ -206,6 +219,15 @@ namespace ft
 			{
 				return (_vec[_size - 1]);
 			}
+			T*	data()
+			{
+				return (this->_vec);
+			}
+			const T*	data() const
+			{
+				return (this->_vec);
+			}
+			/* ITERATORS */
 			iterator	begin()
 			{
 				return (this->_vec);
@@ -226,11 +248,40 @@ namespace ft
 					return (this->_vec);
 				return (this->_vec + _size);
 			}
+			/* CAPACITY */
+			bool	empty() const
+			{
+				if (this->begin() == this->end())
+					return (true);
+				return (false);
+			}
 			size_type	size() const
 			{
 				return (_size);
 			}
-
+			/* Maximum number of items in a vector, it can still fail,
+			because computer can run out of memory before 2^bits-1 2^(64-1 or 32-1) */
+			size_type	max_size() const
+			{
+				return (std::numeric_limits<difference_type>::max()/2);
+			}
+			void	reserve(size_type new_cap)
+			{
+				pointer	ptr = NULL;
+				if (new_cap > this->max_size)
+					std::length_error("length_error");
+				if (new_cap > this->capacity())
+				{
+					ptr = _allocator.allocate(new_cap);
+					_capacity_allocator = new_cap;
+					for (size_type i = 0; i < this->size(); i++)
+						_allocator.construct(ptr + i, _vec + i);
+					for (size_type i = 0; i < this->size(); i++)
+						_allocator.destroy(_vec + i);
+					_allocator.deallocate(_vec, this->size());
+					_vec = ptr;
+				}
+			}
 			size_type	capacity() const
 			{
 				return (_capacity_allocator);
