@@ -18,6 +18,21 @@ void    max_size_custom()
     std::cout << vec.max_size() << std::endl;
 }
 
+void    reserve_error_custom()
+{
+    std::cout << "Reserve error custom" << std::endl;
+    ft::vector<int>    vec;
+
+    try
+    {
+        vec.reserve(vec.max_size() + 1);
+    }
+    catch(std::exception& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+}
+
 void    reserve_test_custom()
 {
     std::cout << "Reserve custom" << std::endl;

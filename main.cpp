@@ -68,11 +68,15 @@ int	main(void)
 	max_size_custom();
 	reserve_error();
 	reserve_test();
+	reserve_error_custom();
 	reserve_test_custom();
 	clear();
 	clear_custom();
 	insert();
 	insert_100k();
 	insert_reserve_100k();
+	insert_custom();
+	//insert_100k_custom();
+	//insert_reserve_100k_custom();
 	return (0);
 }

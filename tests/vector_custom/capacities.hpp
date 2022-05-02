@@ -6,6 +6,7 @@
 
 void    empty_custom();
 void    max_size_custom();
+void    reserve_error_custom();
 void    reserve_test_custom();
 
 #endif

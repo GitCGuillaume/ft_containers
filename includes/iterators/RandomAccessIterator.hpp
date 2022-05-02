@@ -29,6 +29,10 @@ namespace ft
                 if (this != &rhs)
                     *this = rhs;
             };
+            pointer base() const
+            {
+                return (this->_ptr);
+            }
             /* Tester deep copy plus tard */
             RandomAccessIterator & operator=(RandomAccessIterator const & rhs)
             {

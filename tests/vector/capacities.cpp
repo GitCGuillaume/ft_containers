@@ -20,10 +20,12 @@ void    max_size()
 
 void    reserve_error()
 {
+     std::cout << "Reserve error" << std::endl;
     std::vector<int>    vec;
+
     try
     {
-        vec.resize(vec.max_size() + 1);
+        vec.reserve(vec.max_size() + 1);
     }
     catch(std::exception& e)
     {

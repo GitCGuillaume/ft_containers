@@ -140,7 +140,7 @@ namespace ft
 				i = 0;
 				while (first != last)
 				{
-					_allocator.construct(_vec + (i++), *first);
+					_allocator.construct(_vec + i++, *first);
 					first++;
 				}
 				_size = static_cast<size_type>(count);
@@ -152,12 +152,12 @@ namespace ft
 			/* ELEMENTS ACCESS */
 			reference	at(size_type pos)
 			{
-				std::stringstream	oss;
-				std::string err_msg;
-				std::string	concat_msg;
-
 				if (!(pos < this->size()))
 				{
+					std::stringstream	oss;
+					std::string err_msg;
+					std::string	concat_msg;
+
 					err_msg = "vector::_M_check_range: __n (which is ";
 					oss << pos;
 					std::getline(oss, concat_msg);
@@ -175,12 +175,12 @@ namespace ft
 			/* ELEMENTS ACCESS */
 			const_reference	at(size_type pos) const
 			{
-				std::stringstream	oss;
-				std::string err_msg;
-				std::string	concat_msg;
-
 				if (!(pos < this->size()))
 				{
+					std::stringstream	oss;
+					std::string err_msg;
+					std::string	concat_msg;
+
 					err_msg = "vector::_M_check_range: __n (which is ";
 					oss << pos;
 					std::getline(oss, concat_msg);
@@ -267,15 +267,18 @@ namespace ft
 			}
 			void	reserve(size_type new_cap)
 			{
+				if (new_cap > this->max_size())
+					throw std::length_error("vector::reserve");
 				pointer	ptr = NULL;
-				if (new_cap > this->max_size)
-					std::length_error("length_error");
 				if (new_cap > this->capacity())
 				{
 					ptr = _allocator.allocate(new_cap);
 					_capacity_allocator = new_cap;
 					for (size_type i = 0; i < this->size(); i++)
-						_allocator.construct(ptr + i, _vec + i);
+					{
+						_allocator.construct(ptr + i, *_vec);
+						_vec++;
+					}
 					for (size_type i = 0; i < this->size(); i++)
 						_allocator.destroy(_vec + i);
 					_allocator.deallocate(_vec, this->size());
@@ -293,9 +296,34 @@ namespace ft
 					_allocator.destroy(_vec + i);
 				_size = 0;
 			}
+			/*
+				Memory capacity is _capacity_allocator * 2 if new_size is greater than old capacity
+				Put value at the iterator address
+			*/
 			iterator	insert(iterator pos, const T& value)
 			{
-				
+				size_type	cpy_size = _size;
+(void)pos;(void)value;
+				if (_size + 1 > _capacity_allocator)
+					this->reserve(1 << _capacity_allocator);
+				if (this->size() == 0)
+					_allocator.construct(_vec, value);
+				else
+				{
+					iterator	it = this->end(); 
+					/*while (it != pos)
+					{
+						//last_element + 1
+						_vec[cpy_size] = _vec[cpy_size - 1];
+						cpy_size--;
+						it--;
+					}*/
+					//_vec[cpy_size] = _vec[cpy_size - 1];
+					//cpy_size--;
+					//_allocator.construct(&_vec[cpy_size], value);
+					_size++;
+				}
+				return (&_vec[cpy_size]);
 			}
 		private:
 			pointer			_vec;

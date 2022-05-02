@@ -14,7 +14,10 @@ void	test_ft_assign1_forward()
 	//std::cout << *it_2 << std::endl;
 	std::cout << "POSTFIX" << std::endl;
 	for (ft::vector<int>::iterator	it_1 = vec.begin(); it_1 != vec.end(); it_1++)
+	{
+		std::cout << "base : " << it_1.base();
 		std::cout << *it_1 << std::endl;
+	}
 	std::cout << "PREFIX" << std::endl;
 	for (ft::vector<int>::iterator	it_1 = vec.begin(); it_1 != vec.end(); ++it_1)
 		std::cout << *it_1 << std::endl;

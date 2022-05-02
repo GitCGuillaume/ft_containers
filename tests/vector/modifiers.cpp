@@ -49,7 +49,7 @@ void    insert_reserve_100k()
 
     vec.reserve(100000);
     std::cout << "capacity vector capacity 100k : " << vec.capacity() << std::endl;
-    for (double i = 0.000000; i < 100001.000000; i++)
+    for (double i = 0.000000; i < 200001.000000; i++)
         vec.insert(vec.begin() + static_cast<size_t>(i), i);
     std::cout << "capacity vector capacity 100000 : " << vec.capacity() << std::endl;
 }
