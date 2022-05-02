@@ -21,8 +21,11 @@
 #include "tests/vector/capacities.hpp"
 #include "tests/vector_custom/capacities.hpp"
 #include <iostream>
+#include "tests/vector/modifiers.hpp"
+#include "tests/vector_custom/modifiers.hpp"
 //#include <type_traits>
 #include <stdint.h>
+
 int	main(void)
 {
 	test_std_assign1_forward();
@@ -66,5 +69,10 @@ int	main(void)
 	reserve_error();
 	reserve_test();
 	reserve_test_custom();
+	clear();
+	clear_custom();
+	insert();
+	insert_100k();
+	insert_reserve_100k();
 	return (0);
 }

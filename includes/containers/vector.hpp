@@ -286,6 +286,17 @@ namespace ft
 			{
 				return (_capacity_allocator);
 			}
+			/* MODIFIERS */
+			void	clear()
+			{
+				for (size_type i = 0; i < _size; i++)
+					_allocator.destroy(_vec + i);
+				_size = 0;
+			}
+			iterator	insert(iterator pos, const T& value)
+			{
+				
+			}
 		private:
 			pointer			_vec;
 			allocator_type	_allocator;

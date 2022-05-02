@@ -29,6 +29,6 @@ void    reserve_test_custom()
     std::cout << vec.capacity();
     for (ft::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
-    vec.assign(10000, 1);
+    vec.assign(50000, 1);
     std::cout << vec.capacity() << std::endl;
 }
