@@ -304,26 +304,31 @@ namespace ft
 			{
 				size_type	cpy_size = _size;
 (void)pos;(void)value;
+(void)cpy_size;
 				if (_size + 1 > _capacity_allocator)
 					this->reserve(1 << _capacity_allocator);
 				if (this->size() == 0)
 					_allocator.construct(_vec, value);
 				else
 				{
-					iterator	it = this->end(); 
-					/*while (it != pos)
+					//std::cout << "else" << std::endl;
+					/*iterator	it = this->end(); 
+					while (it != pos)
 					{
 						//last_element + 1
+						std::cout << "avant = " << _vec[cpy_size - 1] << std::endl;
 						_vec[cpy_size] = _vec[cpy_size - 1];
+						std::cout << "apres = " << _vec[cpy_size] << std::endl;
 						cpy_size--;
 						it--;
 					}*/
 					//_vec[cpy_size] = _vec[cpy_size - 1];
 					//cpy_size--;
 					//_allocator.construct(&_vec[cpy_size], value);
-					_size++;
 				}
-				return (&_vec[cpy_size]);
+				_size++;
+				return (this->begin());
+				//return (&_vec[cpy_size]);
 			}
 		private:
 			pointer			_vec;

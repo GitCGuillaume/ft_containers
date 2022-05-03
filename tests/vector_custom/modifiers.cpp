@@ -16,8 +16,8 @@ void    insert_custom()
     ft::vector<std::string>    vec;
     vec.insert(vec.begin(), "Insert first element");
     std::cout << "vec.begin() = " << vec[0] << std::endl;
-    /*vec.insert(vec.begin() + 1, "Insert second element");
-    *///std::cout << "vec.begin() + 1 = " << vec[1] << std::endl;
+    vec.insert(vec.begin() + 1, "Insert second element");
+    /**///std::cout << "vec.begin() + 1 = " << vec[1] << std::endl;
     //std::cout << "capacity vector = " << vec.capacity() << std::endl;
     /*vec.insert(vec.end(), "Insert third element");
     std::cout << "vec.end() = " << vec[2] << std::endl;

@@ -23,6 +23,7 @@ namespace ft
             reverse_iterator(const reverse_iterator<U>& rev_it) //: iterator_type(rev_it.iterator_type), iterator_category(rev_it.iterator_category),
             //    value_type(rev_it.value_type), difference_type(rev_it.difference_type), pointer(rev_it.pointer), reference(rev_it.reference)
             {
+                (void)rev_it;
                 return ;
             }
             template<class U>
