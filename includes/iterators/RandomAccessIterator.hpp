@@ -24,11 +24,7 @@ namespace ft
             {
                 this->_ptr = ptr;
             }
-            RandomAccessIterator(RandomAccessIterator const & rhs)
-            {
-                if (this != &rhs)
-                    *this = rhs;
-            };
+            RandomAccessIterator(RandomAccessIterator const & rhs) : _ptr(rhs.base()){}
             pointer base() const
             {
                 return (this->_ptr);

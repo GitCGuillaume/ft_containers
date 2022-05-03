@@ -41,7 +41,6 @@ namespace ft
 				_vec = _allocator.allocate(_capacity_allocator);
 				for (size_type i = 0; i < this->size(); i++)
 					_allocator.construct(_vec + i, value);
-				return ;
 			}
 			template<class InputIt>
 			vector(InputIt first, InputIt last,
@@ -62,7 +61,6 @@ namespace ft
 					}
 				}
 				_size = count;
-				return ;
 			}
 			vector(const vector& other)
 			{
@@ -72,14 +70,15 @@ namespace ft
 				_size = other.size();
 				for (size_type i = 0; i < other.size(); i++)
 					_allocator.construct(_vec + i, other.at(i));
-				return ;
 			}
 			virtual	~vector()
 			{
-				if (_vec)
+				/*if (_vec)
+				{
 					for (size_type i = 0; i < _size; i++)
 						_allocator.destroy(_vec + i);
-				_allocator.deallocate(_vec, _capacity_allocator);
+					_allocator.deallocate(_vec, _capacity_allocator);
+				}*/
 			}
 			vector&	operator=(const vector& other)
 			{
@@ -272,17 +271,20 @@ namespace ft
 				pointer	ptr = NULL;
 				if (new_cap > this->capacity())
 				{
+					std::cout << "new_cap : " << new_cap << std::endl;
 					ptr = _allocator.allocate(new_cap);
 					_capacity_allocator = new_cap;
+					std::cout << "r1" << std::endl;
 					for (size_type i = 0; i < this->size(); i++)
 					{
-						_allocator.construct(ptr + i, *_vec);
-						_vec++;
-					}
-					for (size_type i = 0; i < this->size(); i++)
+						_allocator.construct(ptr + i, *(_vec + i));
 						_allocator.destroy(_vec + i);
+					}
+					std::cout << "r2 size = " << this->size() << std::endl;
 					_allocator.deallocate(_vec, this->size());
 					_vec = ptr;
+					if (_size==1)
+						std::cout << this->at(0) << "r3" << std::endl;
 				}
 			}
 			size_type	capacity() const
@@ -303,31 +305,41 @@ namespace ft
 			iterator	insert(iterator pos, const T& value)
 			{
 				size_type	cpy_size = _size;
-(void)pos;(void)value;
 (void)cpy_size;
 				if (_size + 1 > _capacity_allocator)
+				{
+					std::cout << "_size" << _size << "cap" << _capacity_allocator << std::endl;
 					this->reserve(1 << _capacity_allocator);
+					std::cout << "_size" << this->size() << "cap" << _capacity_allocator << std::endl;
+				}
 				if (this->size() == 0)
 					_allocator.construct(_vec, value);
 				else
 				{
 					//std::cout << "else" << std::endl;
-					/*iterator	it = this->end(); 
+					iterator	it = this->end();
+					//std::cout << "*pos : " << *(pos) << std::endl;
+					std::cout << "*this->begin() : " << *(this->begin()) << std::endl;
 					while (it != pos)
 					{
 						//last_element + 1
 						std::cout << "avant = " << _vec[cpy_size - 1] << std::endl;
-						_vec[cpy_size] = _vec[cpy_size - 1];
+						_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
+						_allocator.destroy(_vec + (cpy_size - 1));
+						//_vec[cpy_size] = _vec[cpy_size - 1];
 						std::cout << "apres = " << _vec[cpy_size] << std::endl;
 						cpy_size--;
 						it--;
-					}*/
+						std::cout << "r4" << std::endl;
+					}
+					//_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
+					//_allocator.destroy(_vec + (cpy_size - 1));
 					//_vec[cpy_size] = _vec[cpy_size - 1];
 					//cpy_size--;
 					//_allocator.construct(&_vec[cpy_size], value);
 				}
 				_size++;
-				return (this->begin());
+				return (NULL);
 				//return (&_vec[cpy_size]);
 			}
 		private:
