@@ -22,7 +22,8 @@ namespace ft
 			typedef typename Allocator::const_reference	const_reference;
 			typedef typename Allocator::pointer	pointer;
 			typedef typename Allocator::const_pointer	const_pointer;
-			typedef ft::RandomAccessIterator<value_type>	iterator;
+			//typedef typename ft::iterator<std::random_access_iterator_tag, ft::RandomAccessIterator<value_type> >	iterator;
+			typedef ft::RandomAccessIterator<value_type>		iterator;
 			typedef ft::RandomAccessIterator<const value_type>	const_iterator;
 			typedef ft::reverse_iterator<iterator>	reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
@@ -73,12 +74,12 @@ namespace ft
 			}
 			virtual	~vector()
 			{
-				/*if (_vec)
+				if (_vec)
 				{
 					for (size_type i = 0; i < _size; i++)
 						_allocator.destroy(_vec + i);
 					_allocator.deallocate(_vec, _capacity_allocator);
-				}*/
+				}
 			}
 			vector&	operator=(const vector& other)
 			{
@@ -264,6 +265,7 @@ namespace ft
 			{
 				return (std::numeric_limits<difference_type>::max()/2);
 			}
+			/* Reserve does provock iterator invalidity */
 			void	reserve(size_type new_cap)
 			{
 				if (new_cap > this->max_size())
@@ -271,20 +273,15 @@ namespace ft
 				pointer	ptr = NULL;
 				if (new_cap > this->capacity())
 				{
-					std::cout << "new_cap : " << new_cap << std::endl;
 					ptr = _allocator.allocate(new_cap);
 					_capacity_allocator = new_cap;
-					std::cout << "r1" << std::endl;
 					for (size_type i = 0; i < this->size(); i++)
 					{
 						_allocator.construct(ptr + i, *(_vec + i));
 						_allocator.destroy(_vec + i);
 					}
-					std::cout << "r2 size = " << this->size() << std::endl;
 					_allocator.deallocate(_vec, this->size());
 					_vec = ptr;
-					if (_size==1)
-						std::cout << this->at(0) << "r3" << std::endl;
 				}
 			}
 			size_type	capacity() const
@@ -301,46 +298,36 @@ namespace ft
 			/*
 				Memory capacity is _capacity_allocator * 2 if new_size is greater than old capacity
 				Put value at the iterator address
+				Reserve does provock iterator invalidity
+				To resolve this, can do std::distance or iterator - .begin();
 			*/
 			iterator	insert(iterator pos, const T& value)
 			{
+				iterator	new_it;
+				iterator	it_end;
+				size_type	offset = pos - this->begin();
 				size_type	cpy_size = _size;
-(void)cpy_size;
+
 				if (_size + 1 > _capacity_allocator)
-				{
-					std::cout << "_size" << _size << "cap" << _capacity_allocator << std::endl;
 					this->reserve(1 << _capacity_allocator);
-					std::cout << "_size" << this->size() << "cap" << _capacity_allocator << std::endl;
-				}
 				if (this->size() == 0)
 					_allocator.construct(_vec, value);
 				else
 				{
-					//std::cout << "else" << std::endl;
-					iterator	it = this->end();
-					//std::cout << "*pos : " << *(pos) << std::endl;
-					std::cout << "*this->begin() : " << *(this->begin()) << std::endl;
-					while (it != pos)
+					new_it = this->begin() - offset;
+					it_end = this->end();
+					while (it_end != new_it)
 					{
-						//last_element + 1
-						std::cout << "avant = " << _vec[cpy_size - 1] << std::endl;
 						_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
 						_allocator.destroy(_vec + (cpy_size - 1));
-						//_vec[cpy_size] = _vec[cpy_size - 1];
-						std::cout << "apres = " << _vec[cpy_size] << std::endl;
 						cpy_size--;
-						it--;
-						std::cout << "r4" << std::endl;
+						it_end--;
 					}
-					//_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
-					//_allocator.destroy(_vec + (cpy_size - 1));
-					//_vec[cpy_size] = _vec[cpy_size - 1];
-					//cpy_size--;
-					//_allocator.construct(&_vec[cpy_size], value);
+					_allocator.construct(_vec + cpy_size, value);
 				}
 				_size++;
-				return (NULL);
-				//return (&_vec[cpy_size]);
+				//FAUT TESTER CA ENCORE
+				return (&_vec[cpy_size]);
 			}
 		private:
 			pointer			_vec;

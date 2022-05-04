@@ -1,7 +1,10 @@
 #ifndef RANDOM_ACCESS_ITERATOR_HPP
 # define RANDOM_ACCESS_ITERATOR_HPP
+
 #include "iterator_traits.hpp"
+#include "iterator.hpp"
 #include <iostream>
+
 namespace ft
 {
     template<class It>
@@ -13,24 +16,30 @@ namespace ft
             value_type, the type denoted by std::iterator_traits<It>::value_type
             [...]
         */
+        /* Use ft::iterator into iterator_traits to use iterator_traits types (is this dispatch tag?) correctly */
         public:
-            typedef It		value_type;
-            typedef typename std::ptrdiff_t	difference_type;
-            typedef value_type&		reference;
-            typedef value_type*		pointer;
+            typedef It    iterator_type;
+            typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::value_type    value_type;
+            typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::difference_type    difference_type;
+            typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::reference    reference;
+            typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::pointer    pointer;
             typedef std::random_access_iterator_tag	iterator_category;
+
             RandomAccessIterator(){};
+            explicit RandomAccessIterator(iterator_type it) : _ptr(it._ptr){std::cout << "iterator_type it" << std::endl;}
             RandomAccessIterator(pointer ptr)
             {
                 this->_ptr = ptr;
             }
-            RandomAccessIterator(RandomAccessIterator const & rhs) : _ptr(rhs.base()){}
+            template<class U>
+            RandomAccessIterator(RandomAccessIterator<U> const & rhs) : _ptr(rhs.base()){std::cout << "random copy" << std::endl;}
             pointer base() const
             {
                 return (this->_ptr);
             }
             /* Tester deep copy plus tard */
-            RandomAccessIterator & operator=(RandomAccessIterator const & rhs)
+            template<class U>
+            RandomAccessIterator & operator=(RandomAccessIterator<U> const & rhs)
             {
                 if (this != &rhs)
                 {
@@ -94,17 +103,16 @@ namespace ft
             {
                 return (this->_ptr - n);
             }
-            /*difference_type operator-(reference const rhs) const
+            difference_type operator-(reference const rhs) const
             {
-                std::cout << "this->ptr= " << this->_ptr << std::endl;
                     return (this->_ptr - rhs._ptr);
-            }*/
+            }
             reference   operator[](std::size_t n) const
             {
                 return (*(this->_ptr + n));
             }
             /* https://en.cppreference.com/w/cpp/named_req/EqualityComparable */
-        private:
+        protected:
             pointer _ptr;
     };
     template<class Iterator1, class Iterator2>
