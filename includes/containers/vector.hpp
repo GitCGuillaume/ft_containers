@@ -309,7 +309,12 @@ namespace ft
 				size_type	cpy_size = _size;
 
 				if (_size + 1 > _capacity_allocator)
-					this->reserve(1 << _capacity_allocator);
+				{
+					if (_capacity_allocator == 0)
+						this->reserve(1);
+					else
+						this->reserve(_capacity_allocator << 1);
+				}
 				if (this->size() == 0)
 					_allocator.construct(_vec, value);
 				else
@@ -326,8 +331,51 @@ namespace ft
 					_allocator.construct(_vec + cpy_size, value);
 				}
 				_size++;
-				//FAUT TESTER CA ENCORE
 				return (&_vec[cpy_size]);
+			}
+
+			/*
+				00
+				0111110 (2 - 1) + 5
+				0122211110 (7 - 1) + 3
+			*/
+			//_allocator.construct(_vec + (cpy + count), *(_vec + cpy));
+			//_allocator.destroy(_vec + cpy);
+			void	insert(iterator pos, size_type count, const T& value)
+			{
+				size_type	offset = pos - this->begin();
+
+				if (_size + count > _capacity_allocator)
+				{
+					if (_capacity_allocator == 0)
+						this->reserve(_size + count);
+					else if (_capacity_allocator + count > (_capacity_allocator << 1))
+						this->reserve(_capacity_allocator + count);
+					else
+						this->reserve(_capacity_allocator << 1);
+				}
+				if (this->size() == 0)
+				{
+					for (size_type nb_count = 0; nb_count < count; nb_count++)
+						_allocator.construct(_vec + nb_count, value);
+				}
+				else
+				{
+					size_type	cpy_size = _size;
+					iterator	new_it = this->begin() - offset;
+					iterator	it_end = this->end();
+
+					while (it_end + count != new_it + count)
+					{
+						size_type cpy = cpy_size - 1;
+						_vec[cpy + count] = _vec[cpy];
+						cpy_size--;
+						it_end--;
+					}
+					for (size_type nb_count = 0; nb_count < count; nb_count++)
+						_allocator.construct(_vec + (cpy_size + nb_count), value);
+				}
+				_size += count;
 			}
 		private:
 			pointer			_vec;

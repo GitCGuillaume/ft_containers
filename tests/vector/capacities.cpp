@@ -44,6 +44,6 @@ void    reserve_test()
     std::cout << vec.capacity();
     for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
-    vec.assign(50000, 1);
+    vec.assign(150000, 1);
     std::cout << vec.capacity() << std::endl;
 }
