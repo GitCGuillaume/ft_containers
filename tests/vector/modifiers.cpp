@@ -17,12 +17,16 @@ void    insert()
     vec.insert(vec.begin(), "Insert first element");
     std::cout << "vec.begin() = " << vec[0] << std::endl;
     vec.insert(vec.begin() + 1, "Insert second element");
-    //std::cout << "vec.begin() = " << vec[0] << std::endl;
+    std::cout << "r6" << std::endl;
     std::cout << "vec.begin() + 1 = " << vec[1] << std::endl;
     std::cout << "capacity vector = " << vec.capacity() << std::endl;
     vec.insert(vec.end(), "Insert third element");
     std::cout << "vec.end() = " << vec[2] << std::endl;
     std::cout << vec[0] << " " << vec[1] << " " << vec[2] << std::endl;
+    vec.insert(vec.end(), "Insert fourth element");
+    std::cout << "vec.end() = " << vec[3] << std::endl;
+    std::cout << vec[0] << " " << vec[1] << " "
+        << vec[2] << " " << vec[3] << std::endl;
 }
 
 void    insert_100k()

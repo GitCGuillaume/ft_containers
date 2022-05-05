@@ -274,14 +274,14 @@ namespace ft
 				if (new_cap > this->capacity())
 				{
 					ptr = _allocator.allocate(new_cap);
-					_capacity_allocator = new_cap;
 					for (size_type i = 0; i < this->size(); i++)
 					{
 						_allocator.construct(ptr + i, *(_vec + i));
 						_allocator.destroy(_vec + i);
 					}
-					_allocator.deallocate(_vec, this->size());
+					_allocator.deallocate(_vec, this->capacity());
 					_vec = ptr;
+					_capacity_allocator = new_cap;
 				}
 			}
 			size_type	capacity() const

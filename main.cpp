@@ -76,7 +76,7 @@ int	main(void)
 	insert_100k();
 	insert_reserve_100k();
 	insert_custom();
-	//insert_100k_custom();
+	insert_100k_custom();
 	//insert_reserve_100k_custom();
 	return (0);
 }

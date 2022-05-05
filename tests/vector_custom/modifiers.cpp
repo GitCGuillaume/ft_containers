@@ -12,7 +12,7 @@ void    clear_custom()
 
 void    insert_custom()
 {
-    std::cout << "Insert tests" << std::endl;
+    std::cout << "Insert custom tests" << std::endl;
     ft::vector<std::string>    vec;
     vec.insert(vec.begin(), "Insert first element");
     std::cout << "vec.begin() = " << vec[0] << std::endl;
@@ -23,6 +23,10 @@ void    insert_custom()
     vec.insert(vec.end(), "Insert third element");
     std::cout << "vec.end() = " << vec[2] << std::endl;
     std::cout << vec[0] << " " << vec[1] << " " << vec[2] << std::endl;
+    vec.insert(vec.end(), "Insert fourth element");
+    std::cout << "vec.end() = " << vec[3] << std::endl;
+    std::cout << vec[0] << " " << vec[1] << " "
+        << vec[2] << " " << vec[3] << std::endl;
 }
 
 void    insert_100k_custom()
@@ -42,6 +46,7 @@ void    insert_100k_custom()
     for (double i = 50000.000000; i < 100000.000000; i++)
         vec.insert(vec.begin() + static_cast<size_t>(i), i);
     std::cout << "capacity vector capacity 100k : " << vec.capacity() << std::endl;
+
 }
 
 void    insert_reserve_100k_custom()
