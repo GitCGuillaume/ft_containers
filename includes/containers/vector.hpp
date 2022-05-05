@@ -300,6 +300,8 @@ namespace ft
 				Put value at the iterator address
 				Reserve does provock iterator invalidity
 				To resolve this, can do std::distance or iterator - .begin();
+				_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
+				_allocator.destroy(_vec + (cpy_size - 1));
 			*/
 			iterator	insert(iterator pos, const T& value)
 			{
@@ -323,8 +325,7 @@ namespace ft
 					it_end = this->end();
 					while (it_end != new_it)
 					{
-						_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
-						_allocator.destroy(_vec + (cpy_size - 1));
+						_vec[cpy_size] = _vec[cpy_size - 1];
 						cpy_size--;
 						it_end--;
 					}
@@ -338,13 +339,16 @@ namespace ft
 				00
 				0111110 (2 - 1) + 5
 				0122211110 (7 - 1) + 3
+				Inserting element at a position other than end() cause element to relocate
+				from pos to end
 			*/
+			//_vec[cpy + count] = _vec[cpy_size - 1];
 			//_allocator.construct(_vec + (cpy + count), *(_vec + cpy));
 			//_allocator.destroy(_vec + cpy);
 			void	insert(iterator pos, size_type count, const T& value)
 			{
 				size_type	offset = pos - this->begin();
-
+				
 				if (_size + count > _capacity_allocator)
 				{
 					if (_capacity_allocator == 0)
@@ -362,13 +366,13 @@ namespace ft
 				else
 				{
 					size_type	cpy_size = _size;
-					iterator	new_it = this->begin() - offset;
-					iterator	it_end = this->end();
+					iterator	new_it = (this->begin() - offset) + count;
+					iterator	it_end = this->end() + count;
 
-					while (it_end + count != new_it + count)
+					while (it_end != new_it)
 					{
-						size_type cpy = cpy_size - 1;
-						_vec[cpy + count] = _vec[cpy];
+						size_type	cpy = cpy_size - 1;
+						_vec[cpy + count] = _vec[cpy_size - 1];
 						cpy_size--;
 						it_end--;
 					}
