@@ -91,3 +91,20 @@ void    count_insert_100()
         vec.insert(vec.begin() + static_cast<size_t>(i), 2, i);
     std::cout << "capacity vector capacity 50k : " << vec.capacity() << std::endl;
 }
+
+void    iterator_insert()
+{
+    std::cout << "iterator insert" << std::endl;
+    std::vector<double> old_vec;
+    std::vector<double> vec;
+    double arr[5] = {0.000000,1.000000,2.000000,3.000000,4.000000};
+    for (int i = 0; i < 5; i++)
+        old_vec.insert(old_vec.end(), *(arr + i));
+    vec.insert(vec.begin(), old_vec.begin(), old_vec.end());
+    for  (std::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
+        std::cout << *it << std::endl;
+    vec.insert(vec.begin() + 3, old_vec.begin(), old_vec.end());
+    for  (std::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
+        std::cout << *it << std::endl;
+    vec.insert(vec.begin() + 5, old_vec.begin(), old_vec.end());
+}

@@ -23,6 +23,8 @@
 #include <iostream>
 #include "tests/vector/modifiers.hpp"
 #include "tests/vector_custom/modifiers.hpp"
+#include "tests/vector/erase.hpp"
+#include "tests/vector_custom/erase.hpp"
 //#include <type_traits>
 #include <stdint.h>
 
@@ -80,7 +82,15 @@ int	main(void)
 	insert_100k_custom();
 	insert_reserve_100k_custom();
 	insert_return_custom();
-	count_insert_100();
-	count_insert_100_custom();
+	//count_insert_100();
+	//count_insert_100_custom();
+	iterator_insert();
+	iterator_insert_custom();
+	erase();
+	erase_30k();
+	erase_custom();
+	erase_30k_custom();
+	erase_iterator();
+	 erase_iterator_custom();
 	return (0);
 }

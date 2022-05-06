@@ -325,6 +325,8 @@ namespace ft
 					it_end = this->end();
 					while (it_end != new_it)
 					{
+						//_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
+						//_allocator.destroy(_vec + (cpy_size - 1));
 						_vec[cpy_size] = _vec[cpy_size - 1];
 						cpy_size--;
 						it_end--;
@@ -345,6 +347,7 @@ namespace ft
 			//_vec[cpy + count] = _vec[cpy_size - 1];
 			//_allocator.construct(_vec + (cpy + count), *(_vec + cpy));
 			//_allocator.destroy(_vec + cpy);
+			//est-il possible d'aller plus vite en déplacent d'un coup le nombre total d'élement à déplacer sans boucle, idée à penser samedi par ex
 			void	insert(iterator pos, size_type count, const T& value)
 			{
 				size_type	offset = pos - this->begin();
@@ -372,7 +375,9 @@ namespace ft
 					while (it_end != new_it)
 					{
 						size_type	cpy = cpy_size - 1;
-						_vec[cpy + count] = _vec[cpy_size - 1];
+						//_allocator.construct(_vec + (cpy + count), *(_vec + cpy));
+						//_allocator.destroy(_vec + cpy);
+						_vec[cpy + count] = _vec[cpy];
 						cpy_size--;
 						it_end--;
 					}
@@ -380,6 +385,90 @@ namespace ft
 						_allocator.construct(_vec + (cpy_size + nb_count), value);
 				}
 				_size += count;
+			}
+			template<class InputIt>
+			void	insert(iterator pos, InputIt first, InputIt last)
+			{
+				difference_type	distance = std::distance(last, first);
+				size_type	offset = pos - this->begin();
+				size_type	nb_count = 0;
+
+				if (_size + distance > _capacity_allocator)
+				{
+					if (_capacity_allocator == 0)
+						this->reserve(_size + distance);
+					else if (_capacity_allocator + distance > (_capacity_allocator << 1))
+						this->reserve(_capacity_allocator + distance);
+					else
+						this->reserve(_capacity_allocator << 1);
+				}
+				if (this->size() == 0)
+				{
+					while (first != last)
+						_allocator.construct(_vec + nb_count++, *(first)++);
+				}
+				else
+				{
+					size_type	cpy_size = _size;
+					iterator	new_it = (this->begin() - offset) + distance;
+					iterator	it_end = this->end() + distance;
+
+					while (it_end != new_it)
+					{
+						size_type	cpy = cpy_size - 1;
+						_vec[cpy + distance] = _vec[cpy];
+						cpy_size--;
+						it_end--;
+					}
+					while (first != last)
+						_allocator.construct(_vec + (cpy_size + nb_count++), *(first)++);
+				}
+				_size += distance;
+			}
+			/* à tester dans l'exam05 */
+			/* pointer ptr for last element because STL return an iterator with the deleted value */
+			iterator	erase(iterator pos)
+			{
+				size_type	offset = pos - this->begin();
+				pointer		ptr = &*pos;
+				difference_type	distance = std::distance(pos, this->begin());
+				iterator	new_it;
+(void)ptr;
+				_allocator.destroy(_vec + distance);
+				_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
+				new_it = this->begin() - offset;
+				new_it++;
+				distance++;
+				while (new_it != this->end())
+				{
+					
+					//_vec[distance] = _vec[distance + 1];
+					_allocator.destroy(_vec + distance);
+					_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
+					new_it++;
+					distance++;
+				}
+				_size--;
+				if ((this->begin() - offset) == this->end())
+				{
+					return (iterator(ptr));
+				}
+				return(this->begin() - offset);
+			}
+			iterator	erase(iterator first, iterator last)
+			{
+				size_type	first_cpy = first - this->begin();
+				size_type	last_cpy = last - this->begin();
+				difference_type	distance = std::distance(first, this->begin());
+static_cast<void>(first_cpy);
+static_cast<void>(last_cpy);
+static_cast<void>(distance);
+				/*while (first_cpy != last_cpy)
+				{
+					_allocator.destroy(_vec + distance);
+					first_cpy++;
+				}*/
+				return (NULL);
 			}
 		private:
 			pointer			_vec;

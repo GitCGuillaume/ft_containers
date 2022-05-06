@@ -10,5 +10,6 @@ void    insert_100k_custom();
 void    insert_reserve_100k_custom();
 void    insert_return_custom();
 void    count_insert_100_custom();
+void    iterator_insert_custom();
 
 #endif
