@@ -7,5 +7,6 @@
 void    erase_custom();
 void    erase_30k_custom();
 void    erase_iterator_custom();
+void    erase_iterator_custom();
 
 #endif

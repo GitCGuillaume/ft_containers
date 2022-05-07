@@ -41,9 +41,12 @@ void    erase_iterator_custom()
     std::cout << "Erase iterator custom" << std::endl;
 
     ft::vector<double>  vec;
-    for (double i = 0.000000; i < 10.000000; i++)
+    for (double i = 1.000000; i < 10000.000000; i++)
         vec.insert(vec.end(), i);
-    vec.erase(vec.begin() + 2, vec.begin() + 7);
+    std::cout << "return iterator custom erase : " << *vec.erase(vec.begin() + 1, vec.end() - 1) << std::endl;
+    for (ft::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
+        std::cout << *it << std::endl;
+    std::cout << "return iterator custom erase : " << *vec.erase(vec.begin(), vec.end()) << std::endl;
     for (ft::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
 }

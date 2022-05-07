@@ -427,48 +427,44 @@ namespace ft
 			}
 			/* à tester dans l'exam05 */
 			/* pointer ptr for last element because STL return an iterator with the deleted value */
+			//_allocator.destroy(_vec + distance);
+			//_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
 			iterator	erase(iterator pos)
 			{
 				size_type	offset = pos - this->begin();
-				pointer		ptr = &*pos;
+				iterator	it(pos);
+				iterator	it_end = this->end() - 1;
 				difference_type	distance = std::distance(pos, this->begin());
-				iterator	new_it;
-(void)ptr;
-				_allocator.destroy(_vec + distance);
-				_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
-				new_it = this->begin() - offset;
-				new_it++;
-				distance++;
-				while (new_it != this->end())
+
+				_vec[distance] = _vec[distance + 1];
+				while (pos != it_end)
 				{
-					
-					//_vec[distance] = _vec[distance + 1];
-					_allocator.destroy(_vec + distance);
-					_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
-					new_it++;
+					_vec[distance] = _vec[distance + 1];
+					pos++;
 					distance++;
 				}
 				_size--;
 				if ((this->begin() - offset) == this->end())
-				{
-					return (iterator(ptr));
-				}
+					return (it);
 				return(this->begin() - offset);
 			}
 			iterator	erase(iterator first, iterator last)
 			{
-				size_type	first_cpy = first - this->begin();
-				size_type	last_cpy = last - this->begin();
 				difference_type	distance = std::distance(first, this->begin());
-static_cast<void>(first_cpy);
-static_cast<void>(last_cpy);
-static_cast<void>(distance);
-				/*while (first_cpy != last_cpy)
+				size_type	offset = first - this->begin();
+				iterator	it(last);
+				if (last == this->end())
+					it = first;
+				(void)offset;
+(void)distance;
+				while (first != last)
 				{
-					_allocator.destroy(_vec + distance);
-					first_cpy++;
-				}*/
-				return (NULL);
+					*first = *first + distance;
+					first++;
+					distance++;
+				}
+				_size -= distance;
+				return (it);
 			}
 		private:
 			pointer			_vec;

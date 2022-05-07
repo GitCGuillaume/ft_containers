@@ -23,7 +23,7 @@ namespace ft
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::difference_type    difference_type;
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::reference    reference;
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::pointer    pointer;
-            typedef std::random_access_iterator_tag	iterator_category;
+            typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::iterator_category    iterator_category;
 
             RandomAccessIterator(){};
             explicit RandomAccessIterator(iterator_type it) : _ptr(it._ptr){std::cout << "iterator_type it" << std::endl;}
@@ -43,6 +43,7 @@ namespace ft
             {
                 if (this != &rhs)
                 {
+                    std::cout << "random access iterator" << std::endl;
                     this->_ptr = rhs._ptr;
                 }
                 return (*this);
