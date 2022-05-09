@@ -92,5 +92,15 @@ int	main(void)
 	erase_30k_custom();
 	erase_iterator();
 	erase_iterator_custom();
+	push_back_vector();
+	push_back_vector_custom();
+	pop_back_vector();
+	pop_back_vector_custom();
+	resize();
+	resize_custom();
+	swap_vector();
+	swap_vector_custom();
+	swap_vector_non_member();
+	swap_vector_non_member_custom();
 	return (0);
 }

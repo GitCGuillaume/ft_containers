@@ -439,6 +439,7 @@ namespace ft
 				_vec[distance] = _vec[distance + 1];
 				while (pos != it_end)
 				{
+					_allocator.destroy(_vec + distance);
 					_vec[distance] = _vec[distance + 1];
 					pos++;
 					distance++;
@@ -450,21 +451,61 @@ namespace ft
 			}
 			iterator	erase(iterator first, iterator last)
 			{
-				difference_type	distance = std::distance(first, this->begin());
-				size_type	offset = first - this->begin();
+				size_type	distance = 0;
 				iterator	it(last);
+
 				if (last == this->end())
 					it = first;
-				(void)offset;
-(void)distance;
+				*first = *last;
 				while (first != last)
 				{
-					*first = *first + distance;
+					_allocator.destroy(&*first);
 					first++;
 					distance++;
 				}
 				_size -= distance;
 				return (it);
+			}
+			void	push_back(const T& value)
+			{
+				if (_capacity_allocator == 0)
+					this->reserve(1);
+				else if (_size + 1 > this->capacity())
+					this->reserve(_capacity_allocator << 1);
+				_vec[_size] = value;
+				_size++;
+			}
+			void	pop_back()
+			{
+				_allocator.destroy(_vec + (_size - 1));
+				_size--;
+			}
+			void	resize(size_type count)
+			{
+				if (_capacity_allocator < count)
+				{
+					if (_capacity_allocator == 0)
+						this->reserve(count);
+					else
+						this->reserve(_capacity_allocator << 1);
+				}
+				while (_size < count)
+				{
+					_allocator.construct(_vec + _size, 0);
+					_size++;
+				}
+				while (count < _size)
+				{
+					_allocator.destroy(_vec + _size);
+					_size--;
+				}
+			}
+			void	swap(vector& other)
+			{
+				vector	tmp(*this);
+
+				*this = other;
+				other = tmp;
 			}
 		private:
 			pointer			_vec;
@@ -472,12 +513,21 @@ namespace ft
 			size_type		_capacity_allocator;
 			size_type		_size;
 	};
+
 	template<class T, class Alloc>
 	bool	operator!=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
-		if (lhs/*->_size*/ != rhs/*->_size*/)
+		if (lhs != rhs)
 			return (true);
 		return (false);
+	}
+	template<class T, class Alloc>
+	void	swap(ft::vector<T, Alloc>& lhs, ft::vector<T, Alloc>& rhs)
+	{
+		ft::vector<T>	tmp(rhs);
+
+		rhs = lhs;
+		lhs = tmp;
 	}
 }
 
