@@ -25,6 +25,8 @@
 #include "tests/vector_custom/modifiers.hpp"
 #include "tests/vector/erase.hpp"
 #include "tests/vector_custom/erase.hpp"
+#include "tests/vector/operator.hpp"
+#include "tests/vector_custom/operator.hpp"
 //#include <type_traits>
 #include <stdint.h>
 
@@ -102,5 +104,7 @@ int	main(void)
 	swap_vector_custom();
 	swap_vector_non_member();
 	swap_vector_non_member_custom();
+	equal_vector();
+	equal_vector_custom();
 	return (0);
 }

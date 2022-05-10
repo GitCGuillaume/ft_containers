@@ -5,6 +5,8 @@
 #include "../iterators/reverse_iterator.hpp"
 #include "../library_headers/is_integral.hpp"
 #include "../library_headers/enable_if.hpp"
+#include "../library_headers/equal.hpp"
+#include "../library_headers/lexicographical_compare.hpp"
 #include <iterator>
 #include <exception>
 #include <sstream>
@@ -513,13 +515,77 @@ namespace ft
 			size_type		_capacity_allocator;
 			size_type		_size;
 	};
+	template<class T, class Alloc>
+	bool	operator==(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+	{
+		bool	is_equal = ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 
+		return (is_equal);
+	}
 	template<class T, class Alloc>
 	bool	operator!=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
-		if (lhs != rhs)
-			return (true);
-		return (false);
+		bool	is_equal = ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+
+		return (!is_equal);
+	}
+	template<class T, class Alloc>
+    bool	operator<(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+    {
+        bool	is_left = ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	
+		return (is_left);
+    }
+	template<class T, class Alloc>
+    bool	operator<=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+	{
+		std::size_t	size = 0;
+
+		while (lhs.begin() + size != lhs.end() && rhs.begin() + size != rhs.end())
+        {
+            if (*(lhs.begin() + size) <= *(rhs.begin() + size))
+                return (true);
+            else
+                return (false);
+            size++;
+        }
+        //if (*(lhs.begin() + size) <= *(rhs.begin() + size))
+          //  return (true);
+        return (false);
+	}
+	template<class T, class Alloc>
+    bool	operator>(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+	{
+		std::size_t	size = 0;
+
+		while (lhs.begin() + size != lhs.end() && rhs.begin() + size != rhs.end())
+        {
+            if (*(lhs.begin() + size) > *(rhs.begin() + size))
+                return (true);
+            if (*(rhs.begin() + size) > *(lhs.begin() + size))
+                return (false);
+			size++;
+        }
+        //if (*(lhs.begin() + size) > *(rhs.begin() + size))
+          //  return (true);
+        return (false);
+	}
+	template<class T, class Alloc>
+    bool	operator>=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+	{
+		std::size_t	size = 0;
+
+		while (lhs.begin() + size != lhs.end() && rhs.begin() + size != rhs.end())
+        {
+            if (*(lhs.begin() + size) >= *(rhs.begin() + size))
+                return (true);
+            if (*(rhs.begin() + size) > *(lhs.begin() + size))
+                return (false);
+            size++;
+        }
+        //if (*(lhs.begin() + size) >= *(rhs.begin() + size))
+          //  return (true);
+        return (false);
 	}
 	template<class T, class Alloc>
 	void	swap(ft::vector<T, Alloc>& lhs, ft::vector<T, Alloc>& rhs)
