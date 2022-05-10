@@ -238,6 +238,14 @@ namespace ft
 			{
 				return (this->_vec);
 			}
+			reverse_iterator	rbegin()
+			{
+				return (reverse_iterator(this->end() - 1));
+			}
+			const_reverse_iterator	rbegin() const
+			{
+				return (reverse_iterator(this->end() - 1));
+			}
 			iterator	end()
 			{
 				if (_size == 0)
@@ -249,6 +257,14 @@ namespace ft
 				if (_size == 0)
 					return (this->_vec);
 				return (this->_vec + _size);
+			}
+			reverse_iterator	rend()
+			{
+				return (reverse_iterator(this->begin() - 1));
+			}
+			const_reverse_iterator	rend() const
+			{
+				return (reverse_iterator(this->begin() - 1));
 			}
 			/* CAPACITY */
 			bool	empty() const

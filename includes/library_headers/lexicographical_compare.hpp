@@ -16,8 +16,8 @@ namespace ft
             first1++;
             first2++;
         }
-        if (*first1 < *first2)
-            return (true);
+        //if (*first1 < *first2)
+          //  return (true);
         return (false);
     }
     template<class InputIt1, class InputIt2, class Compare>

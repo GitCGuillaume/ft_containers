@@ -27,6 +27,8 @@
 #include "tests/vector_custom/erase.hpp"
 #include "tests/vector/operator.hpp"
 #include "tests/vector_custom/operator.hpp"
+#include "tests/vector/reverse_iterator.hpp"
+#include "tests/vector_custom/reverse_iterator.hpp"
 //#include <type_traits>
 #include <stdint.h>
 
@@ -106,5 +108,9 @@ int	main(void)
 	swap_vector_non_member_custom();
 	equal_vector();
 	equal_vector_custom();
+	reverse_iterator();
+	reverse_iterator_custom();
+	reverse_iterator_empty();
+	reverse_iterator_empty_custom();
 	return (0);
 }

@@ -26,13 +26,13 @@ namespace ft
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::iterator_category    iterator_category;
 
             RandomAccessIterator(){};
-            explicit RandomAccessIterator(iterator_type it) : _ptr(it._ptr){std::cout << "iterator_type it" << std::endl;}
+            explicit RandomAccessIterator(iterator_type it) : _ptr(it._ptr){}
             RandomAccessIterator(pointer ptr)
             {
                 this->_ptr = ptr;
             }
             template<class U>
-            RandomAccessIterator(RandomAccessIterator<U> const & rhs) : _ptr(rhs.base()){std::cout << "random copy" << std::endl;}
+            RandomAccessIterator(RandomAccessIterator<U> const & rhs) : _ptr(rhs.base()){}
             pointer base() const
             {
                 return (this->_ptr);
@@ -42,10 +42,7 @@ namespace ft
             RandomAccessIterator & operator=(RandomAccessIterator<U> const & rhs)
             {
                 if (this != &rhs)
-                {
-                    std::cout << "random access iterator" << std::endl;
                     this->_ptr = rhs._ptr;
-                }
                 return (*this);
             };
             virtual ~RandomAccessIterator(){};
@@ -81,13 +78,15 @@ namespace ft
                 _ptr--;
                 return (tmp);
             }
-            reference operator+=(difference_type n)
+            RandomAccessIterator& operator+=(difference_type n)
             {
-                return (this->_ptr = this->_ptr + n);
+                this->_ptr += n;
+                return (*this);
             }
-            reference operator-=(difference_type n)
+            RandomAccessIterator& operator-=(difference_type n)
             {
-                return (this->_ptr = this->_ptr - n);
+                this->_ptr -= n;
+                return (*this);
             }
             RandomAccessIterator    operator+(difference_type n) const
             {
