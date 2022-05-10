@@ -539,51 +539,57 @@ namespace ft
 	template<class T, class Alloc>
     bool	operator<=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
-		std::size_t	size = 0;
+		typename ft::vector<T>::const_iterator	it_lhs = lhs.begin();
+		typename ft::vector<T>::const_iterator	it_rhs = rhs.begin();
 
-		while (lhs.begin() + size != lhs.end() && rhs.begin() + size != rhs.end())
+		while (it_lhs != lhs.end() && it_rhs != rhs.end())
         {
-            if (*(lhs.begin() + size) <= *(rhs.begin() + size))
+            if (*it_lhs <= *it_rhs)
                 return (true);
             else
                 return (false);
-            size++;
+            it_lhs++;
+			it_rhs++;
         }
-        //if (*(lhs.begin() + size) <= *(rhs.begin() + size))
+        //if (*(it_lhs) <= *(rhs.begin() + size))
           //  return (true);
         return (false);
 	}
 	template<class T, class Alloc>
     bool	operator>(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
-		std::size_t	size = 0;
+		typename ft::vector<T>::const_iterator	it_lhs = lhs.begin();
+		typename ft::vector<T>::const_iterator	it_rhs = rhs.begin();
 
-		while (lhs.begin() + size != lhs.end() && rhs.begin() + size != rhs.end())
+		while (it_lhs != lhs.end() && it_rhs != rhs.end())
         {
-            if (*(lhs.begin() + size) > *(rhs.begin() + size))
+            if (*it_lhs > *it_rhs)
                 return (true);
-            if (*(rhs.begin() + size) > *(lhs.begin() + size))
+            if (*it_rhs > *it_lhs)
                 return (false);
-			size++;
+			it_lhs++;
+			it_rhs++;
         }
-        //if (*(lhs.begin() + size) > *(rhs.begin() + size))
+        //if (*(lhs.begin() + size) > *(it_rhs))
           //  return (true);
         return (false);
 	}
 	template<class T, class Alloc>
     bool	operator>=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
-		std::size_t	size = 0;
+		typename ft::vector<T>::const_iterator	it_lhs = lhs.begin();
+		typename ft::vector<T>::const_iterator	it_rhs = rhs.begin();
 
-		while (lhs.begin() + size != lhs.end() && rhs.begin() + size != rhs.end())
+		while (it_lhs != lhs.end() && it_rhs != rhs.end())
         {
-            if (*(lhs.begin() + size) >= *(rhs.begin() + size))
+            if (*it_lhs >= *it_rhs)
                 return (true);
-            if (*(rhs.begin() + size) > *(lhs.begin() + size))
+            if (*it_rhs > *it_lhs)
                 return (false);
-            size++;
+            it_lhs++;
+			it_rhs++;
         }
-        //if (*(lhs.begin() + size) >= *(rhs.begin() + size))
+        //if (*(it_lhs) >= *(it_rhs))
           //  return (true);
         return (false);
 	}
