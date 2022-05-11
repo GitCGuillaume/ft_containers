@@ -29,11 +29,15 @@
 #include "tests/vector_custom/operator.hpp"
 #include "tests/vector/reverse_iterator.hpp"
 #include "tests/vector_custom/reverse_iterator.hpp"
+#include "tests/vector/iterator.hpp"
+#include "tests/vector_custom/iterator.hpp"
 //#include <type_traits>
 #include <stdint.h>
 
 int	main(void)
 {
+	rite();
+	rite2();
 	test_std_assign1_forward();
 	test_ft_assign1_forward();
 	test_std_assign_it_forward();
@@ -112,5 +116,10 @@ int	main(void)
 	reverse_iterator_custom();
 	reverse_iterator_empty();
 	reverse_iterator_empty_custom();
+	iterator_test();
+	iterator_test_custom();
+	iterator_empty();
+	iterator_empty_custom();
+	
 	return (0);
 }

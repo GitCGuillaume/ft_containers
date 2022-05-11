@@ -24,7 +24,6 @@ namespace ft
 			typedef typename Allocator::const_reference	const_reference;
 			typedef typename Allocator::pointer	pointer;
 			typedef typename Allocator::const_pointer	const_pointer;
-			//typedef typename ft::iterator<std::random_access_iterator_tag, ft::RandomAccessIterator<value_type> >	iterator;
 			typedef ft::RandomAccessIterator<value_type>		iterator;
 			typedef ft::RandomAccessIterator<const value_type>	const_iterator;
 			typedef ft::reverse_iterator<iterator>	reverse_iterator;
@@ -232,11 +231,11 @@ namespace ft
 			/* ITERATORS */
 			iterator	begin()
 			{
-				return (this->_vec);
+				return (iterator(this->_vec));
 			}
 			const_iterator	begin() const
 			{
-				return (this->_vec);
+				return (const_iterator(this->_vec));
 			}
 			reverse_iterator	rbegin()
 			{
@@ -244,19 +243,19 @@ namespace ft
 			}
 			const_reverse_iterator	rbegin() const
 			{
-				return (reverse_iterator(this->end() - 1));
+				return (const_reverse_iterator(this->end() - 1));
 			}
 			iterator	end()
 			{
 				if (_size == 0)
-					return (this->_vec);
-				return (this->_vec + _size);
+					return (iterator(this->_vec));
+				return (iterator(this->_vec + _size));
 			}
 			const_iterator	end() const
 			{
 				if (_size == 0)
-					return (this->_vec);
-				return (this->_vec + _size);
+					return (const_iterator(this->_vec));
+				return (const_iterator(this->_vec + _size));
 			}
 			reverse_iterator	rend()
 			{
@@ -264,7 +263,7 @@ namespace ft
 			}
 			const_reverse_iterator	rend() const
 			{
-				return (reverse_iterator(this->begin() - 1));
+				return (const_reverse_iterator(this->begin() - 1));
 			}
 			/* CAPACITY */
 			bool	empty() const

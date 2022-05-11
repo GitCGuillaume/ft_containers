@@ -3,6 +3,8 @@
 
 #include "iterator_traits.hpp"
 #include "iterator.hpp"
+#include "../library_headers/is_integral.hpp"
+#include "../library_headers/enable_if.hpp"
 #include <iostream>
 
 namespace ft
@@ -26,23 +28,23 @@ namespace ft
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::iterator_category    iterator_category;
 
             RandomAccessIterator(){};
-            explicit RandomAccessIterator(iterator_type it) : _ptr(it._ptr){}
+            explicit RandomAccessIterator(iterator_type it) : _ptr(it){}
             RandomAccessIterator(pointer ptr)
             {
                 this->_ptr = ptr;
             }
-            template<class U>
-            RandomAccessIterator(RandomAccessIterator<U> const & rhs) : _ptr(rhs.base()){}
-            pointer base() const
+            //template<class U>
+            RandomAccessIterator(const RandomAccessIterator & rhs) : _ptr(rhs.base()){}
+            const pointer   base() const
             {
                 return (this->_ptr);
             }
             /* Tester deep copy plus tard */
-            template<class U>
-            RandomAccessIterator & operator=(RandomAccessIterator<U> const & rhs)
+            //template<class U>
+            RandomAccessIterator & operator=(const RandomAccessIterator & rhs)
             {
                 if (this != &rhs)
-                    this->_ptr = rhs._ptr;
+                    this->_ptr = rhs.base();
                 return (*this);
             };
             virtual ~RandomAccessIterator(){};
@@ -78,17 +80,17 @@ namespace ft
                 _ptr--;
                 return (tmp);
             }
-            RandomAccessIterator& operator+=(difference_type n)
+            RandomAccessIterator& operator+=(const difference_type n)
             {
                 this->_ptr += n;
                 return (*this);
             }
-            RandomAccessIterator& operator-=(difference_type n)
+            RandomAccessIterator& operator-=(const difference_type n)
             {
                 this->_ptr -= n;
                 return (*this);
             }
-            RandomAccessIterator    operator+(difference_type n) const
+            RandomAccessIterator    operator+(const difference_type n) const
             {
                 return (this->_ptr + n);
             }
@@ -99,13 +101,13 @@ namespace ft
             }*/
              /* https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator
             b - a */
-            RandomAccessIterator  operator-(difference_type n) const
+            RandomAccessIterator  operator-(const difference_type n) const
             {
                 return (this->_ptr - n);
             }
-            difference_type operator-(reference const rhs) const
+            difference_type operator-(RandomAccessIterator const & rhs) const
             {
-                    return (this->_ptr - rhs._ptr);
+                return (this->_ptr - rhs._ptr);
             }
             reference   operator[](std::size_t n) const
             {
@@ -157,7 +159,7 @@ namespace ft
     template<class Iterator>
     typename    RandomAccessIterator<Iterator>::difference_type operator-(const RandomAccessIterator<Iterator>& lhs, const RandomAccessIterator<Iterator>& rhs)
     {
-        return (rhs.operator->() - lhs.operator->());
+        return (rhs.base() - lhs.base());
     }
 }
 #endif

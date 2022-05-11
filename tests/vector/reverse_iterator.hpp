@@ -6,5 +6,6 @@
 
 void    reverse_iterator();
 void    reverse_iterator_empty();
+void    rite();
 
 #endif
