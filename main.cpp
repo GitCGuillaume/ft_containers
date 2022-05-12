@@ -36,8 +36,8 @@
 
 int	main(void)
 {
-	rite();
-	rite2();
+	//rite();
+	//rite2();
 	test_std_assign1_forward();
 	test_ft_assign1_forward();
 	test_std_assign_it_forward();

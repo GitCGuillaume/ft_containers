@@ -5,11 +5,12 @@
 #include "iterator.hpp"
 #include "../library_headers/is_integral.hpp"
 #include "../library_headers/enable_if.hpp"
+#include "../library_headers/is_same.hpp"
 #include <iostream>
 
 namespace ft
 {
-    template<class It>
+    template<class It, class Container>
     class RandomAccessIterator
     {
         /*Oublie pas de test les const */
@@ -28,20 +29,26 @@ namespace ft
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::iterator_category    iterator_category;
 
             RandomAccessIterator(){};
-            explicit RandomAccessIterator(iterator_type it) : _ptr(it){}
+            explicit RandomAccessIterator(const iterator_type it) : _ptr(it){}
             RandomAccessIterator(pointer ptr)
             {
                 this->_ptr = ptr;
             }
-            //template<class U>
-            RandomAccessIterator(const RandomAccessIterator & rhs) : _ptr(rhs.base()){}
+           // RandomAccessIterator(RandomAccessIterator const & rhs) : _ptr(rhs.base()){}
+            template<typename U>
+            RandomAccessIterator(const RandomAccessIterator<U
+                , typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type>& rhs) : _ptr(rhs.base()){}
             const pointer   base() const
             {
                 return (this->_ptr);
             }
+            /*
+             *  Convert iterator to const_iterator
+             *  iterator will choose non const function if container is not const
+            */
             /* Tester deep copy plus tard */
             //template<class U>
-            RandomAccessIterator & operator=(const RandomAccessIterator & rhs)
+            RandomAccessIterator & operator=(RandomAccessIterator const & rhs)
             {
                 if (this != &rhs)
                     this->_ptr = rhs.base();
@@ -117,47 +124,88 @@ namespace ft
         protected:
             pointer _ptr;
     };
-    template<class Iterator1, class Iterator2>
-    bool    operator!=(const ft::RandomAccessIterator<Iterator1>& lhs, const ft::RandomAccessIterator<Iterator2>& rhs)
+    template<class Iterator, class Container>
+    bool    operator!=(const ft::RandomAccessIterator<Iterator, Container>& lhs, const ft::RandomAccessIterator<Iterator, Container>& rhs)
     {
         if (lhs.operator->() != rhs.operator->())
             return true;
         return (false);
     }
-    template<class Iterator1, class Iterator2>
-    bool    operator==(const ft::RandomAccessIterator<Iterator1>& lhs, const ft::RandomAccessIterator<Iterator2>& rhs)
+    template<class Iterator, class Container>
+    bool    operator==(const ft::RandomAccessIterator<Iterator, Container>& lhs, const ft::RandomAccessIterator<Iterator, Container>& rhs)
     {
         if (lhs.operator->() == rhs.operator->())
             return true;
         return (false);
     }
-    template<class Iterator1, class Iterator2>
-    bool    operator<(const ft::RandomAccessIterator<Iterator1>& lhs, const ft::RandomAccessIterator<Iterator2>& rhs)
+    template<class Iterator, class Container>
+    bool    operator<(const ft::RandomAccessIterator<Iterator, Container>& lhs, const ft::RandomAccessIterator<Iterator, Container>& rhs)
     {
         return ((lhs.operator->() < rhs.operator->()) ? true : false);
     }
-    template<class Iterator1, class Iterator2>
-    bool    operator>(const ft::RandomAccessIterator<Iterator1>& lhs, const ft::RandomAccessIterator<Iterator2>& rhs)
+    template<class Iterator, class Container>
+    bool    operator>(const ft::RandomAccessIterator<Iterator, Container>& lhs, const ft::RandomAccessIterator<Iterator, Container>& rhs)
     {
         return (rhs < lhs);
     }
-    template<class Iterator1, class Iterator2>
-    bool    operator<=(const ft::RandomAccessIterator<Iterator1>& lhs, const ft::RandomAccessIterator<Iterator2>& rhs)
+    template<class Iterator, class Container>
+    bool    operator<=(const ft::RandomAccessIterator<Iterator, Container>& lhs, const ft::RandomAccessIterator<Iterator, Container>& rhs)
     {
         return ((lhs.operator->() <= rhs.operator->()) ? true : false);
     }
-    template<class Iterator1, class Iterator2>
-    bool    operator>=(const ft::RandomAccessIterator<Iterator1>& lhs, const ft::RandomAccessIterator<Iterator2>& rhs)
+    template<class Iterator, class Container>
+    bool    operator>=(const ft::RandomAccessIterator<Iterator, Container>& lhs, const ft::RandomAccessIterator<Iterator, Container>& rhs)
     {
         return (rhs <= lhs);
     }
-    template<class Iterator>
-    RandomAccessIterator<Iterator>  operator+(typename RandomAccessIterator<Iterator>::difference_type n, const RandomAccessIterator<Iterator>& it)
+    template<class Iterator, class Container>
+    RandomAccessIterator<Iterator, Container>  operator+(typename RandomAccessIterator<Iterator, Container>::difference_type n, const RandomAccessIterator<Iterator, Container>& it)
     {
         return &*(it + n);
     }
-    template<class Iterator>
-    typename    RandomAccessIterator<Iterator>::difference_type operator-(const RandomAccessIterator<Iterator>& lhs, const RandomAccessIterator<Iterator>& rhs)
+    template<class Iterator, class Container>
+    typename    RandomAccessIterator<Iterator, Container>::difference_type operator-(const RandomAccessIterator<Iterator, Container>& lhs, const RandomAccessIterator<Iterator, Container>& rhs)
+    {
+        return (rhs.base() - lhs.base());
+    }
+
+    /* CONST ITERATOR */
+    template<class Iterator1, class Iterator2, class Container>
+    bool    operator!=(const ft::RandomAccessIterator<Iterator1, Container>& lhs, const ft::RandomAccessIterator<Iterator2, Container>& rhs)
+    {
+        if (lhs.operator->() != rhs.operator->())
+            return true;
+        return (false);
+    }
+    template<class Iterator1, class Iterator2, class Container>
+    bool    operator==(const ft::RandomAccessIterator<Iterator1, Container>& lhs, const ft::RandomAccessIterator<Iterator2, Container>& rhs)
+    {
+        if (lhs.operator->() == rhs.operator->())
+            return true;
+        return (false);
+    }
+    template<class Iterator1, class Iterator2, class Container>
+    bool    operator<(const ft::RandomAccessIterator<Iterator1, Container>& lhs, const ft::RandomAccessIterator<Iterator2, Container>& rhs)
+    {
+        return ((lhs.operator->() < rhs.operator->()) ? true : false);
+    }
+    template<class Iterator1, class Iterator2, class Container>
+    bool    operator>(const ft::RandomAccessIterator<Iterator1, Container>& lhs, const ft::RandomAccessIterator<Iterator2, Container>& rhs)
+    {
+        return (rhs < lhs);
+    }
+    template<class Iterator1, class Iterator2, class Container>
+    bool    operator<=(const ft::RandomAccessIterator<Iterator1, Container>& lhs, const ft::RandomAccessIterator<Iterator2, Container>& rhs)
+    {
+        return ((lhs.operator->() <= rhs.operator->()) ? true : false);
+    }
+    template<class Iterator1, class Iterator2, class Container>
+    bool    operator>=(const ft::RandomAccessIterator<Iterator1, Container>& lhs, const ft::RandomAccessIterator<Iterator2, Container>& rhs)
+    {
+        return (rhs <= lhs);
+    }
+    template<class Iterator, class Iterator2, class Container>
+    typename    RandomAccessIterator<Iterator, Container>::difference_type operator-(const RandomAccessIterator<Iterator, Container>& lhs, const RandomAccessIterator<Iterator2, Container>& rhs)
     {
         return (rhs.base() - lhs.base());
     }

@@ -24,8 +24,8 @@ namespace ft
 			typedef typename Allocator::const_reference	const_reference;
 			typedef typename Allocator::pointer	pointer;
 			typedef typename Allocator::const_pointer	const_pointer;
-			typedef ft::RandomAccessIterator<value_type>		iterator;
-			typedef ft::RandomAccessIterator<const value_type>	const_iterator;
+			typedef ft::RandomAccessIterator<value_type, vector>		iterator;
+			typedef ft::RandomAccessIterator<const value_type, vector>	const_iterator;
 			typedef ft::reverse_iterator<iterator>	reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 			typedef std::ptrdiff_t	difference_type;
