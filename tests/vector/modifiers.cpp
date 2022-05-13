@@ -151,7 +151,7 @@ void    resize()
     std::cout << "capacity : " << vec.capacity() << std::endl;
     for (int i = 1; i < 6; i++)
         vec.push_back(i);
-    vec.resize(15);
+    vec.resize(15, 42);
     std::cout << "capacity : " << vec.capacity() << std::endl;
     for  (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
             std::cout << "e2 : " << *it << std::endl;

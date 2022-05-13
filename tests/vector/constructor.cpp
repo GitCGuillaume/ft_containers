@@ -50,6 +50,8 @@ void    copy_constructor()
     std::vector<float>  vec(3, 1.000000);
     std::vector<float>  vec_2(vec.begin(), vec.end());
     std::vector<float>  vec_cpy(vec_2);
+    std::cout << "Capacity count COPY constructor : " << vec_cpy.capacity() << std::endl;
+    std::cout << "Size count COPY constructor : " << vec_cpy.size() << std::endl;
     for (std::vector<float>::iterator	it = vec_cpy.begin(); it != vec_cpy.end(); it++)
 		std::cout << *it << std::endl;
 }
@@ -62,6 +64,8 @@ void    operator_assignation_constructor()
 
     vec.assign(5, 1);
     vec2 = vec;
+    std::cout << "Capacity count ASSIGNATION constructor : " << vec2.capacity() << std::endl;
+    std::cout << "Size count ASSIGNATION constructor : " << vec2.size() << std::endl;
     for (std::vector<int>::iterator	it = vec2.begin(); it != vec2.end(); it++)
 		std::cout << *it << std::endl;
 }

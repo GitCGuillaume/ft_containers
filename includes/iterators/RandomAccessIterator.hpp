@@ -21,7 +21,7 @@ namespace ft
         */
         /* Use ft::iterator into iterator_traits to use iterator_traits types (is this dispatch tag?) correctly */
         public:
-            typedef It    iterator_type;
+            //typedef It    iterator_type;
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::value_type    value_type;
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::difference_type    difference_type;
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::reference    reference;
@@ -29,7 +29,7 @@ namespace ft
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::iterator_category    iterator_category;
 
             RandomAccessIterator(){};
-            explicit RandomAccessIterator(const iterator_type it) : _ptr(it){}
+            //explicit RandomAccessIterator(const iterator_type it) : _ptr(it){}
             RandomAccessIterator(pointer ptr)
             {
                 this->_ptr = ptr;
@@ -38,7 +38,7 @@ namespace ft
             template<typename U>
             RandomAccessIterator(const RandomAccessIterator<U
                 , typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type>& rhs) : _ptr(rhs.base()){}
-            const pointer   base() const
+            pointer   base() const
             {
                 return (this->_ptr);
             }
@@ -166,7 +166,7 @@ namespace ft
     template<class Iterator, class Container>
     typename    RandomAccessIterator<Iterator, Container>::difference_type operator-(const RandomAccessIterator<Iterator, Container>& lhs, const RandomAccessIterator<Iterator, Container>& rhs)
     {
-        return (rhs.base() - lhs.base());
+        return (lhs.base() - rhs.base());
     }
 
     /* CONST ITERATOR */
@@ -207,7 +207,7 @@ namespace ft
     template<class Iterator, class Iterator2, class Container>
     typename    RandomAccessIterator<Iterator, Container>::difference_type operator-(const RandomAccessIterator<Iterator, Container>& lhs, const RandomAccessIterator<Iterator2, Container>& rhs)
     {
-        return (rhs.base() - lhs.base());
+        return (lhs.base() - rhs.base());
     }
 }
 #endif

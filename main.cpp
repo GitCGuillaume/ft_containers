@@ -36,8 +36,6 @@
 
 int	main(void)
 {
-	//rite();
-	//rite2();
 	test_std_assign1_forward();
 	test_ft_assign1_forward();
 	test_std_assign_it_forward();
@@ -120,6 +118,5 @@ int	main(void)
 	iterator_test_custom();
 	iterator_empty();
 	iterator_empty_custom();
-	
 	return (0);
 }

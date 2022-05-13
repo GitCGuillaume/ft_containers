@@ -31,7 +31,7 @@ namespace ft
             /* essayer de tester out of range */
             iterator_type   base() const
             {
-                return (this->_current);
+                return (this->_current + 1);
             }
             reference  operator*() const
             {
