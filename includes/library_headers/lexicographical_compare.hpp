@@ -16,8 +16,9 @@ namespace ft
             first1++;
             first2++;
         }
-        //if (*first1 < *first2)
-          //  return (true);
+        //less bigger than left container, so lexicographical less
+        if (first2 != last2 && first1 == last1)
+            return (true);
         return (false);
     }
     template<class InputIt1, class InputIt2, class Compare>
@@ -33,7 +34,7 @@ namespace ft
             first1++;
             first2++;
         }
-        if (comp(*first1, *first2))
+        if (first2 != last2)
             return (true);
         return (false);
     }

@@ -232,7 +232,7 @@ namespace ft
 			/* ITERATORS */
 			iterator	begin()
 			{
-				return (iterator(this->_vec));
+				return (this->_vec);
 			}
 			const_iterator	begin() const
 			{
@@ -249,8 +249,8 @@ namespace ft
 			iterator	end()
 			{
 				if (_size == 0)
-					return (iterator(this->_vec));
-				return (iterator(this->_vec + _size));
+					return (this->_vec);
+				return (this->_vec + _size);
 			}
 			const_iterator	end() const
 			{
@@ -295,7 +295,7 @@ namespace ft
 					for (size_type i = 0; i < this->size(); i++)
 					{
 						_allocator.construct(ptr + i, *(_vec + i));
-						_allocator.destroy(_vec + i);
+						//_allocator.destroy(_vec + i);
 					}
 					_allocator.deallocate(_vec, this->capacity());
 					_vec = ptr;
@@ -520,11 +520,12 @@ namespace ft
 				if (_capacity_allocator < count)
 				{
 					if (_capacity_allocator == 0)
-						this->reserve(count);
+						this->reserve(_size + count);
+					else if (_capacity_allocator + count > (_capacity_allocator << 1))
+						this->reserve(_capacity_allocator + count);
 					else
 						this->reserve(_capacity_allocator << 1);
 				}
-				std::cout << "CAPACITY : " << this->capacity() << "value : " << value << std::endl;
 				while (count < _size)
 				{
 					_allocator.destroy(_vec + _size);
@@ -538,7 +539,7 @@ namespace ft
 			}
 			void	swap(vector& other)
 			{
-				vector	tmp(*this);
+				vector	tmp = *this;
 
 				*this = other;
 				other = tmp;
@@ -549,9 +550,16 @@ namespace ft
 			size_type		_capacity_allocator;
 			size_type		_size;
 	};
+	/*
+	*	if (lhs.size() != rhs.size())
+	*	Can't be equal if size is not
+	*	Also quicker
+	*/
 	template<class T, class Alloc>
 	bool	operator==(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
+		if (lhs.size() != rhs.size())
+			return (false);
 		bool	is_equal = ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 
 		return (is_equal);
@@ -559,6 +567,8 @@ namespace ft
 	template<class T, class Alloc>
 	bool	operator!=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
+		if (lhs.size() != rhs.size()) // Quicker
+			return (true);
 		bool	is_equal = ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 
 		return (!is_equal);
@@ -573,21 +583,7 @@ namespace ft
 	template<class T, class Alloc>
     bool	operator<=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
-		typename ft::vector<T>::const_iterator	it_lhs = lhs.begin();
-		typename ft::vector<T>::const_iterator	it_rhs = rhs.begin();
-
-		while (it_lhs != lhs.end() && it_rhs != rhs.end())
-        {
-            if (*it_lhs <= *it_rhs)
-                return (true);
-            else
-                return (false);
-            it_lhs++;
-			it_rhs++;
-        }
-        //if (*(it_lhs) <= *(rhs.begin() + size))
-          //  return (true);
-        return (false);
+		return (!(lhs > rhs));
 	}
 	template<class T, class Alloc>
     bool	operator>(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
@@ -604,33 +600,20 @@ namespace ft
 			it_lhs++;
 			it_rhs++;
         }
-        //if (*(lhs.begin() + size) > *(it_rhs))
-          //  return (true);
+		//less bigger than right container, so lexicographical less
+        if (it_lhs != lhs.end() && it_rhs == rhs.end())
+            return (true);
         return (false);
 	}
 	template<class T, class Alloc>
     bool	operator>=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
-		typename ft::vector<T>::const_iterator	it_lhs = lhs.begin();
-		typename ft::vector<T>::const_iterator	it_rhs = rhs.begin();
-
-		while (it_lhs != lhs.end() && it_rhs != rhs.end())
-        {
-            if (*it_lhs >= *it_rhs)
-                return (true);
-            if (*it_rhs > *it_lhs)
-                return (false);
-            it_lhs++;
-			it_rhs++;
-        }
-        //if (*(it_lhs) >= *(it_rhs))
-          //  return (true);
-        return (false);
+		return (!(lhs < rhs));
 	}
 	template<class T, class Alloc>
 	void	swap(ft::vector<T, Alloc>& lhs, ft::vector<T, Alloc>& rhs)
 	{
-		ft::vector<T>	tmp(rhs);
+		ft::vector<T>	tmp = rhs;
 
 		rhs = lhs;
 		lhs = tmp;

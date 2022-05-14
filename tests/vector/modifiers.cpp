@@ -192,6 +192,8 @@ void    swap_vector()
     vec_1.reserve(5);
     vec_2.push_back(5);
     vec_2.push_back(6);
+    std::vector<int>::iterator it1 = vec_1.begin();
+    std::vector<int>::iterator it2 = vec_2.begin();
     std::cout << "BEFORE" << std::endl;
     std::cout << "vec_1 size : " << vec_1.size() << std::endl
         << "vec_1 capacity : " << vec_1.capacity() << std::endl;
@@ -209,6 +211,9 @@ void    swap_vector()
     std::cout << "vec_2" << std::endl;
     for  (std::vector<int>::iterator it = vec_2.begin(); it != vec_2.end(); it++)
         std::cout << *it << std::endl;
+    std::cout << "it_1 validity : " << (it1 == vec_1.begin()) << std::endl;
+    std::cout << "it_2 validity : " << (it2 == vec_2.begin()) << std::endl;
+
 }
 
 void    swap_vector_non_member()
@@ -230,6 +235,8 @@ void    swap_vector_non_member()
     vec_1.reserve(5);
     vec_2.push_back(5);
     vec_2.push_back(6);
+    std::vector<int>::iterator it1 = vec_1.begin();
+    std::vector<int>::iterator it2 = vec_2.begin();
     std::cout << "BEFORE" << std::endl;
     std::cout << "vec_1 size : " << vec_1.size() << std::endl
         << "vec_1 capacity : " << vec_1.capacity() << std::endl;
@@ -247,4 +254,6 @@ void    swap_vector_non_member()
     std::cout << "vec_2" << std::endl;
     for  (std::vector<int>::iterator it = vec_2.begin(); it != vec_2.end(); it++)
         std::cout << *it << std::endl;
+    std::cout << "it_1 validity : " << (it1 == vec_1.begin()) << std::endl;
+    std::cout << "it_2 validity : " << (it2 == vec_2.begin()) << std::endl;
 }
