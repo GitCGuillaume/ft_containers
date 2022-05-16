@@ -36,12 +36,15 @@ namespace ft
 				_vec = _allocator.allocate(0);
 			}
 			/* TESTER CAPACITY ALLOCATORS */
-			explicit	vector(const Allocator& alloc) : _vec(NULL), _allocator(alloc), _capacity_allocator(0), _size(0){}
+			explicit	vector(const Allocator& alloc) : _vec(NULL), _allocator(alloc), _capacity_allocator(0), _size(0)
+			{
+				_vec = _allocator.allocate(0);
+			}
 			explicit	vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator()) :
 				_allocator(alloc), _capacity_allocator(count), _size(count)
 			{
 				_vec = _allocator.allocate(_capacity_allocator);
-				for (size_type i = 0; i < this->size(); i++)
+				for (size_type i = 0; i < count; i++)
 					_allocator.construct(_vec + i, value);
 			}
 			template<class InputIt>
@@ -78,8 +81,8 @@ namespace ft
 			{
 				if (_vec)
 				{
-					for (size_type i = 0; i < _size; i++)
-						_allocator.destroy(_vec + i);
+					//for (size_type i = 0; i < _size; i++)
+					//	_allocator.destroy(_vec + i);
 					_allocator.deallocate(_vec, _capacity_allocator);
 				}
 			}
@@ -87,25 +90,22 @@ namespace ft
 			{
 				if (this != &other)
 				{
-					if (_vec)
-					{
-						for (size_type i = 0; i < _size; i++)
-							_allocator.destroy(_vec + i);
-						_allocator.deallocate(_vec, _capacity_allocator);
-						_allocator = other.get_allocator();
-						_vec = _allocator.allocate(other.capacity());
-					}
+					for (size_type i = 0; i < _size; i++)
+						_allocator.destroy(_vec + i);
+					_allocator.deallocate(_vec, _capacity_allocator);
+					_allocator = other.get_allocator();
+					_vec = _allocator.allocate(other.capacity());
 					_capacity_allocator = other.capacity();
 					_size = other.size();
 					for (size_type i = 0; i < other.size(); i++)
-						_allocator.construct(_vec + i, other.at(i));
+						_vec[i] = other.at(i);
+					//_allocator.construct(_vec + i, other[i]);
 				}
 				return (*this);
 			}
 			/* Oublie pas de mettre les fonctions dans le bon ordre */
 			void	assign(size_type count, const T& value)
 			{
-				//TRY CATCH ?
 				size_type i = 0;
 
 				for (; i < _size; i++)
@@ -174,7 +174,6 @@ namespace ft
 				}
 				return (_vec[pos]);
 			}
-			/* ELEMENTS ACCESS */
 			const_reference	at(size_type pos) const
 			{
 				if (!(pos < this->size()))
@@ -232,7 +231,7 @@ namespace ft
 			/* ITERATORS */
 			iterator	begin()
 			{
-				return (this->_vec);
+				return (iterator(this->_vec));
 			}
 			const_iterator	begin() const
 			{
@@ -240,17 +239,17 @@ namespace ft
 			}
 			reverse_iterator	rbegin()
 			{
-				return (reverse_iterator(this->end() - 1));
+				return (reverse_iterator(this->end()));
 			}
 			const_reverse_iterator	rbegin() const
 			{
-				return (const_reverse_iterator(this->end() - 1));
+				return (const_reverse_iterator(this->end()));
 			}
 			iterator	end()
 			{
 				if (_size == 0)
-					return (this->_vec);
-				return (this->_vec + _size);
+					return (iterator(this->_vec));
+				return (iterator(this->_vec + _size));
 			}
 			const_iterator	end() const
 			{
@@ -260,11 +259,11 @@ namespace ft
 			}
 			reverse_iterator	rend()
 			{
-				return (reverse_iterator(this->begin() - 1));
+				return (reverse_iterator(this->begin()));
 			}
 			const_reverse_iterator	rend() const
 			{
-				return (const_reverse_iterator(this->begin() - 1));
+				return (const_reverse_iterator(this->begin()));
 			}
 			/* CAPACITY */
 			bool	empty() const
@@ -295,7 +294,7 @@ namespace ft
 					for (size_type i = 0; i < this->size(); i++)
 					{
 						_allocator.construct(ptr + i, *(_vec + i));
-						//_allocator.destroy(_vec + i);
+						_allocator.destroy(_vec + i);
 					}
 					_allocator.deallocate(_vec, this->capacity());
 					_vec = ptr;
@@ -539,10 +538,23 @@ namespace ft
 			}
 			void	swap(vector& other)
 			{
-				vector	tmp = *this;
+				/*vector	tmp = other;
 
-				*this = other;
-				other = tmp;
+				other = *this;
+				*this = tmp;*/
+				pointer	tmp_vec = other._vec;
+				allocator_type	tmp_alc = other._allocator;
+				size_type	tmp_cap = other._capacity_allocator;
+				size_type	tmp_size = other._size;
+
+				other._vec = _vec;
+				other._allocator = _allocator;
+				other._capacity_allocator = _capacity_allocator;
+				other._size = _size;
+				_vec = tmp_vec;
+				_allocator = tmp_alc;
+				_capacity_allocator = tmp_cap;
+				_size = tmp_size;
 			}
 		private:
 			pointer			_vec;

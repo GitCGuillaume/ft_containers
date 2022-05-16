@@ -19,10 +19,10 @@ void    reverse_iterator()
        std::cout << *rit << std::endl;
     std::vector<int>::reverse_iterator rit = vec.rend();
     std::cout << "base : " << *rit.base() << std::endl;
-    rit -= 1;
+    std::cout << "rit -= 1 : " << *(rit -= 1) << std::endl;
     rit + 1;
     rit - 1;
-    rit += 1;
+    std::cout << "rit += 1 : " << *(rit += 1) << std::endl;
     for (std::vector<int>::reverse_iterator rit = vec.rend() - 1; rit != vec.rbegin(); rit--)
         std::cout << *rit << std::endl;
 }

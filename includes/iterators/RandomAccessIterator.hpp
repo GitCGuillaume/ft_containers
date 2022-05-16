@@ -28,12 +28,9 @@ namespace ft
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::pointer    pointer;
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::iterator_category    iterator_category;
 
-            RandomAccessIterator(){};
+            RandomAccessIterator() : _ptr(){};
             //explicit RandomAccessIterator(const iterator_type it) : _ptr(it){}
-            RandomAccessIterator(pointer ptr)
-            {
-                this->_ptr = ptr;
-            }
+            RandomAccessIterator(pointer ptr) : _ptr(ptr) {}
            // RandomAccessIterator(RandomAccessIterator const & rhs) : _ptr(rhs.base()){}
             template<typename U>
             RandomAccessIterator(const RandomAccessIterator<U

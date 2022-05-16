@@ -9,7 +9,7 @@ void    reverse_iterator_custom()
 
 	it = vec.rbegin();
 	ite = vec.rbegin();
-	static_cast<void>(it);
+    static_cast<void>(it);
     static_cast<void>(ite);
     for (int i = 1; i < 6; i++)
         vec.push_back(i);
@@ -19,10 +19,10 @@ void    reverse_iterator_custom()
        std::cout << *rit << std::endl;
     ft::vector<int>::reverse_iterator rit = vec.rend();
     std::cout << "base : " << *rit.base() << std::endl;
-    rit -= 1;
+    std::cout << "rit -= 1 : " << *(rit -= 1) << std::endl;
     rit + 1;
     rit - 1;
-    rit += 1;
+    std::cout << "rit += 1 : " << *(rit += 1) << std::endl;
     for (ft::vector<int>::reverse_iterator rit = vec.rend() - 1; rit != vec.rbegin(); rit--)
         std::cout << *rit << std::endl;
 }
