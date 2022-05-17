@@ -64,6 +64,8 @@ int	main(void)
 	allocator_custom_iterator();
 	copy_constructor();
 	copy_custom_constructor();
+	fill_constructor();
+	fill_constructor_custom();
 	operator_assignation_constructor();
 	operator_custom_assignation_constructor();
 	test_data();

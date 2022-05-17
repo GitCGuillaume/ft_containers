@@ -68,4 +68,23 @@ void    operator_assignation_constructor()
     std::cout << "Size count ASSIGNATION constructor : " << vec2.size() << std::endl;
     for (std::vector<int>::iterator	it = vec2.begin(); it != vec2.end(); it++)
 		std::cout << *it << std::endl;
+    std::cout << "Constructor assignation test assignation from EMPTY" << std::endl;
+    std::vector<int> vec3(10, 42);
+    std::vector<int> vec4;
+    vec3 = vec4;
+    std::cout << "Capacity count ASSIGNATION constructor EMPTY : " << vec3.capacity() << std::endl;
+    std::cout << "Size count ASSIGNATION constructor EMPTY : " << vec3.size() << std::endl;
+    for (std::vector<int>::iterator	it = vec3.begin(); it != vec3.end(); it++)
+		std::cout << *it << std::endl;
+}
+
+void    fill_constructor()
+{
+    std::cout << "Fill constructor" << std::endl;
+
+    std::vector<int>    vec(5);
+    std::cout << "Capacity count FILL constructor : " << vec.capacity() << std::endl;
+    std::cout << "Size count FILL constructor : " << vec.size() << std::endl;
+    for (std::vector<int>::iterator	it = vec.begin(); it != vec.end(); it++)
+		std::cout << *it << std::endl;
 }

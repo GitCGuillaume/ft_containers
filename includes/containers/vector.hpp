@@ -31,47 +31,52 @@ namespace ft
 			typedef std::ptrdiff_t	difference_type;
 			typedef std::size_t	size_type;
 			/* MEMBERS FUNCTIONS */
-			vector() : _capacity_allocator(0), _size(0)
+			/*vector() : _capacity_allocator(0), _size(0)
 			{
+				_allocator = Allocator();
 				_vec = _allocator.allocate(0);
-			}
+			}*/
 			/* TESTER CAPACITY ALLOCATORS */
-			explicit	vector(const Allocator& alloc) : _vec(NULL), _allocator(alloc), _capacity_allocator(0), _size(0)
+			explicit	vector(const allocator_type& alloc = allocator_type()) : _vec(0), _allocator(alloc), _capacity_allocator(0), _size(0)
 			{
+				//_vec = 0;
 				_vec = _allocator.allocate(0);
 			}
 			explicit	vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator()) :
 				_allocator(alloc), _capacity_allocator(count), _size(count)
 			{
-				_vec = _allocator.allocate(_capacity_allocator);
+				//if (count > 0)
+				_vec = _allocator.allocate(count);
+				//else
+				//	_vec = 0;
 				for (size_type i = 0; i < count; i++)
 					_allocator.construct(_vec + i, value);
 			}
 			template<class InputIt>
 			vector(InputIt first, InputIt last,
-				const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0) :
+				const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0) :
 				_allocator(alloc)
 			{
-				//size_type	count = 0;
-
-				difference_type count = std::distance(first, last);
-				//std::cout << "distance : " << count << std::endl;
+				size_type count = static_cast<size_type>(std::distance(first, last));
 				_capacity_allocator = count;
+				//if (count > 0)
 				_vec = _allocator.allocate(_capacity_allocator);
-				for (difference_type i = 0; i < count; i++)
+				//else
+				//	_vec = 0;
+				for (size_type i = 0; i < count; i++)
 				{
-					//if (first != last)
-					//{
 						_allocator.construct(_vec + i, *first);
 						first++;
-					//}
 				}
 				_size = count;
 			}
 			vector(const vector& other)
 			{
 				_allocator = other.get_allocator();
-				_vec = _allocator.allocate(other.capacity());
+				//if (other.size() > 0)
+					_vec = _allocator.allocate(other.capacity());
+				//else
+				//	_vec = 0;
 				_capacity_allocator = other.capacity();
 				_size = other.size();
 				for (size_type i = 0; i < other.size(); i++)
@@ -81,8 +86,8 @@ namespace ft
 			{
 				if (_vec)
 				{
-					//for (size_type i = 0; i < _size; i++)
-					//	_allocator.destroy(_vec + i);
+					for (size_type i = 0; i < _size; i++)
+						_allocator.destroy(_vec + i);
 					_allocator.deallocate(_vec, _capacity_allocator);
 				}
 			}
@@ -90,16 +95,23 @@ namespace ft
 			{
 				if (this != &other)
 				{
-					for (size_type i = 0; i < _size; i++)
-						_allocator.destroy(_vec + i);
+					//if (_vec)
+					//{
+						for (size_type i = 0; i < _size; i++)
+							_allocator.destroy(_vec + i);
+						//_vec = NULL;
+						_size = 0;
+					//}
+					if (other.empty())
+						return (*this);
+					//_allocator = other.get_allocator();
 					_allocator.deallocate(_vec, _capacity_allocator);
-					_allocator = other.get_allocator();
 					_vec = _allocator.allocate(other.capacity());
 					_capacity_allocator = other.capacity();
 					_size = other.size();
 					for (size_type i = 0; i < other.size(); i++)
-						_vec[i] = other.at(i);
-					//_allocator.construct(_vec + i, other[i]);
+						_allocator.construct(_vec + i, other.at(i));
+					//	_vec[i] = other.at(i);
 				}
 				return (*this);
 			}
@@ -110,10 +122,10 @@ namespace ft
 
 				for (; i < _size; i++)
 					_allocator.destroy(_vec + i);
-				if (this->capacity() <= count)
+				if (this->capacity() < count)
 				{
-					if (_vec)
-						_allocator.deallocate(_vec, _capacity_allocator);
+					//if (_vec)
+					_allocator.deallocate(_vec, _capacity_allocator);
 					_capacity_allocator = count;
 					_vec = _allocator.allocate(_capacity_allocator);
 				}
@@ -126,16 +138,13 @@ namespace ft
 			void	assign(InputIt first, InputIt last,
 				typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 			{
+				difference_type	count = std::distance(first, last);
 				size_type	i = 0;
-				difference_type	count = 0;
-
-				count = std::distance(first, last);
 				for (; i < _size; i++)
 					_allocator.destroy(_vec + i);
-				if (this->capacity() <= static_cast<unsigned>(count))
+				if (this->capacity() < static_cast<unsigned>(count))
 				{
-					if (_vec)
-						_allocator.deallocate(_vec, _capacity_allocator);
+					_allocator.deallocate(_vec, _capacity_allocator);
 					_capacity_allocator = count;
 					_vec = _allocator.allocate(_capacity_allocator);
 				}
@@ -145,6 +154,7 @@ namespace ft
 					_allocator.construct(_vec + i++, *first);
 					first++;
 				}
+				//_allocator.construct(_vec + i++, *first);
 				_size = static_cast<size_type>(count);
 			}
 			allocator_type	get_allocator() const
@@ -296,6 +306,7 @@ namespace ft
 						_allocator.construct(ptr + i, *(_vec + i));
 						_allocator.destroy(_vec + i);
 					}
+					//if (_vec)
 					_allocator.deallocate(_vec, this->capacity());
 					_vec = ptr;
 					_capacity_allocator = new_cap;
@@ -343,9 +354,9 @@ namespace ft
 					it_end = this->end();
 					while (it_end != new_it)
 					{
-						//_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
-						//_allocator.destroy(_vec + (cpy_size - 1));
-						_vec[cpy_size] = _vec[cpy_size - 1];
+						_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
+						_allocator.destroy(_vec + (cpy_size - 1));
+						//_vec[cpy_size] = _vec[cpy_size - 1];
 						cpy_size--;
 						it_end--;
 					}
@@ -365,11 +376,11 @@ namespace ft
 			//_vec[cpy + count] = _vec[cpy_size - 1];
 			//_allocator.construct(_vec + (cpy + count), *(_vec + cpy));
 			//_allocator.destroy(_vec + cpy);
-			//est-il possible d'aller plus vite en déplacent d'un coup le nombre total d'élement à déplacer sans boucle, idée à penser samedi par ex
 			void	insert(iterator pos, size_type count, const T& value)
 			{
 				size_type	offset = pos - this->begin();
-				
+				if (count == 0)
+					return ;
 				if (_size + count > _capacity_allocator)
 				{
 					if (_capacity_allocator == 0)
@@ -393,9 +404,9 @@ namespace ft
 					while (it_end != new_it)
 					{
 						size_type	cpy = cpy_size - 1;
-						//_allocator.construct(_vec + (cpy + count), *(_vec + cpy));
-						//_allocator.destroy(_vec + cpy);
-						_vec[cpy + count] = _vec[cpy];
+						_allocator.construct(_vec + (cpy + count), *(_vec + cpy));
+						_allocator.destroy(_vec + cpy);
+						//_vec[cpy + count] = _vec[cpy];
 						cpy_size--;
 						it_end--;
 					}
@@ -411,7 +422,8 @@ namespace ft
 				difference_type	distance = std::distance(first, last);
 				size_type	offset = pos - this->begin();
 				size_type	nb_count = 0;
-
+				if (distance == 0)
+					return ;
 				if (_size + distance > _capacity_allocator)
 				{
 					if (_capacity_allocator == 0)
@@ -435,7 +447,9 @@ namespace ft
 					while (it_end != new_it)
 					{
 						size_type	cpy = cpy_size - 1;
-						_vec[cpy + distance] = _vec[cpy];
+						_allocator.construct(_vec + (cpy + distance), *(_vec + cpy));
+						_allocator.destroy(_vec + cpy);
+						//_vec[cpy + distance] = _vec[cpy];
 						cpy_size--;
 						it_end--;
 					}
@@ -444,78 +458,134 @@ namespace ft
 				}
 				_size += distance;
 			}
-			/* à tester dans l'exam05 */
 			/* pointer ptr for last element because STL return an iterator with the deleted value */
 			//_allocator.destroy(_vec + distance);
 			//_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
 			iterator	erase(iterator pos)
 			{
-				size_type	offset = pos - this->begin();
-				iterator	it(pos);
-				iterator	it_end = this->end() - 1;
+				//size_type	offset = pos - this->begin();
 				difference_type	distance = std::distance(this->begin(), pos);
+				iterator	it(pos);
+				//if (pos == this->end())
+				//	it = this->end();
+				iterator	it_end = this->end();
+				//difference_type	distance = std::distance(this->begin(), pos);
 
-				_vec[distance] = _vec[distance + 1];
-				while (pos != it_end)
+				//_vec[distance] = _vec[distance + 1];
+				//_allocator.destroy(&*pos);
+				//if (pos + 1 != this->end())
+				//	_allocator.construct(&*pos, *(pos + 1));
+				while (it != it_end)
+				{
+					//*pos = *(pos + 1);
+					_allocator.destroy(_vec + distance);
+					if (it + 1 != it_end)
+						_allocator.construct(_vec + distance, _vec[distance + 1]);
+					distance++;
+					it++;
+				}
+				//_allocator.destroy(_vec + distance);
+				//_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
+				/*while (pos != it_end)
 				{
 					_allocator.destroy(_vec + distance);
+					_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
 					_vec[distance] = _vec[distance + 1];
 					pos++;
-					distance++;
-				}
-				_size--;
-				if ((offset + this->begin()) == this->end())
-					return (it);
-				return(offset + this->begin());
+				//	distance++;
+				}*/
+				if (pos != this->end())
+					_size--;
+				return (pos);
 			}
 			iterator	erase(iterator first, iterator last)
 			{
-				size_type	distance = 0;
+				if (first == last)
+					return (last);
+				size_type	reduce = 0;
 				size_type	offset = first - this->begin();
-				iterator	it(last);
-				iterator	save_start_it;
+				difference_type	distance = std::distance(this->begin(), first);
+				size_type	cpy_distance = distance;
+				iterator	it(first);
+				//iterator	save_start_it;
 				iterator	it_end = this->end();
-				if (last == this->end())
-					it = first;
+				//if (last == this->end())
+				//	it = first;
 				//_allocator.destroy(&*first);
 				//*first = *last;
 				//first++;
 				//distance++;
-				while (first != last)
+				if (first != last)
 				{
-					_allocator.destroy(&*first);
-					distance++;
-					first++;
+					while (it != last)
+					{
+						_allocator.destroy(_vec + distance);
+						distance++;
+						//_allocator.destroy(&*first);
+						reduce++;
+						it++;
+					}
+					while (it != it_end)
+					{
+						_allocator.construct(_vec + cpy_distance, *it);
+						_allocator.destroy(_vec + distance);
+						it++;
+						distance++;
+						cpy_distance++;
+					}
+					//if (first != this->end())
+					//{
+						//save_start_it = (offset + this->begin());
+						/*while (first != it_end)
+						{
+							*save_start_it = *first;
+							_allocator.construct(_vec + distance, *first);
+							_allocator.destroy(_vec + cpy_distance);
+							distance++;
+							cpy_distance++;
+							//save_start_it++;
+							first++;
+						}*/
+					//}
+					//*save_start_it = *it_end;
+					_size -= reduce;
 				}
-				save_start_it = (offset + this->begin());
-				while (first != it_end)
-				{
-					*save_start_it = *first;
-					//_allocator.construct(&*save_start_it, *first);
-					//_allocator.destroy(&*first);
-					save_start_it++;
-					first++;
-				}
-				//*save_start_it = *it_end;
-				_size -= distance;
-				return (it);
+				if (last == this->end())
+					return (offset + this->begin());
+				return (first);
 			}
 			void	push_back(const T& value)
 			{
+				//if (_size + 1 > this->max_size())
+				//	throw std::length_error("vector::length_error");
 				if (_capacity_allocator == 0)
 					this->reserve(1);
 				else if (_size + 1 > this->capacity())
 					this->reserve(_capacity_allocator << 1);
-				_vec[_size] = value;
+				_allocator.construct(_vec + _size, value);
 				_size++;
 			}
 			void	pop_back()
 			{
-				_allocator.destroy(_vec + (_size - 1));
-				_size--;
+				if (_size > 0)
+				{
+					_allocator.destroy(_vec + (_size - 1));
+					_size--;
+				}
 			}
 			void	resize(size_type count, T value = T())
 			{
+				//std::cout << "cap : " << _capacity_allocator << " _size : " << _size << " count : " << count << std::endl;
+				if (count < _size)
+				{
+					while (count < _size)
+					{
+						this->pop_back();
+						//_allocator.destroy(_vec + _size);
+						//_size--;
+					}
+					return ;
+				}
 				if (_capacity_allocator < count)
 				{
 					if (_capacity_allocator == 0)
@@ -525,11 +595,6 @@ namespace ft
 					else
 						this->reserve(_capacity_allocator << 1);
 				}
-				while (count < _size)
-				{
-					_allocator.destroy(_vec + _size);
-					_size--;
-				}
 				while (_size < count)
 				{
 					_allocator.construct(_vec + _size, value);
@@ -538,10 +603,6 @@ namespace ft
 			}
 			void	swap(vector& other)
 			{
-				/*vector	tmp = other;
-
-				other = *this;
-				*this = tmp;*/
 				pointer	tmp_vec = other._vec;
 				allocator_type	tmp_alc = other._allocator;
 				size_type	tmp_cap = other._capacity_allocator;
