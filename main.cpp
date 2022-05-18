@@ -144,8 +144,8 @@ int	main(void)
 	execute_function(&resize_custom, 1);
 	*/
 	
-	
-	/*execute_function(&swap_vector, 0);
+	/*
+	execute_function(&swap_vector, 0);
 	execute_function(&swap_vector_custom, 1);
 	execute_function(&swap_vector_non_member, 0);
 	execute_function(&swap_vector_non_member_custom, 1);

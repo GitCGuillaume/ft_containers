@@ -60,10 +60,7 @@ namespace ft
 			{
 				size_type count = static_cast<size_type>(std::distance(first, last));
 				_capacity_allocator = count;
-				//if (count > 0)
 				_vec = _allocator.allocate(_capacity_allocator);
-				//else
-				//	_vec = 0;
 				for (size_type i = 0; i < count; i++)
 				{
 						_allocator.construct(_vec + i, *first);
@@ -365,7 +362,6 @@ namespace ft
 				_size++;
 				return (&_vec[cpy_size]);
 			}
-
 			/*
 				00
 				0111110 (2 - 1) + 5
@@ -378,7 +374,7 @@ namespace ft
 			//_allocator.destroy(_vec + cpy);
 			void	insert(iterator pos, size_type count, const T& value)
 			{
-size_type	offset = pos - this->begin();
+				size_type	offset = pos - this->begin();
 				if (count == 0)
 					return ;
 				if (_size + count > _capacity_allocator)
@@ -416,6 +412,59 @@ size_type	offset = pos - this->begin();
 				}
 				_size += count;
 			}
+			/*
+				00
+				0111110 (2 - 1) + 5
+				0122211110 (7 - 1) + 3
+				Inserting element at a position other than end() cause element to relocate
+				from pos to end
+			*/
+			//_vec[cpy + count] = _vec[cpy_size - 1];
+			//_allocator.construct(_vec + (cpy + count), *(_vec + cpy));
+			//_allocator.destroy(_vec + cpy);
+			/*void	insert(iterator pos, size_type count, const T& value)
+			{
+				if (count == 0)
+					return ;
+				size_type	offset = pos - this->begin();
+				if (_size + count > _capacity_allocator)
+				{
+					if (_capacity_allocator == 0)
+						this->reserve(_size + count);
+					else if (_capacity_allocator + count > (_capacity_allocator << 1))
+						this->reserve(_capacity_allocator + count);
+					else
+						this->reserve(_capacity_allocator << 1);
+				}
+				if (this->size() == 0)
+				{
+					for (size_type nb_count = 0; nb_count < count; nb_count++)
+						_allocator.construct(_vec + nb_count, value);
+					_size += count;
+				}
+				else
+				{
+					iterator	new_it = offset + this->begin();
+					vector	vec_tmp(new_it, this->end());
+					
+					iterator	it_end = this->end();
+					size_type nb_pop_back = 0;
+					for (nb_pop_back = 0; nb_pop_back < vec_tmp.size(); nb_pop_back++)
+						this->pop_back();
+					size_type nb_count = 0;
+					for (nb_count = 0; nb_count < count; nb_count++)
+						_allocator.construct(&_vec[this->size() + nb_count], value);
+					_size += nb_count;
+					size_type i = 0;
+					for (iterator	iterator_tmp = vec_tmp.begin(); iterator_tmp != vec_tmp.end(); iterator_tmp++)
+					{
+						_allocator.construct(&_vec[_size], vec_tmp[i]);
+						i++;
+						_size++;
+					}
+				}
+				
+			}*/
 			template<class InputIt>
 			void	insert(iterator pos, InputIt first, InputIt last,
 				typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
