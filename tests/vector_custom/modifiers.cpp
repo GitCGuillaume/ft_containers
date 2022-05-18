@@ -90,6 +90,7 @@ void    count_insert_100_custom()
     for (double i = 10000.000000; i < 20000.000000; i++)
         vec.insert(vec.begin() + static_cast<size_t>(i), 2, i);
     std::cout << "capacity vector capacity 50k : " << vec.capacity() << std::endl;
+    std::cout << "size : " << vec.size() << std::endl;
 }
 
 void    iterator_insert_custom()

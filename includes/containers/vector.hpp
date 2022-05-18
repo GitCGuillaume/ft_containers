@@ -493,15 +493,16 @@ namespace ft
 					size_type	cpy_size = _size;
 					iterator	new_it = (offset + this->begin()) + distance;
 					iterator	it_end = this->end() + distance;
-
+					size_type	cpy = cpy_size - 1;
+					size_type	cpy_count = cpy + distance;
 					while (it_end != new_it)
 					{
-						size_type	cpy = cpy_size - 1;
-						_allocator.construct(_vec + (cpy + distance), *(_vec + cpy));
-						_allocator.destroy(_vec + cpy);
-						//_vec[cpy + distance] = _vec[cpy];
+						_allocator.construct(&_vec[cpy_count], _vec[cpy]);
+						_allocator.destroy(&_vec[cpy]);
 						cpy_size--;
 						it_end--;
+						cpy--;
+						cpy_count--;
 					}
 					while (first != last)
 						_allocator.construct(_vec + (cpy_size + nb_count++), *(first)++);
