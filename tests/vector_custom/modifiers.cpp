@@ -45,7 +45,6 @@ void    insert_100k_custom()
     for (double i = 50000.000000; i < 100000.000000; i++)
         vec.insert(vec.begin() + static_cast<size_t>(i), i);
     std::cout << "capacity vector capacity 100k : " << vec.capacity() << std::endl;
-
 }
 
 void    insert_reserve_100k_custom()
