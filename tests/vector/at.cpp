@@ -2,6 +2,7 @@
 
 void    at_ok()
 {
+    std::cout << "AT" << std::endl;
     std::vector<int>vec;
 
     vec.assign(2, 1);
@@ -33,6 +34,7 @@ void    at_const_ok()
 
 void    at_out_of_range()
 {
+    std::cout << "AT_OUT_OF_RANGE" << std::endl;
     std::vector<int>vec;
 
     try

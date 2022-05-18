@@ -2,6 +2,7 @@
 
 void    at_custom_ok()
 {
+    std::cout << "AT CUSTOM" << std::endl;
     ft::vector<int>vec;
 
     vec.assign(2, 1);
@@ -33,6 +34,7 @@ void    at_custom_const_ok()
 
 void    at_custom_out_of_range()
 {
+    std::cout << "AT_OUT_OF_RANGE CUSTOM" << std::endl;
     ft::vector<int>vec;
 
     try

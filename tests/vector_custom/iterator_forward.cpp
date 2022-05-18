@@ -2,13 +2,13 @@
 
 void	test_ft_assign1_forward()
 {
+	std::cout << "TEST_FT_ASSIGN1_FORWARD" << std::endl;
 	ft::vector<int>	vec;
 
 	vec.assign(3, 'b');
 	vec.assign(3, 'b');
 	ft::vector<int>::iterator	it_1 = vec.begin();
 	ft::vector<int>::iterator	it_2 = vec.end();
-	std::cout << "TEST_FT_ASSIGN1_FORWARD" << std::endl;
 	std::cout << *it_1 << std::endl;
 	//undefined behavior
 	//std::cout << *it_2 << std::endl;
@@ -26,12 +26,12 @@ void	test_ft_assign1_forward()
 
 void	test_ft_assign_it_forward()
 {
+	std::cout << "TEST_FT_ASSIGN_IT_FORWARD" << std::endl;
 	ft::vector<int>	vec_1;
 	ft::vector<int> vec_2;
 	ft::vector<int>::iterator	it_1;
 	char	a = 'a';
 
-	std::cout << "TEST_FT_ASSIGN_IT_FORWARD" << std::endl;
 	vec_1.assign(3, a++);
 	it_1 = vec_1.begin();
 	vec_2.assign(it_1, vec_1.end());

@@ -167,6 +167,10 @@ void    resize()
     vec.resize(5);
     vec.resize(1);
     vec.resize(5);
+    vec.resize(0);
+    vec.resize(0);
+    vec.resize(0);
+    vec.resize(5);
     for  (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
             std::cout << *it << std::endl;
     vec.resize(0);

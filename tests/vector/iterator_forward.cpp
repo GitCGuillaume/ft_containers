@@ -4,10 +4,10 @@ void	test_std_assign1_forward()
 {
 	std::vector<int>	vec;
 
+	std::cout << "TEST_STD_ASSIGN1_FORWARD" << std::endl;
 	vec.assign(3, 'b');
 	vec.assign(3, 'b');
 	std::vector<int>::iterator	it_1 = vec.begin();
-	std::cout << "TEST_STD_ASSIGN1_FORWARD" << std::endl;
 	std::cout << *it_1 << std::endl;
 	//undefined behavior
 	//std::vector<int>::iterator	it_2 = vec.end();
@@ -26,12 +26,12 @@ void	test_std_assign1_forward()
 
 void	test_std_assign_it_forward()
 {
+	std::cout << "TEST_STD_ASSIGN_IT_FORWARD" << std::endl;
 	std::vector<int>	vec_1;
 	std::vector<int> vec_2;
 	std::vector<int>::iterator	it_1;
 	char	a = 'a';
 
-	std::cout << "TEST_STD_ASSIGN_IT_FORWARD" << std::endl;
 	vec_1.assign(3, a++);
 	it_1 = vec_1.begin();
 	vec_2.assign(it_1, vec_1.end());
