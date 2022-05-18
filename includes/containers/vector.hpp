@@ -11,6 +11,7 @@
 #include <exception>
 #include <sstream>
 #include <limits>
+//#include <memory>
 
 namespace ft
 {
@@ -301,12 +302,12 @@ namespace ft
 				if (new_cap > this->capacity())
 				{
 					ptr = _allocator.allocate(new_cap);
+					//std::uninitialized_copy(this->begin(), this->end(), ptr);
 					for (size_type i = 0; i < this->size(); i++)
 					{
 						_allocator.construct(ptr + i, *(_vec + i));
 						_allocator.destroy(_vec + i);
 					}
-					//if (_vec)
 					_allocator.deallocate(_vec, this->capacity());
 					_vec = ptr;
 					_capacity_allocator = new_cap;
@@ -330,6 +331,7 @@ namespace ft
 				To resolve this, can do std::distance or iterator - .begin();
 				_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
 				_allocator.destroy(_vec + (cpy_size - 1));
+				_vec[cpy_size] = _vec[cpy_size - 1];
 			*/
 			iterator	insert(iterator pos, const T& value)
 			{
@@ -350,13 +352,11 @@ namespace ft
 				else
 				{
 					new_it = offset + this->begin();
-					//new_it = this->begin() - offset;
 					it_end = this->end();
 					while (it_end != new_it)
 					{
 						_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
 						_allocator.destroy(_vec + (cpy_size - 1));
-						//_vec[cpy_size] = _vec[cpy_size - 1];
 						cpy_size--;
 						it_end--;
 					}
@@ -378,7 +378,7 @@ namespace ft
 			//_allocator.destroy(_vec + cpy);
 			void	insert(iterator pos, size_type count, const T& value)
 			{
-				size_type	offset = pos - this->begin();
+size_type	offset = pos - this->begin();
 				if (count == 0)
 					return ;
 				if (_size + count > _capacity_allocator)
@@ -400,15 +400,16 @@ namespace ft
 					size_type	cpy_size = _size;
 					iterator	new_it = (offset + this->begin()) + count;
 					iterator	it_end = this->end() + count;
-
+					size_type	cpy = cpy_size - 1;
+					size_type	cpy_count = cpy + count;
 					while (it_end != new_it)
 					{
-						size_type	cpy = cpy_size - 1;
-						_allocator.construct(_vec + (cpy + count), *(_vec + cpy));
-						_allocator.destroy(_vec + cpy);
-						//_vec[cpy + count] = _vec[cpy];
+						_allocator.construct(&_vec[cpy_count], _vec[cpy]);
+						_allocator.destroy(&_vec[cpy]);
 						cpy_size--;
 						it_end--;
+						cpy--;
+						cpy_count--;
 					}
 					for (size_type nb_count = 0; nb_count < count; nb_count++)
 						_allocator.construct(_vec + (cpy_size + nb_count), value);
@@ -463,37 +464,17 @@ namespace ft
 			//_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
 			iterator	erase(iterator pos)
 			{
-				//size_type	offset = pos - this->begin();
 				difference_type	distance = std::distance(this->begin(), pos);
 				iterator	it(pos);
-				//if (pos == this->end())
-				//	it = this->end();
 				iterator	it_end = this->end();
-				//difference_type	distance = std::distance(this->begin(), pos);
-
-				//_vec[distance] = _vec[distance + 1];
-				//_allocator.destroy(&*pos);
-				//if (pos + 1 != this->end())
-				//	_allocator.construct(&*pos, *(pos + 1));
 				while (it != it_end)
 				{
-					//*pos = *(pos + 1);
 					_allocator.destroy(_vec + distance);
 					if (it + 1 != it_end)
 						_allocator.construct(_vec + distance, _vec[distance + 1]);
 					distance++;
 					it++;
 				}
-				//_allocator.destroy(_vec + distance);
-				//_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
-				/*while (pos != it_end)
-				{
-					_allocator.destroy(_vec + distance);
-					_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
-					_vec[distance] = _vec[distance + 1];
-					pos++;
-				//	distance++;
-				}*/
 				if (pos != this->end())
 					_size--;
 				return (pos);
@@ -507,21 +488,14 @@ namespace ft
 				difference_type	distance = std::distance(this->begin(), first);
 				size_type	cpy_distance = distance;
 				iterator	it(first);
-				//iterator	save_start_it;
 				iterator	it_end = this->end();
-				//if (last == this->end())
-				//	it = first;
-				//_allocator.destroy(&*first);
-				//*first = *last;
-				//first++;
-				//distance++;
+
 				if (first != last)
 				{
 					while (it != last)
 					{
 						_allocator.destroy(_vec + distance);
 						distance++;
-						//_allocator.destroy(&*first);
 						reduce++;
 						it++;
 					}
@@ -533,21 +507,6 @@ namespace ft
 						distance++;
 						cpy_distance++;
 					}
-					//if (first != this->end())
-					//{
-						//save_start_it = (offset + this->begin());
-						/*while (first != it_end)
-						{
-							*save_start_it = *first;
-							_allocator.construct(_vec + distance, *first);
-							_allocator.destroy(_vec + cpy_distance);
-							distance++;
-							cpy_distance++;
-							//save_start_it++;
-							first++;
-						}*/
-					//}
-					//*save_start_it = *it_end;
 					_size -= reduce;
 				}
 				if (last == this->end())
@@ -556,8 +515,6 @@ namespace ft
 			}
 			void	push_back(const T& value)
 			{
-				//if (_size + 1 > this->max_size())
-				//	throw std::length_error("vector::length_error");
 				if (_capacity_allocator == 0)
 					this->reserve(1);
 				else if (_size + 1 > this->capacity())
@@ -575,17 +532,6 @@ namespace ft
 			}
 			void	resize(size_type count, T value = T())
 			{
-				//std::cout << "cap : " << _capacity_allocator << " _size : " << _size << " count : " << count << std::endl;
-				if (count < _size)
-				{
-					while (count < _size)
-					{
-						this->pop_back();
-						//_allocator.destroy(_vec + _size);
-						//_size--;
-					}
-					return ;
-				}
 				if (_capacity_allocator < count)
 				{
 					if (_capacity_allocator == 0)
@@ -599,6 +545,11 @@ namespace ft
 				{
 					_allocator.construct(_vec + _size, value);
 					_size++;
+				}
+				if (count < _size)
+				{
+					while (count < _size)
+						this->pop_back();
 				}
 			}
 			void	swap(vector& other)
