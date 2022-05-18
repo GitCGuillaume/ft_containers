@@ -63,6 +63,7 @@ void	execute_function(void (*ft)(void), bool colour_print)
 		std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
 	else
 		std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
+	std::cout << std::setprecision(0);
 }
 
 int	main(void)
