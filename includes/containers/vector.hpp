@@ -285,10 +285,12 @@ namespace ft
 				return (_size);
 			}
 			/* Maximum number of items in a vector, it can still fail,
-			because computer can run out of memory before 2^bits-1 2^(64-1 or 32-1) */
+			because computer can run out of memory before 2^bits-1 2^(64-1 or 32-1)
+			Could use std::numeric_limits<size_type>::max() / sizeof(value_type)
+			but the references say it's used "in most"  */
 			size_type	max_size() const
 			{
-				return (std::numeric_limits<difference_type>::max()/2);
+				return (this->get_allocator().max_size());
 			}
 			/* Reserve does provock iterator invalidity */
 			void	reserve(size_type new_cap)

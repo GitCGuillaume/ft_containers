@@ -86,9 +86,10 @@ int	main(void)
 	execute_function(&front_custom, 1);
 	execute_function(&back, 0);
 	execute_function(&back_custom, 1);
+	*/
 	execute_function(&default_constructor, 0);
 	execute_function(&default_custom_constructor, 1);
-	execute_function(&allocator_constructor, 0);
+	/*execute_function(&allocator_constructor, 0);
 	execute_function(&allocator_custom_constructor, 1);
 	execute_function(&allocator_count_constructor, 0);
 	execute_function(&allocator_custom_count_constructor, 1);
@@ -126,8 +127,8 @@ int	main(void)
 	execute_function(&insert_reserve_100k_custom, 1);
 	execute_function(&insert_return_custom, 0);
 	*/
-	execute_function(&count_insert_100, 0);
-	execute_function(&count_insert_100_custom, 1);
+	//execute_function(&count_insert_100, 0);
+	//execute_function(&count_insert_100_custom, 1);
 	/*execute_function(&iterator_insert, 0);
 	execute_function(&iterator_insert_custom, 1);
 	execute_function(&erase, 0);

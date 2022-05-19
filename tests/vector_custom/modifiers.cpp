@@ -1,4 +1,7 @@
 #include "modifiers.hpp"
+#include <iomanip>
+#include <ctime>
+#include "sys/time.h"
 
 void    clear_custom()
 {
@@ -69,26 +72,65 @@ void    insert_return_custom()
 
 void    count_insert_100_custom()
 {
-    std::cout << "count_insert_100_custom" << std::endl;
+    std::cout << "count_insert_100 CUSTOM" << std::endl;
     ft::vector<double>  vec;
+    struct timeval	start, end;
+	double		sum_time;
+	long int	mem_seconds;
+	long int	mem_micro_s;
 
+    gettimeofday(&start, NULL);
     vec.insert(vec.begin() + 0, 2, 0.000000);
+    gettimeofday(&end, NULL);
+	mem_seconds = end.tv_sec - start.tv_sec;
+	mem_micro_s = end.tv_usec - start.tv_usec;
+	sum_time = mem_seconds + mem_micro_s * 1e-6;
+    std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
+	std::cout << std::setprecision(0);
     std::cout << "capacity vector begin() + 0 : " << vec.capacity() << std::endl;
     for  (ft::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
+    gettimeofday(&start, NULL);
     vec.insert(vec.begin() + 1, 5, 1.000000);
+    gettimeofday(&end, NULL);
+	mem_seconds = end.tv_sec - start.tv_sec;
+	mem_micro_s = end.tv_usec - start.tv_usec;
+	sum_time = mem_seconds + mem_micro_s * 1e-6;
+    std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
+	std::cout << std::setprecision(0);
     std::cout << "capacity vector begin() + 1 : " << vec.capacity() << std::endl;
     for  (ft::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
+    gettimeofday(&start, NULL);
     vec.insert(vec.begin() + 2, 3, 2.000000);
+    gettimeofday(&end, NULL);
+	mem_seconds = end.tv_sec - start.tv_sec;
+	mem_micro_s = end.tv_usec - start.tv_usec;
+	sum_time = mem_seconds + mem_micro_s * 1e-6;
+    std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
+	std::cout << std::setprecision(0);
     std::cout << "capacity vector begin() + 2 : " << vec.capacity() << std::endl;
     for  (ft::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
+    gettimeofday(&start, NULL);
     for (double i = 3.000000; i < 10000.000000; i++)
         vec.insert(vec.begin() + static_cast<size_t>(i), 2, i);
+    gettimeofday(&end, NULL);
+	mem_seconds = end.tv_sec - start.tv_sec;
+	mem_micro_s = end.tv_usec - start.tv_usec;
+	sum_time = mem_seconds + mem_micro_s * 1e-6;
+    std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
+	std::cout << std::setprecision(0);
     std::cout << "capacity vector capacity  20k : " << vec.capacity() << std::endl;
+    gettimeofday(&start, NULL);
     for (double i = 10000.000000; i < 20000.000000; i++)
         vec.insert(vec.begin() + static_cast<size_t>(i), 2, i);
+    gettimeofday(&end, NULL);
+	mem_seconds = end.tv_sec - start.tv_sec;
+	mem_micro_s = end.tv_usec - start.tv_usec;
+	sum_time = mem_seconds + mem_micro_s * 1e-6;
+    std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
+	std::cout << std::setprecision(0);
     std::cout << "capacity vector capacity 50k : " << vec.capacity() << std::endl;
     std::cout << "size : " << vec.size() << std::endl;
 }
