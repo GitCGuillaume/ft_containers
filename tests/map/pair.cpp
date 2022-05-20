@@ -1,5 +1,13 @@
 #include "pair.hpp"
 
+void    pair_default()
+{
+    std::cout << "Default pair" << std::endl;
+    std::pair<double, double>   pair;
+    std::cout << "first : " << pair.first << std::endl;
+    std::cout << "second : " << pair.second << std::endl;
+}
+
 void    pair_equal()
 {
     std::cout << "pair equal" << std::endl;

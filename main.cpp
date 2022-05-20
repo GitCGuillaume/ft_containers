@@ -170,10 +170,12 @@ int	main(void)
 	execute_function(operator_assignation_map, 0);
 	execute_function(constructor_range_speed, 0);
 	execute_function(constructor_copy_speed, 0);
+	execute_function(pair_default, 0);
 	execute_function(pair_equal, 0);
 	execute_function(pair_not_equal, 0);
 	execute_function(pair_left, 0);
 	execute_function(pair_left_equal, 0);
+	execute_function(pair_default_custom, 1);
 	execute_function(pair_equal_custom, 1);
 	execute_function(pair_not_equal_custom, 1);
 	execute_function(pair_left_custom, 1);

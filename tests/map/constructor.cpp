@@ -18,9 +18,10 @@ void    constructor_range_map()
   map["abc"] = -2147483647;
   map["jkl"] = 2147483648;
   map["ghi"] = 0;
-  map["def"] = 21354;
   map["mno"] = 54644587;
-  map["m"] = 54644587;
+  map["ghi"] = 1;
+  map["def"] = 21354;
+  map["m"] = 1;
   std::map<std::string, int> map_arr(map.begin(), map.end());
   std::cout << "Size map constructor : " << map.size() << std::endl;
   std::cout << "Size map_arr constructor : " << map_arr.size() << std::endl;

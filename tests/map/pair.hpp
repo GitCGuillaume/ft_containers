@@ -4,6 +4,7 @@
 #include <utility>
 #include <iostream>
 
+void    pair_default();
 void    pair_equal_custom();
 void    pair_not_equal_custom();
 void    pair_left_custom();

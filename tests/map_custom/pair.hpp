@@ -4,6 +4,7 @@
 #include "../../includes/library_headers/pair.hpp"
 #include <iostream>
 
+void    pair_default_custom();
 void    pair_equal();
 void    pair_not_equal();
 void    pair_left();
