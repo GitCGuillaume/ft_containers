@@ -37,6 +37,9 @@
 #include "sys/time.h"
 #include <ios>
 #include <iomanip>
+#include "tests/map/constructor_summary_map.hpp"
+#include "tests/map_custom/constructor_summary_map.hpp"
+#include "includes/containers/map.hpp"
 
 /*
  *	true == green == std
@@ -59,9 +62,9 @@ void	execute_function(void (*ft)(void), bool colour_print)
 	mem_seconds = end.tv_sec - start.tv_sec;
 	mem_micro_s = end.tv_usec - start.tv_usec;
 	sum_time = mem_seconds + mem_micro_s * 1e-6;
-	if (colour_print == false)
+	if (colour_print == false) // std
 		std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
-	else
+	else // ft
 		std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
 	std::cout << std::setprecision(0);
 }
@@ -126,8 +129,8 @@ int	main(void)
 	execute_function(&insert_reserve_100k_custom, 1);
 	execute_function(&insert_return_custom, 0);
 	*/
-	execute_function(&count_insert_100, 0);
-	execute_function(&count_insert_100_custom, 1);
+	//execute_function(&count_insert_100, 0);
+	//execute_function(&count_insert_100_custom, 1);
 	/*execute_function(&iterator_insert, 0);
 	execute_function(&iterator_insert_custom, 1);
 	execute_function(&erase, 0);
@@ -159,5 +162,24 @@ int	main(void)
 	execute_function(&iterator_test_custom, 1);
 	execute_function(&iterator_empty, 0);
 	execute_function(&iterator_empty_custom, 1);*/
+	//MAP PART
+	execute_function(default_constructor_map, 0);
+	execute_function(constructor_range_map, 0);
+	execute_function(copy_constructor_map, 0);
+	execute_function(operator_assignation_map, 0);
+	execute_function(constructor_range_speed, 0);
+	execute_function(constructor_copy_speed, 0);
+	execute_function(pair_equal, 0);
+	execute_function(pair_not_equal, 0);
+	execute_function(pair_left, 0);
+	execute_function(pair_left_equal, 0);
+	execute_function(pair_equal_custom, 1);
+	execute_function(pair_not_equal_custom, 1);
+	execute_function(pair_left_custom, 1);
+	execute_function(pair_left_equal_custom, 1);
+	execute_function(pair_right, 0);
+	execute_function(pair_right_equal, 0);
+	execute_function(pair_right_custom, 1);
+	execute_function(pair_right_equal_custom, 1);
 	return (0);
 }
