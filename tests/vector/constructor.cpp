@@ -10,6 +10,8 @@ void    default_constructor()
     std::cout << "Size default constructor : " << vec.size() << std::endl;
     std::cout << "Capacity default const constructor : " << const_vec.capacity() << std::endl;
     std::cout << "Size default const constructor : " << const_vec.size() << std::endl;
+    std::cout << "max size : " << vec.max_size() << std::endl;
+    std::cout << "max size const: " << const_vec.max_size() << std::endl;
 }
 
 void    allocator_constructor()
