@@ -1,6 +1,6 @@
 #ifndef FT_PAIR_HPP
 # define FT_PAIR_HPP
-
+#include <iostream>
 namespace ft
 {
     template<class T1, class T2>
@@ -11,12 +11,11 @@ namespace ft
         first_type  first;
         second_type second;
 
-        pair(){};
-        pair(const T1& x, const T2& y)
-        {
-            first = x;
-            second = y;
+        //T1() T2() is a value initialization
+        pair() : first(T1()), second(T2()){
+            std::cout << "const called" << std::endl;
         }
+        pair(const T1& x, const T2& y) : first(x), second(y){}
         template<class U1, class U2>
         pair(const pair<U1, U2>& p)
         {

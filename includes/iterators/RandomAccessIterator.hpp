@@ -32,6 +32,10 @@ namespace ft
             //explicit RandomAccessIterator(const iterator_type it) : _ptr(it){}
             RandomAccessIterator(pointer ptr) : _ptr(ptr) {}
            // RandomAccessIterator(RandomAccessIterator const & rhs) : _ptr(rhs.base()){}
+            /*
+             *  Convert iterator to const_iterator
+             *  iterator will choose non const function if container is not const
+            */
             template<typename U>
             RandomAccessIterator(const RandomAccessIterator<U
                 , typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type>& rhs) : _ptr(rhs.base()){}
@@ -39,12 +43,6 @@ namespace ft
             {
                 return (this->_ptr);
             }
-            /*
-             *  Convert iterator to const_iterator
-             *  iterator will choose non const function if container is not const
-            */
-            /* Tester deep copy plus tard */
-            //template<class U>
             RandomAccessIterator & operator=(RandomAccessIterator const & rhs)
             {
                 if (this != &rhs)

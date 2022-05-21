@@ -170,6 +170,8 @@ int	main(void)
 	execute_function(operator_assignation_map, 0);
 	execute_function(constructor_range_speed, 0);
 	execute_function(constructor_copy_speed, 0);
+	
+	execute_function(default_constructor_map_custom, 1);
 	execute_function(pair_default, 0);
 	execute_function(pair_equal, 0);
 	execute_function(pair_not_equal, 0);
@@ -184,5 +186,7 @@ int	main(void)
 	execute_function(pair_right_equal, 0);
 	execute_function(pair_right_custom, 1);
 	execute_function(pair_right_equal_custom, 1);
+	execute_function(forward_iterator_map_default, 0);
+	execute_function(forward_iterator_map_default_custom, 1);
 	return (0);
 }

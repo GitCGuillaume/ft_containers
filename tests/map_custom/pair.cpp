@@ -5,7 +5,7 @@ void    pair_default_custom()
     std::cout << "Default pair CUSTOM" << std::endl;
     ft::pair<double, double>   pair;
     std::cout << "first : " << pair.first << std::endl;
-    std::cout << "second : " << pair.second << std::endl;
+    //std::cout << "second : " << pair.second << std::endl;
 }
 
 void    pair_equal_custom()
