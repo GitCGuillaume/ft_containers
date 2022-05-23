@@ -188,5 +188,7 @@ int	main(void)
 	execute_function(pair_right_equal_custom, 1);
 	execute_function(forward_iterator_map_default, 0);
 	execute_function(forward_iterator_map_default_custom, 1);
+	execute_function(empty_bracket, 0);
+	execute_function((empty_bracket_custom, 1);
 	return (0);
 }
