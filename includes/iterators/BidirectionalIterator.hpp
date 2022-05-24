@@ -63,16 +63,24 @@ namespace ft
 
                                 Key     firstSubRoot = subRoot->pair->first;
                                 Key     firstNewNode = newNode->pair->first;
+                                std::cout << "SEARCH" << std::endl;
                                 while (subRoot)
                                 {
+                                        std::cout << "first : " << firstSubRoot << std::endl;
                                         if (firstSubRoot < firstNewNode)
+                                        {
                                                 subRoot = subRoot->right;
+                                        }
                                         else if (firstNewNode < firstSubRoot)
+                                        {
                                                 subRoot = subRoot->right;
+                                        }
                                         else if (firstNewNode == firstSubRoot)
                                                 return (subRoot);
                                         else
                                                 return (NULL);
+                                        if (_iterator && _iterator->pair)
+                                                firstSubRoot = _iterator->pair->first;
                                 }
                                 return (NULL);
                         }
@@ -83,8 +91,8 @@ namespace ft
                                 node*   nodeMemory = _iterator;
                                 Key     firstSubRoot = _iterator->pair->first;
                                 Key     firstNewNode = newNode->pair->first;
-                                bool    newNodeSide = false;
-                                bool    parentNodeSide = false;
+                                //bool    newNodeSide = false;
+                                //bool    parentNodeSide = false;
                                 //Search
                                 if (!_iterator->right && !_iterator->left
                                         && _iterator->colour == 0) //no root
@@ -103,7 +111,7 @@ namespace ft
                                                  if (!_iterator->right)
                                                  {
                                                         newNode->parent = _iterator;
-                                                        newNodeSide = true; //detect if new node is left or right
+                                                        //newNodeSide = true; //detect if new node is left or right
                                                  }
                                                 _iterator = _iterator->right;
                                                
@@ -113,7 +121,7 @@ namespace ft
                                                 if (!_iterator->left)
                                                 {
                                                         newNode->parent = _iterator;
-                                                        newNodeSide = false; //detect if new node is left or right
+                                                        //newNodeSide = false; //detect if new node is left or right
                                                 }
                                                 _iterator = _iterator->left;
                                         }
@@ -138,53 +146,152 @@ namespace ft
                                 //put it as red colour
                                 newNode->colour = 0;
                                 //detect if parent node is left or right
-                                if (_iterator->parent)
-                                {
-                                        if (_iterator == _iterator->parent->right)
-                                                parentNodeSide = true;
+                                //if (_iterator->parent)
+                               // {
+                                 //       if (_iterator == _iterator->parent->right)
+                                   //             parentNodeSide = true;
                                         /*std::cout << "Gparent : " << _iterator->parent << std::endl;
                                         std::cout << "Gparent->left : " << _iterator->left << std::endl;
                                         std::cout << "Gparent->right : " << _iterator->right << std::endl;
                                         std::cout << "parentNodeSide : " << parentNodeSide << std::endl;*/
-                                }
+                               // }
                                 //detech wich type of violate
-                                
-                                _iterator = root;
+                                _repearTree(newNode);
+                                //find new root
+                                while (getParent(newNode))
+                                        newNode = newNode->parent;
+                                _iterator = newNode;
                         }
-                        //newNodeSide == 0 == newNode is left
-                        //newNodeSide == 1 == newNode is right
-                        //parentNode == 0 == parent is left
-                        //parentNode == 1 == parent is right
-                        char    _detectAndCorrectViolate(node** node, bool newNodeSide, bool parentNode)
+                        node    *getGrandParent(node* current)
                         {
-                                //parentNode
-                                //grandParentNode
-                                //dois-je boucler le detectViolate (pour parent+oncle == rouge par ex)
-                                //      pour que l'arbre sois validé
-                                //si parent + uncle == rouge
-                                        //lancer violationRepair1 (recolor racine sous arbre + parent et oncle)
-                                /*
-                                si parentNode == 0
-                                        si newNodeSide == 0// && uncleSide == 1
-                                                swap colour of parent and grand parent
-                                                rotateRight
-                                        sinon si newNodeSide == 1// && uncleSide == 1
-                                                rotateLeft
-                                                swap colour of parent and grand parent
-                                                rotateRight
-                                        sinon si 
-                                finSi
-                                si parentNode == 1
-                                        si newNodeSide == 1// && uncleSide == 0
-                                                swap colour of parent and grand parent
-                                                rotateleft
-                                        sinon si newNodeSide == 0// && uncleSide == 1
-                                                rotateRight
-                                                swap colour of parent and grand parent
-                                                rotateLeft
-                                        sinon si 
-                                finSi
-                                */
+                                node*    parent;
+
+                                if (!current)
+                                        return (NULL);
+                                parent = current->parent;
+                                if (!parent)
+                                        return (NULL);
+                                return (parent->parent);
+                        }
+                        node    *getUncle(node* gParentNode, node* parent)
+                        {
+
+                                if (!gParentNode || !parent)
+                                        return (NULL);
+                                if (gParentNode->left != parent)
+                                        return (gParentNode->left);
+                                else
+                                        return (gParentNode->right);
+                                return (NULL);
+                        }
+                        node    *getParent(node* current)
+                        {
+                                if (!current)
+                                        return (NULL);
+                                return (current->parent);
+                        }
+                        node*    repearCaseOne(node* parent, node* uncle, node* gParentNode)
+                        {
+                                parent->colour = 0;
+                                uncle->colour = 0;
+                                gParentNode->colour = 1;
+                                return (gParentNode);
+                        }
+                        void    _swapColour(char *colour)
+                        {
+                                if (*colour == 0)
+                                        *colour = 1;
+                                else
+                                        *colour = 0;
+                        }
+                        void    _rotateRight(node *parent, node *grandParent)
+                        {
+                                node*    leftChild = parent->left; //cpy left child of parent
+
+                                parent->left = leftChild->right; //give to left child it's right child
+                                if (leftChild->right) //check if left child has a right child
+                                        leftChild->right->parent = parent; //give this child head the parent address
+                                leftChild->parent = grandParent;
+                                leftChild->right = parent;
+                                if (grandParent && parent == grandParent->left) //give grand parent the right branch
+                                        grandParent->left = leftChild;
+                                else if (grandParent && parent == grandParent->right)
+                                        grandParent->right = leftChild;
+                                parent->parent = leftChild; //current node need an update parent so the left child
+                        }
+                        void    _rotateLeft(node *parent, node *grandParent)
+                        {
+                                node*    rightChild = parent->right; //cpy right child of parent
+
+                                parent->right = rightChild->left; //give to right child it's right child
+                                if (rightChild->left) //check if right child has a left child
+                                        rightChild->left->parent = parent; //give this child head the parent address
+                                rightChild->parent = grandParent;
+                                rightChild->left = parent;
+                                if (grandParent && parent == grandParent->left) //give grand parent the right branch
+                                        grandParent->left = rightChild;
+                                else if (grandParent && parent == grandParent->right)
+                                        grandParent->right = rightChild;
+                                parent->parent = rightChild; //current node need an update parent so the right child
+                        }
+                        void    _repearTree(node *current)
+                        {
+                                node   *gParentNode, *parentNode, *uncle;
+
+                                gParentNode = getGrandParent(current);
+                                parentNode = getParent(current);
+                                //if (!parentNode || !gParentNode)
+                                //        return ;
+                                uncle = getUncle(gParentNode, parentNode);
+                                while (uncle && uncle->colour > 0)
+                                {
+                                        current = repearCaseOne(parentNode, uncle, gParentNode);
+                                        gParentNode = getGrandParent(current);
+                                        parentNode = getParent(current);
+                                        uncle = getUncle(gParentNode, parentNode);
+                                }
+                                //if (gparentNode == gParentNode->left) //parent is left
+                                //{
+                                        if (parentNode->left == current) //node is left
+                                        {
+                                                //swap colour of parent and grand parent
+                                                _swapColour(&parentNode->colour);
+                                                _swapColour(&gParentNode->colour);
+                                                //rotateRight
+                                                _rotateRight(parentNode, gParentNode);
+                                        }
+                                        else if (parentNode->right == current)
+                                        {
+                                                //rotateLeft
+                                                _rotateLeft(parentNode, gParentNode);
+                                                //swap colour of parent and grand parent
+                                                _swapColour(&parentNode->colour);
+                                                _swapColour(&gParentNode->colour);
+                                                //rotateRight
+                                                _rotateRight(parentNode, gParentNode);
+                                        }
+                                /*}
+                                else if (parentNode == gParentNode->right) // parent is right
+                                {*/
+                                        if (parentNode->right == current) //node is right
+                                        {
+                                                //swap colour of parent and grand parent
+                                                _swapColour(&parentNode->colour);
+                                                _swapColour(&gParentNode->colour);
+                                                //rotateleft
+                                                 _rotateLeft(parentNode, gParentNode);
+                                        }
+                                        else if (parentNode->left == current)
+                                        {
+                                                //rotateRight
+                                                _rotateRight(parentNode, gParentNode);
+                                                //swap colour of parent and grand parent
+                                                _swapColour(&parentNode->colour);
+                                                _swapColour(&gParentNode->colour);
+                                                //rotateLeft
+                                                _rotateLeft(parentNode, gParentNode);
+                                        }
+                                //}
                         }
                         node*  _iterator; // struct stocked here, used to iterate
                         private:

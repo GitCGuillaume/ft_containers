@@ -75,6 +75,7 @@ namespace ft
                 _allocator.construct(new_node->pair, ft::pair<key_type, mapped_type>(key, T()));
                 std::cout << "&newNode : " << new_node << std::endl;
                 _tree._insert(new_node);
+                _tree._search(new_node);
                 return (_tree._iterator->pair->second);
             }
             iterator    begin()
