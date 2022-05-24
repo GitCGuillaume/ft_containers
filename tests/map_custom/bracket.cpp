@@ -9,7 +9,10 @@ void    empty_bracket_custom()
    // std::cout << "size : " << map.size() << std::endl;
     std::cout << map["test"] << std::endl;
    // std::cout << "size : " << map.size() << std::endl;
-  //  std::cout << map["test"] << std::endl;
+    std::cout << map["u"] << std::endl;
+    std::cout << map["b"] << std::endl;
+    std::cout << map["a"] << std::endl;
+    std::cout << map["z"] << std::endl;
     //std::cout << map["tes"] << std::endl;
    // std::cout << "size : " << map.size() << std::endl;
 }

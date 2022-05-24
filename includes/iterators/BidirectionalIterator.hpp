@@ -78,59 +78,81 @@ namespace ft
                         }
                         void    _insert(node *newNode)
                         {
+                                std::cout << "newNode : " << newNode << std::endl;
                                 node*   root = _iterator;
+                                node*   nodeMemory = _iterator;
                                 Key     firstSubRoot = _iterator->pair->first;
                                 Key     firstNewNode = newNode->pair->first;
                                 bool    newNodeSide = false;
                                 bool    parentNodeSide = false;
                                 //Search
-                                if (!_iterator->right && !_iterator->left)
+                                if (!_iterator->right && !_iterator->left
+                                        && _iterator->colour == 0) //no root
                                 {
-                                        std::cout << "first : " << firstNewNode << std::endl;
-                                        std::cout << "sec : " << _iterator->pair->second << std::endl;
                                         _allocator.destroy(_iterator->pair);
                                         _allocator.deallocate(_iterator->pair, 1);
                                         _iterator->pair = newNode->pair;
+                                        _iterator->colour = 1;
                                         return ;
                                 }
                                 while (_iterator)
                                 {
-                                        newNode->parent = _iterator;
+                                        nodeMemory = _iterator;
                                         if (firstSubRoot < firstNewNode)
-                                                _iterator = _iterator->right;
-                                        else if (firstNewNode < firstSubRoot)
-                                                _iterator = _iterator->right;
-                                        else
                                         {
-                                                
-                                                return ;
+                                                 if (!_iterator->right)
+                                                 {
+                                                        newNode->parent = _iterator;
+                                                        newNodeSide = true; //detect if new node is left or right
+                                                 }
+                                                _iterator = _iterator->right;
+                                               
                                         }
-                                        firstSubRoot = _iterator->pair->first;
+                                        else if (firstNewNode < firstSubRoot)
+                                        {
+                                                if (!_iterator->left)
+                                                {
+                                                        newNode->parent = _iterator;
+                                                        newNodeSide = false; //detect if new node is left or right
+                                                }
+                                                _iterator = _iterator->left;
+                                        }
+                                        else if (firstNewNode == firstSubRoot)
+                                                return ;
+                                        if (_iterator && _iterator->pair)
+                                                firstSubRoot = _iterator->pair->first;
                                 }
-                               
-                                //newNode->parent is sub root
-                                _iterator = newNode->parent;
-                                //Give to new node the parent
-                                newNode->parent = _iterator;
-                                //detect if new node is left or right
-                                if (newNode == newNode->parent->right)
-                                        newNodeSide = true;
+                                //nodeMemory is sub root
+                                _iterator = nodeMemory;
                                 //insert new node as left or right
                                 if (firstSubRoot < firstNewNode)
                                         _iterator->right = newNode;
                                 else
                                         _iterator->left = newNode;
+                                /*std::cout << "newNode : " << newNode << std::endl;
+                                std::cout << "subroot : " << _iterator << std::endl;
+                                std::cout << "parent : " << newNode->parent << std::endl;
+                                std::cout << "newNode->parent->left : " << newNode->parent->left << std::endl;
+                                std::cout << "newNode->parent->right : " << newNode->parent->right << std::endl;
+                                std::cout << "newNodeSide : " << newNodeSide << std::endl;*/
                                 //put it as red colour
                                 newNode->colour = 0;
                                 //detect if parent node is left or right
-                                if (_iterator == _iterator->parent->right)
-                                        parentNodeSide = true;
+                                if (_iterator->parent)
+                                {
+                                        if (_iterator == _iterator->parent->right)
+                                                parentNodeSide = true;
+                                        /*std::cout << "Gparent : " << _iterator->parent << std::endl;
+                                        std::cout << "Gparent->left : " << _iterator->left << std::endl;
+                                        std::cout << "Gparent->right : " << _iterator->right << std::endl;
+                                        std::cout << "parentNodeSide : " << parentNodeSide << std::endl;*/
+                                }
                                 //detech wich type of violate
                                 
                                 _iterator = root;
                         }
-                        //newNodeSide == 0 == parent is left
-                        //newNodeSide == 1 == parent is right
+                        //newNodeSide == 0 == newNode is left
+                        //newNodeSide == 1 == newNode is right
                         //parentNode == 0 == parent is left
                         //parentNode == 1 == parent is right
                         char    _detectAndCorrectViolate(node** node, bool newNodeSide, bool parentNode)
