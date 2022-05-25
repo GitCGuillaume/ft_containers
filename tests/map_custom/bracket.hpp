@@ -5,5 +5,6 @@
 #include <iostream>
 
 void    empty_bracket_custom();
+void    bracket_map_custom();
 
 #endif

@@ -57,26 +57,28 @@ namespace ft
                         {
                                 return (_iterator->pair);
                         }
-                        node*    _search(node *newNode)
+                        node*    _search(Key const &key)
                         {
                                 node    *subRoot = _iterator;
 
                                 Key     firstSubRoot = subRoot->pair->first;
-                                Key     firstNewNode = newNode->pair->first;
-                                std::cout << "SEARCH" << std::endl;
+                                Key     firstNewNode = key;
+                                //std::cout << "SEARCH" << std::endl;
                                 while (subRoot)
                                 {
-                                        std::cout << "first : " << firstSubRoot
-                                                << " colour : " << subRoot->colour << std::endl;
+                                        //std::cout << "first : " << firstSubRoot
+                                          //      << " colour : " << subRoot->colour << std::endl;
                                         if (firstSubRoot < firstNewNode)
                                         {
                                                 subRoot = subRoot->right;
-                                                firstSubRoot = subRoot->pair->first;
+                                                if (subRoot)
+                                                        firstSubRoot = subRoot->pair->first;
                                         }
                                         else if (firstNewNode < firstSubRoot)
                                         {
                                                 subRoot = subRoot->left;
-                                                firstSubRoot = subRoot->pair->first;
+                                                if (subRoot)
+                                                        firstSubRoot = subRoot->pair->first;
                                         }
                                         else if (firstNewNode == firstSubRoot)
                                                 return (subRoot);
@@ -129,6 +131,7 @@ namespace ft
                                 newNode->colour = 1;
                                 //detech wich type of violate
                                 _repearTree(newNode);
+                                //_iterator = newNode;
                                 //find new root
                                 while (getParent(_iterator))
                                         _iterator = _iterator->parent;

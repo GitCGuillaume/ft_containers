@@ -70,13 +70,18 @@ namespace ft
             T&  operator[](const Key& key)
             {
                 typename ft::BidirectionalIterator<value_type, map, key_type, mapped_type, Allocator>::node* new_node;
-                new_node = new typename ft::BidirectionalIterator<value_type, map, key_type, mapped_type, Allocator>::node();
-                new_node->pair = _allocator.allocate(1);
-                _allocator.construct(new_node->pair, ft::pair<key_type, mapped_type>(key, T()));
-                std::cout << "&newNode : " << new_node << std::endl;
-                _tree._insert(new_node);
-                _tree._search(new_node);
-                return (_tree._iterator->pair->second);
+                new_node = _tree._search(key);
+                //std::cout << "search addr : " << new_node << std::endl;
+                //std::cout << "---" << std::endl;
+                if (!new_node)
+                {
+                    new_node = new typename ft::BidirectionalIterator<value_type, map, key_type, mapped_type, Allocator>::node();
+                    new_node->pair = _allocator.allocate(1);
+                    _allocator.construct(new_node->pair, ft::pair<key_type, mapped_type>(key, T()));
+                  //  std::cout << "&newNode : " << new_node << std::endl;
+                    _tree._insert(new_node);
+                }
+                return (new_node->pair->second);
             }
             iterator    begin()
             {

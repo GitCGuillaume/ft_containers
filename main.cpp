@@ -190,5 +190,7 @@ int	main(void)
 	execute_function(forward_iterator_map_default_custom, 1);
 	execute_function(empty_bracket, 0);
 	execute_function(empty_bracket_custom, 1);
+	execute_function(bracket_map, 0);
+	execute_function(bracket_map_custom, 1);
 	return (0);
 }
