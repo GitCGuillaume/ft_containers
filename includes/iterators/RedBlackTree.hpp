@@ -1,5 +1,5 @@
-#ifndef BIDIRECTIONALITERATOR_HPP
-# define BIDIRECTIONALITERATOR_HPP
+#ifndef REDBLACKTREE_HPP
+# define REDBLACKTREE_HPP
 
 #include "iterator_traits.hpp"
 #include "iterator.hpp"
@@ -34,7 +34,7 @@ struct s_node
 namespace ft
 {
         template<class It, class Container, class Key, class T, class Allocator>
-        class   BidirectionalIterator
+        class   RedBlackTree
         {
                 public:
                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::value_type    value_type;
@@ -46,9 +46,9 @@ namespace ft
                         typedef T   mapped_type;
                         typedef Allocator   allocator_type;
                         typedef  s_node<pointer>       node;
-                        BidirectionalIterator(){}
-                        ~BidirectionalIterator(){}
-                        BidirectionalIterator(node* iterator) : _iterator(iterator){}
+                        RedBlackTree(){}
+                        ~RedBlackTree(){}
+                        RedBlackTree(node* iterator) : _iterator(iterator){}
                         reference operator*() const
                         {
                                 return (*_iterator->pair);

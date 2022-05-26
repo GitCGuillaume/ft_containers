@@ -1,7 +1,7 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
-#include "../iterators/BidirectionalIterator.hpp"
+#include "../iterators/RedBlackTree.hpp"
 #include "../library_headers/less.hpp"
 #include "../library_headers/pair.hpp"
 #include <stdexcept>
@@ -27,8 +27,8 @@ namespace ft
             typedef const value_type& const_reference;
             typedef typename Allocator::pointer  pointer;
             typedef typename Allocator::const_pointer    const_pointer;
-            typedef ft::BidirectionalIterator<value_type, map, key_type, mapped_type, Allocator> iterator;
-            typedef ft::BidirectionalIterator<const value_type, map, key_type, mapped_type, Allocator> const_iterator;
+            typedef ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator> iterator;
+            typedef ft::RedBlackTree<const value_type, map, key_type, mapped_type, Allocator> const_iterator;
             //typedef ft::reverse_iterator<iterator>  reverse_iterator;
             //typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
             class   value_compare : public ft::binary_function<value_type, value_type, bool>
@@ -105,7 +105,7 @@ namespace ft
                 return (_tree._iterator);
             }
         private:
-            typedef typename ft::BidirectionalIterator<value_type, map, key_type, mapped_type, Allocator>   _RB_tree;
+            typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>   _RB_tree;
             _RB_tree    _tree; //need to use RD iterator nodes somewhere
             Compare const  _comp;
             allocator_type	_allocator;
