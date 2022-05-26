@@ -20,8 +20,10 @@ void    empty_bracket()
     std::cout << map[10] << std::endl;
     std::cout << map[11] << std::endl;
     std::cout << map[12] << std::endl;
+    std::cout << "size : " << map.size() << std::endl;
     std::cout << map[5] << std::endl;
     std::cout << map[12] << std::endl;
+    std::cout << "size : " << map.size() << std::endl;
     //std::cout << map["tes"] << std::endl;
    // std::cout << "size : " << map.size() << std::endl;
 }

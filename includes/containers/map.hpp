@@ -4,17 +4,7 @@
 #include "../iterators/BidirectionalIterator.hpp"
 #include "../library_headers/less.hpp"
 #include "../library_headers/pair.hpp"
-/*
-template<class It>
-struct s_node
-{
-        It*      pair;
-        struct s_node*  head = NULL;
-        struct s_node*  left = NULL;
-        struct s_node*  right = NULL;
-        char    colour;
-};
-*/
+#include <stdexcept>
 
 /*
     struct s_node* _node is a pointer because std::allocator allocate return pointer.
@@ -41,6 +31,16 @@ namespace ft
             typedef ft::BidirectionalIterator<const value_type, map, key_type, mapped_type, Allocator> const_iterator;
             //typedef ft::reverse_iterator<iterator>  reverse_iterator;
             //typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
+            class   value_compare : public ft::binary_function<value_type, value_type, bool>
+            {
+                protected:
+                    Compare comp;
+                    value_compare(Compare C) : comp(C){}
+                    bool    operator()(const value_type& lhs, const value_type& rhs) const
+                    {
+                        return (comp(lhs.first, rhs.first));
+                    }
+            };
 
             explicit    map(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
                 : _comp(comp), _allocator(alloc), _capacity_allocator(0)
@@ -69,22 +69,35 @@ namespace ft
             */
             T&  at(const Key& key)
             {
-
+                typename _RB_tree::node* new_node;
+                new_node = _tree._search(key);
+                if (!new_node)
+                    throw std::out_of_range("map::at");
+                return (new_node->pair->second);
             }
             T&  operator[](const Key& key)
             {
                 typename _RB_tree::node* new_node;
-                new_node = _tree._search(key);
+                typename _RB_tree::node* res;
+                //new_node = _tree._search(key);
                 //std::cout << "search addr : " << new_node << std::endl;
                 //std::cout << "---" << std::endl;
-                if (!new_node)
-                {
+                //if (!new_node)
+                //{
                     new_node = new typename _RB_tree::node();
                     new_node->pair = _allocator.allocate(1);
                     _allocator.construct(new_node->pair, ft::pair<key_type, mapped_type>(key, T()));
                   //  std::cout << "&newNode : " << new_node << std::endl;
-                    _tree._insert(new_node);
-                }
+                    res = _tree._insert(new_node);
+                    if (res)
+                    {
+                        _allocator.destroy(new_node->pair);
+                        _allocator.deallocate(new_node->pair, 1);
+                        while (_tree._iterator->parent)
+                            _tree._iterator = _tree._iterator->parent;
+                        return (res->pair->second);
+                    }
+                //}
                 return (new_node->pair->second);
             }
             iterator    begin()

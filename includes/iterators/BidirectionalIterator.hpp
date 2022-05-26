@@ -85,7 +85,7 @@ namespace ft
                                 }
                                 return (NULL);
                         }
-                        void    _insert(node *newNode)
+                        node*    _insert(node *newNode)
                         {
                                 Key     firstSubRoot = _iterator->pair->first;
                                 Key     firstNewNode = newNode->pair->first;
@@ -97,7 +97,7 @@ namespace ft
                                         _allocator.deallocate(_iterator->pair, 1);
                                         _iterator->pair = newNode->pair;
                                         _iterator->colour = 2;
-                                        return ;
+                                        return (NULL);
                                 }
                                 //Search
                                 while (_iterator)
@@ -126,7 +126,7 @@ namespace ft
                                                 firstSubRoot = _iterator->pair->first;
                                         }
                                         else if (firstNewNode == firstSubRoot)
-                                                return ;
+                                                return (_iterator);
                                 }
                                 newNode->colour = 1;
                                 //detech wich type of violate
@@ -135,6 +135,7 @@ namespace ft
                                 //find new root
                                 while (_getParent(_iterator))
                                         _iterator = _iterator->parent;
+                                return (NULL);
                         }
                         node*  _iterator; // struct stocked here, used to iterate
                         private:
