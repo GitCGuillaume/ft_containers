@@ -45,7 +45,7 @@ namespace ft
             explicit    map(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
                 : _comp(comp), _allocator(alloc), _capacity_allocator(0)
             {
-                _tree._iterator = new typename ft::BidirectionalIterator<value_type, map, key_type, mapped_type, Allocator>::node();
+                _tree._iterator = new typename _RB_tree::node();
                 _tree._iterator->colour = 0;
                 _tree._iterator->pair = _allocator.allocate(1);
                 _allocator.construct(_tree._iterator->pair, value_type()); //Call pair<>() constructor
@@ -67,15 +67,19 @@ namespace ft
             /*
             Elements Access
             */
+            T&  at(const Key& key)
+            {
+
+            }
             T&  operator[](const Key& key)
             {
-                typename ft::BidirectionalIterator<value_type, map, key_type, mapped_type, Allocator>::node* new_node;
+                typename _RB_tree::node* new_node;
                 new_node = _tree._search(key);
                 //std::cout << "search addr : " << new_node << std::endl;
                 //std::cout << "---" << std::endl;
                 if (!new_node)
                 {
-                    new_node = new typename ft::BidirectionalIterator<value_type, map, key_type, mapped_type, Allocator>::node();
+                    new_node = new typename _RB_tree::node();
                     new_node->pair = _allocator.allocate(1);
                     _allocator.construct(new_node->pair, ft::pair<key_type, mapped_type>(key, T()));
                   //  std::cout << "&newNode : " << new_node << std::endl;
@@ -88,7 +92,8 @@ namespace ft
                 return (_tree._iterator);
             }
         private:
-            typename ft::BidirectionalIterator<value_type, map, key_type, mapped_type, Allocator>    _tree; //need to use RD iterator nodes somewhere
+            typedef typename ft::BidirectionalIterator<value_type, map, key_type, mapped_type, Allocator>   _RB_tree;
+            _RB_tree    _tree; //need to use RD iterator nodes somewhere
             Compare const  _comp;
             allocator_type	_allocator;
 			size_type		_capacity_allocator;
