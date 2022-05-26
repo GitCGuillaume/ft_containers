@@ -27,8 +27,8 @@ namespace ft
             typedef const value_type& const_reference;
             typedef typename Allocator::pointer  pointer;
             typedef typename Allocator::const_pointer    const_pointer;
-            typedef ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator> iterator;
-            typedef ft::RedBlackTree<const value_type, map, key_type, mapped_type, Allocator> const_iterator;
+            typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>::BiDirectionnalIterator iterator;
+            typedef typename ft::RedBlackTree<const value_type, map, key_type, mapped_type, Allocator>::BiDirectionnalIterator const_iterator;
             //typedef ft::reverse_iterator<iterator>  reverse_iterator;
             //typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
             class   value_compare : public ft::binary_function<value_type, value_type, bool>
@@ -102,7 +102,25 @@ namespace ft
             }
             iterator    begin()
             {
-                return (_tree._iterator);
+                _RB_tree*   ptr_tree = &_tree;
+                //go to root in case it's not here
+                while (ptr_tree->_iterator->parent)
+                    ptr_tree->_iterator = ptr_tree->_iterator->parent;
+                //go to leftest structure
+                while (ptr_tree->_iterator->left)
+                    ptr_tree->_iterator = ptr_tree->_iterator->left;
+                return (ptr_tree->_iterator);
+            }
+            iterator    end()
+            {
+                _RB_tree*   ptr_tree = &_tree;
+                //go to root in case it's not here
+                while (ptr_tree->_iterator->parent)
+                    ptr_tree->_iterator = ptr_tree->_iterator->parent;
+                //go to rightest structure
+                while (ptr_tree->_iterator->right)
+                    ptr_tree->_iterator = ptr_tree->_iterator->right;
+                return (ptr_tree->_iterator);
             }
         private:
             typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>   _RB_tree;

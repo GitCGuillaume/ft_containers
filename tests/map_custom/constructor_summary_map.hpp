@@ -9,5 +9,6 @@
 #include "iterator.hpp"
 #include "bracket.hpp"
 #include "at.hpp"
+#include "operator.hpp"
 
 #endif

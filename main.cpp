@@ -186,13 +186,19 @@ int	main(void)
 	execute_function(pair_right_equal, 0);
 	execute_function(pair_right_custom, 1);
 	execute_function(pair_right_equal_custom, 1);
-	execute_function(forward_iterator_map_default, 0);
-	execute_function(forward_iterator_map_default_custom, 1);
+	execute_function(iterator_map_default, 0);
+	execute_function(iterator_map_default_custom, 1);
 	execute_function(empty_bracket, 0);
 	execute_function(empty_bracket_custom, 1);
 	execute_function(bracket_map, 0);
 	execute_function(bracket_map_custom, 1);
 	execute_function(at_map, 0);
 	execute_function(at_map_custom, 1);
+	execute_function(iterator_assignation_map, 0);
+	execute_function(iterator_assignation_map_custom, 1);
+	execute_function(iterator_forward_map, 0);
+	execute_function(iterator_forward_map_custom, 1);
+	execute_function(equal_map, 0);
+	execute_function(equal_map_custom, 1);
 	return (0);
 }

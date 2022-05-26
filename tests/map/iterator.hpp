@@ -4,6 +4,8 @@
 #include <map>
 #include <iostream>
 
-void    forward_iterator_map_default();
+void    iterator_map_default();
+void    iterator_assignation_map();
+void    iterator_forward_map();
 
 #endif

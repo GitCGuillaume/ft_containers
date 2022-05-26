@@ -46,17 +46,59 @@ namespace ft
                         typedef T   mapped_type;
                         typedef Allocator   allocator_type;
                         typedef  s_node<pointer>       node;
+                        class   BiDirectionnalIterator //nested class
+                        {
+                                public:
+                                        BiDirectionnalIterator() : _ptr(){}
+                                        BiDirectionnalIterator(node* ptr) : _ptr(ptr){}
+                                        BiDirectionnalIterator(const BiDirectionnalIterator& rhs) : _ptr(rhs._ptr){}
+                                        BiDirectionnalIterator &        operator=(BiDirectionnalIterator& rhs)
+                                        {
+                                                if (_ptr != &rhs)
+                                                {
+                                                        _ptr->pair->second = rhs.second;
+                                                }
+                                                return (*this);
+                                        }
+                                        reference operator*() const
+                                        {
+                                                return (*_ptr->pair);
+                                        }
+                                        pointer operator->() const
+                                        {
+                                                return (_ptr->pair);
+                                        }
+                                        /* PREFIX */
+                                        BiDirectionnalIterator& operator++()
+                                        {
+                                                _ptr = _ptr->right;
+                                                return (*this);
+                                        }
+                                        BiDirectionnalIterator& operator--()
+                                        {
+                                                _ptr = _ptr->left;
+                                                return (*this);
+                                        }
+                                        /* POSTFIX*/
+                                        BiDirectionnalIterator operator++(int)
+                                        {
+                                                BiDirectionnalIterator tmp = *this;
+                                                _ptr = _ptr->right;
+                                                return (tmp);
+                                        }
+                                        BiDirectionnalIterator   operator--(int)
+                                        {
+                                                BiDirectionnalIterator tmp = *this;
+                                                _ptr = _ptr->left;
+                                                return (tmp);
+                                        }
+                                private:
+                                        node* _ptr;    //pointer of pair
+                        };
                         RedBlackTree(){}
                         ~RedBlackTree(){}
                         RedBlackTree(node* iterator) : _iterator(iterator){}
-                        reference operator*() const
-                        {
-                                return (*_iterator->pair);
-                        }
-                        pointer operator->()
-                        {
-                                return (_iterator->pair);
-                        }
+                        
                         node*    _search(Key const &key)
                         {
                                 node    *subRoot = _iterator;
