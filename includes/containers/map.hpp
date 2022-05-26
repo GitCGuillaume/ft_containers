@@ -88,7 +88,7 @@ namespace ft
                     new_node->pair = _allocator.allocate(1);
                     _allocator.construct(new_node->pair, ft::pair<key_type, mapped_type>(key, T()));
                   //  std::cout << "&newNode : " << new_node << std::endl;
-                    res = _tree._insert(new_node);
+                    res = _tree._insertOperator(new_node);
                     if (res)
                     {
                         _allocator.destroy(new_node->pair);

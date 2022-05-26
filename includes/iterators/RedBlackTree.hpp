@@ -127,7 +127,7 @@ namespace ft
                                 }
                                 return (NULL);
                         }
-                        node*    _insert(node *newNode)
+                        node*    _insertOperator(node *newNode)
                         {
                                 Key     firstSubRoot = _iterator->pair->first;
                                 Key     firstNewNode = newNode->pair->first;
