@@ -34,6 +34,13 @@ void    constructor_range_map_custom()
   //std::cout << "Size map_arr constructor : " << map_arr.size() << std::endl;
   for (ft::map<std::string, int>::iterator	it = map_arr.begin(); it != map_arr.end(); it++)
 		std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
+
+  ft::map<std::string, int>::iterator it2 = map_arr.begin();
+  ft::map<std::string, int>::iterator ite = map_arr.end();
+  it2--;
+  ite--;
+  for (; ite != it2; ite--)
+    std::cout << "arr end : " << ite->first << std::endl;
 }
 /*
 void    copy_constructor_map()

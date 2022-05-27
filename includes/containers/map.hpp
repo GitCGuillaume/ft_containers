@@ -60,8 +60,6 @@ namespace ft
                 _allocator.construct(_tree._iterator->pair, value_type());
                 while (first != second)
                 {
-                    std::cout << "*first : " << first->first << std::endl;
-                    std::cout << "*second : " << first->second << std::endl; 
                     _tree.normalInsert(*first);
                     first++;
                 }
@@ -112,7 +110,7 @@ namespace ft
                 //go to leftest structure
                 while (ptr_tree->_iterator->left)
                     ptr_tree->_iterator = ptr_tree->_iterator->left;
-                return (ptr_tree->_iterator);
+                return (iterator(_tree, ptr_tree->_iterator));
             }
             iterator    end()
             {
@@ -123,7 +121,7 @@ namespace ft
                 //go to rightest structure
                 while (ptr_tree->_iterator->right)
                     ptr_tree->_iterator = ptr_tree->_iterator->right;
-                return (ptr_tree->_iterator->right);
+                return (iterator(_tree, ptr_tree->_iterator->right));
             }
         private:
             typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>   _RB_tree;

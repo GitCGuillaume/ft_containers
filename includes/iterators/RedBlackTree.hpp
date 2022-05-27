@@ -50,14 +50,15 @@ namespace ft
                         class   BiDirectionnalIterator //nested class
                         {
                                 public:
-                                        BiDirectionnalIterator() : _ptr(){}
-                                        BiDirectionnalIterator(node* ptr) : _ptr(ptr){}
-                                        BiDirectionnalIterator(const BiDirectionnalIterator& rhs) : _ptr(rhs._ptr){}
+                                        BiDirectionnalIterator() : _ptr(), _old(){}
+                                        BiDirectionnalIterator(const RedBlackTree& src, node* ptr) : _ptr(ptr), _old(src._iterator){}
+                                        BiDirectionnalIterator(const BiDirectionnalIterator& rhs) : _ptr(rhs._ptr), _old(rhs._old){}
                                         BiDirectionnalIterator &        operator=(BiDirectionnalIterator& rhs)
                                         {
                                                 if (_ptr != &rhs)
                                                 {
                                                         _ptr->pair->second = rhs.second;
+                                                        _old->pair->second = rhs.second;
                                                 }
                                                 return (*this);
                                         }
@@ -71,53 +72,58 @@ namespace ft
                                         }
                                         /* PREFIX */
                                         /*
-                                                0---3
-                                                |
-                                                1 _ptr->right if (_ptr->right(1) == cpy(1)) goto parent
-                                                \2 cpy
-                                                if we are at the end()
-                                                we need to loop until ptr reach the root
-                                                or else it will do an infinite loop
+                                                _old->right == _ptr will loop until parent root(NULL)
+                                                or until _ptr->right is not old anymore
                                         */
                                         BiDirectionnalIterator& operator++()
                                         {
-                                                node*   tmp = NULL;
-
+                                                _old = _ptr->parent;
                                                 if (_ptr->right) //check if struct on right
                                                 {
                                                         _ptr = _ptr->right; //go ro right
                                                         while (_ptr->left) //then go to leftest key
                                                                 _ptr = _ptr->left;
                                                 }
-                                                else if (_ptr->parent)
+                                                else if (_old && _old->right == _ptr)
                                                 {
-                                                        tmp = _ptr;
-                                                        _ptr = _ptr->parent;
-                                                        while (_ptr && tmp == _ptr->right)
+                                                        while (_old && _old->right == _ptr)
                                                         {
-                                                                tmp = _ptr;
-                                                                _ptr = _ptr->parent;
+                                                                _ptr = _old;
+                                                                _old = _ptr->parent;
                                                         }
+                                                        _ptr = _old;
                                                 }
+                                                else
+                                                        _ptr = _ptr->parent;
                                                 return (*this);
                                         }
                                         BiDirectionnalIterator& operator--()
                                         {
-                                                //_ptr = _ptr->left;
+                                                if (!_ptr)
+                                                {
+                                                        _ptr = _old;
+                                                        while (_ptr->right)
+                                                                _ptr = _ptr->right;
+                                                        return (*this);
+                                                }
+                                                _old = _ptr->parent;
                                                 if (_ptr->left) //check if struct on left
                                                 {
                                                         _ptr = _ptr->left; //go ro left
                                                         while (_ptr->right) //then go to leftest key
                                                                 _ptr = _ptr->right;
                                                 }
-                                                else if (!_ptr->right && _ptr->parent
-                                                        && _ptr->pair->left >  _ptr->parent->parent->pair->first)
-                                                        _ptr = _ptr->right;
-                                                else if (!_ptr->right)
+                                                else if (_old && _old->left == _ptr)
                                                 {
-                                                        while (_ptr->parent && !_ptr->right)
-                                                                _ptr = _ptr->parent;
+                                                        while (_old && _old->left == _ptr)
+                                                        {
+                                                                _ptr = _old;
+                                                                _old = _ptr->parent;
+                                                        }
+                                                        _ptr = _old;
                                                 }
+                                                else
+                                                        _ptr = _ptr->parent;
                                                 return (*this);
                                         }
                                         /* POSTFIX*/
@@ -143,7 +149,8 @@ namespace ft
                                                 return (_ptr != rhs._ptr);
                                         }
                                 private:
-                                        node* _ptr;    //pointer of pair
+                                        node*   _ptr;    //pointer of pair
+                                        node*   _old;
                         };
                         RedBlackTree(){}
                         ~RedBlackTree(){}
@@ -286,6 +293,10 @@ namespace ft
                                 while (_getParent(_iterator))
                                         _iterator = _iterator->parent;
                                 return (NULL);
+                        }
+                        node*   getIterator() const
+                        {
+                                return (_iterator);
                         }
                         node*  _iterator; // struct stocked here, used to iterate
                         private:
