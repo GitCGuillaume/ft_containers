@@ -27,9 +27,10 @@ struct s_node
 
 /*
         RB tree
-        0 = red
-        1 = black
-        2+ = 2+ black (delete part)
+        0 = none
+        1 = red
+        2 = 2 black
+        3 = 3 black (delete part)
 */
 namespace ft
 {
@@ -69,28 +70,77 @@ namespace ft
                                                 return (_ptr->pair);
                                         }
                                         /* PREFIX */
+                                        /*
+                                                0---3
+                                                |
+                                                1 _ptr->right if (_ptr->right(1) == cpy(1)) goto parent
+                                                \2 cpy
+                                                if we are at the end()
+                                                we need to loop until ptr reach the root
+                                                or else it will do an infinite loop
+                                        */
                                         BiDirectionnalIterator& operator++()
                                         {
-                                                _ptr = _ptr->right;
+                                                node*   tmp = NULL;
+
+                                                if (_ptr->right) //check if struct on right
+                                                {
+                                                        _ptr = _ptr->right; //go ro right
+                                                        while (_ptr->left) //then go to leftest key
+                                                                _ptr = _ptr->left;
+                                                }
+                                                else if (_ptr->parent)
+                                                {
+                                                        tmp = _ptr;
+                                                        _ptr = _ptr->parent;
+                                                        while (_ptr && tmp == _ptr->right)
+                                                        {
+                                                                tmp = _ptr;
+                                                                _ptr = _ptr->parent;
+                                                        }
+                                                }
                                                 return (*this);
                                         }
                                         BiDirectionnalIterator& operator--()
                                         {
-                                                _ptr = _ptr->left;
+                                                //_ptr = _ptr->left;
+                                                if (_ptr->left) //check if struct on left
+                                                {
+                                                        _ptr = _ptr->left; //go ro left
+                                                        while (_ptr->right) //then go to leftest key
+                                                                _ptr = _ptr->right;
+                                                }
+                                                else if (!_ptr->right && _ptr->parent
+                                                        && _ptr->pair->left >  _ptr->parent->parent->pair->first)
+                                                        _ptr = _ptr->right;
+                                                else if (!_ptr->right)
+                                                {
+                                                        while (_ptr->parent && !_ptr->right)
+                                                                _ptr = _ptr->parent;
+                                                }
                                                 return (*this);
                                         }
                                         /* POSTFIX*/
                                         BiDirectionnalIterator operator++(int)
                                         {
                                                 BiDirectionnalIterator tmp = *this;
-                                                _ptr = _ptr->right;
+                                                this->operator++();
                                                 return (tmp);
                                         }
                                         BiDirectionnalIterator   operator--(int)
                                         {
                                                 BiDirectionnalIterator tmp = *this;
-                                                _ptr = _ptr->left;
+                                                //_ptr = _ptr->left;
+                                                this->operator--();
                                                 return (tmp);
+                                        }
+                                        bool    operator==(BiDirectionnalIterator const & rhs)
+                                        {
+                                                return (_ptr == rhs._ptr);
+                                        }
+                                        bool    operator!=(BiDirectionnalIterator const & rhs)
+                                        {
+                                                return (_ptr != rhs._ptr);
                                         }
                                 private:
                                         node* _ptr;    //pointer of pair
@@ -127,7 +177,65 @@ namespace ft
                                 }
                                 return (NULL);
                         }
-                        node*    _insertOperator(node *newNode)
+                        template<typename U, typename X>
+                        ft::pair<U, X>&    normalInsert(const ft::pair<U, X>& pair)
+                        {
+                                node    *new_node = NULL;
+                                Key     firstSubRoot = _iterator->pair->first;
+                                Key     firstNewNode = pair.first;
+                                ft::pair<U, X>  ret;
+
+                                if (!_iterator->right && !_iterator->left
+                                        && _iterator->colour == 0) //no root
+                                {
+                                        _allocator.destroy(_iterator->pair);
+                                        _allocator.deallocate(_iterator->pair, 1);
+                                        _iterator->pair = _allocator.allocate(1);
+                                        _allocator.construct(_iterator->pair, pair);
+                                        //black colour
+                                        _iterator->colour = 2;
+                                        return (*_iterator->pair);
+                                }
+                                new_node = new node();
+                                //Search
+                               while (_iterator)
+                                {
+                                        if (firstSubRoot < firstNewNode)
+                                        {
+                                                 if (!_iterator->right)
+                                                 {
+                                                        new_node->parent = _iterator;
+                                                        _iterator->right = new_node;
+                                                        break ;
+                                                 }
+                                                _iterator = _iterator->right;
+                                                firstSubRoot = _iterator->pair->first;
+                                               
+                                        }
+                                        else if (firstNewNode < firstSubRoot)
+                                        {
+                                                if (!_iterator->left)
+                                                {
+                                                        new_node->parent = _iterator;
+                                                        _iterator->left = new_node;
+                                                        break ;
+                                                }
+                                                _iterator = _iterator->left;
+                                                firstSubRoot = _iterator->pair->first;
+                                        }
+                                        else if (firstNewNode == firstSubRoot)
+                                                return (*_iterator->pair);
+                                }
+                                new_node->pair = _allocator.allocate(1);
+                                _allocator.construct(new_node->pair, pair);
+                                //red colour
+                                new_node->colour = 1;
+                                _repearTree(new_node);
+                                while (_getParent(_iterator))
+                                        _iterator = _iterator->parent;
+                                return (*new_node->pair);
+                        }
+                        node*    insertOperator(node *newNode)
                         {
                                 Key     firstSubRoot = _iterator->pair->first;
                                 Key     firstNewNode = newNode->pair->first;

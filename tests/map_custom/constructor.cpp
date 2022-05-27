@@ -10,11 +10,11 @@ void    default_constructor_map_custom()
   //std::cout << "Size default const constructor : " << const_map.size() << std::endl;
   //ft::map<std::string, int> map_alloc(map.key_comp(), map.get_allocator());
 }
-/*
-void    constructor_range_map()
+
+void    constructor_range_map_custom()
 {
-  std::cout << "constructor range (1) Map" << std::endl;
-  std::map<std::string, int> map;
+  std::cout << "constructor range (1) Map CUSTOM" << std::endl;
+  ft::map<std::string, int> map;
   map["abc"] = -2147483647;
   map["jkl"] = 2147483648;
   map["ghi"] = 0;
@@ -22,13 +22,20 @@ void    constructor_range_map()
   map["ghi"] = 1;
   map["def"] = 21354;
   map["m"] = 1;
-  std::map<std::string, int> map_arr(map.begin(), map.end());
-  std::cout << "Size map constructor : " << map.size() << std::endl;
-  std::cout << "Size map_arr constructor : " << map_arr.size() << std::endl;
-  for (std::map<std::string, int>::iterator	it = map_arr.begin(); it != map_arr.end(); it++)
+  map["pqr"] = 1;
+  map["stu"] = 2145;
+  ft::map<std::string, int>::iterator it = map.begin();
+  //it++;
+  //it++;
+  //map.insert(/*it, */std::make_pair("m", 123));
+  ft::map<std::string, int> map_arr(map.begin(), map.end());
+ // exit(0);
+  //std::cout << "Size map constructor : " << map.size() << std::endl;
+  //std::cout << "Size map_arr constructor : " << map_arr.size() << std::endl;
+  for (ft::map<std::string, int>::iterator	it = map_arr.begin(); it != map_arr.end(); it++)
 		std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
 }
-
+/*
 void    copy_constructor_map()
 {
   std::cout << "Copy constructor" << std::endl;

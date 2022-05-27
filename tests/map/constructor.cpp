@@ -22,6 +22,12 @@ void    constructor_range_map()
   map["ghi"] = 1;
   map["def"] = 21354;
   map["m"] = 1;
+  map["pqr"] = 1;
+  map["stu"] = 2145;
+  std::map<std::string, int>::iterator it = map.begin();
+  //it++;
+  //it++;
+  map.insert(/*it, */std::make_pair("m", 123));
   std::map<std::string, int> map_arr(map.begin(), map.end());
   std::cout << "Size map constructor : " << map.size() << std::endl;
   std::cout << "Size map_arr constructor : " << map_arr.size() << std::endl;

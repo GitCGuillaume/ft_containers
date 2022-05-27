@@ -172,6 +172,7 @@ int	main(void)
 	execute_function(constructor_copy_speed, 0);
 	
 	execute_function(default_constructor_map_custom, 1);
+	execute_function(constructor_range_map_custom, 1);
 	execute_function(pair_default, 0);
 	execute_function(pair_equal, 0);
 	execute_function(pair_not_equal, 0);

@@ -43,7 +43,7 @@ namespace ft
             };
 
             explicit    map(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
-                : _comp(comp), _allocator(alloc), _capacity_allocator(0)
+                : _comp(comp), _allocator(alloc), _capacity_allocator(1)
             {
                 _tree._iterator = new typename _RB_tree::node();
                 _tree._iterator->colour = 0;
@@ -52,9 +52,19 @@ namespace ft
             }
             template<class InputIt>
             map(InputIt first, InputIt second, const Compare& comp = Compare(),
-                const Allocator& alloc = Allocator())
+                const Allocator& alloc = Allocator()) : _comp(comp), _allocator(alloc), _capacity_allocator(1)
             {
-                
+                _tree._iterator = new typename _RB_tree::node();
+                _tree._iterator->colour = 0;
+                _tree._iterator->pair = _allocator.allocate(1);
+                _allocator.construct(_tree._iterator->pair, value_type());
+                while (first != second)
+                {
+                    std::cout << "*first : " << first->first << std::endl;
+                    std::cout << "*second : " << first->second << std::endl; 
+                    _tree.normalInsert(*first);
+                    first++;
+                }
             }
             virtual ~map()
             {
@@ -79,25 +89,18 @@ namespace ft
             {
                 typename _RB_tree::node* new_node;
                 typename _RB_tree::node* res;
-                //new_node = _tree._search(key);
-                //std::cout << "search addr : " << new_node << std::endl;
-                //std::cout << "---" << std::endl;
-                //if (!new_node)
-                //{
-                    new_node = new typename _RB_tree::node();
-                    new_node->pair = _allocator.allocate(1);
-                    _allocator.construct(new_node->pair, ft::pair<key_type, mapped_type>(key, T()));
-                  //  std::cout << "&newNode : " << new_node << std::endl;
-                    res = _tree._insertOperator(new_node);
-                    if (res)
-                    {
-                        _allocator.destroy(new_node->pair);
-                        _allocator.deallocate(new_node->pair, 1);
-                        while (_tree._iterator->parent)
-                            _tree._iterator = _tree._iterator->parent;
-                        return (res->pair->second);
-                    }
-                //}
+                new_node = new typename _RB_tree::node();
+                new_node->pair = _allocator.allocate(1);
+                _allocator.construct(new_node->pair, ft::pair<key_type, mapped_type>(key, T()));
+                res = _tree.insertOperator(new_node);
+                if (res)
+                {
+                    _allocator.destroy(new_node->pair);
+                    _allocator.deallocate(new_node->pair, 1);
+                    while (_tree._iterator->parent)
+                        _tree._iterator = _tree._iterator->parent;
+                    return (res->pair->second);
+                }
                 return (new_node->pair->second);
             }
             iterator    begin()
@@ -120,7 +123,7 @@ namespace ft
                 //go to rightest structure
                 while (ptr_tree->_iterator->right)
                     ptr_tree->_iterator = ptr_tree->_iterator->right;
-                return (ptr_tree->_iterator);
+                return (ptr_tree->_iterator->right);
             }
         private:
             typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>   _RB_tree;
