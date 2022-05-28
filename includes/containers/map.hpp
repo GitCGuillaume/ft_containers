@@ -66,11 +66,7 @@ namespace ft
             }
             virtual ~map()
             {
-                _allocator.destroy(_tree._iterator->pair);
-                _allocator.deallocate(_tree._iterator->pair, 1);
-                delete _tree._iterator;
-                _tree._iterator = NULL;
-                //need to clear with erase / clear whatever
+                //DOIT FAIRE AVEC ERASE OU LES ITERATORS POSES PROBLEMES
             }
             /*
             Elements Access
@@ -95,6 +91,7 @@ namespace ft
                 {
                     _allocator.destroy(new_node->pair);
                     _allocator.deallocate(new_node->pair, 1);
+                    delete new_node;
                     while (_tree._iterator->parent)
                         _tree._iterator = _tree._iterator->parent;
                     return (res->pair->second);

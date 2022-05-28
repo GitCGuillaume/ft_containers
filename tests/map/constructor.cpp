@@ -40,6 +40,12 @@ void    constructor_range_map()
   ite--;
   for (; ite != it2; ite--)
     std::cout << "arr end : " << ite->first << std::endl;
+  it2 = map_arr.begin();
+  ite = map_arr.end();
+  it2--;
+  ite--;
+  for (; ite != it2; ite--)
+    std::cout << "arr end : " << ite->first << std::endl;
 }
 
 void    copy_constructor_map()

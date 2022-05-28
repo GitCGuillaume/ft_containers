@@ -50,15 +50,22 @@ namespace ft
                         class   BiDirectionnalIterator //nested class
                         {
                                 public:
+                                        /* FOR STD DISTANCE */
+                                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::value_type    value_type;
+                                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::difference_type    difference_type;
+                                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::reference    reference;
+                                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::pointer    pointer;
+                                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::iterator_category    iterator_category;
+                        
                                         BiDirectionnalIterator() : _ptr(), _old(){}
                                         BiDirectionnalIterator(const RedBlackTree& src, node* ptr) : _ptr(ptr), _old(src._iterator){}
                                         BiDirectionnalIterator(const BiDirectionnalIterator& rhs) : _ptr(rhs._ptr), _old(rhs._old){}
-                                        BiDirectionnalIterator &        operator=(BiDirectionnalIterator& rhs)
+                                        BiDirectionnalIterator &        operator=(const BiDirectionnalIterator& rhs)
                                         {
-                                                if (_ptr != &rhs)
+                                                if (this != &rhs)
                                                 {
-                                                        _ptr->pair->second = rhs.second;
-                                                        _old->pair->second = rhs.second;
+                                                        _ptr = rhs._ptr;
+                                                        _old = rhs._old;
                                                 }
                                                 return (*this);
                                         }
@@ -136,7 +143,6 @@ namespace ft
                                         BiDirectionnalIterator   operator--(int)
                                         {
                                                 BiDirectionnalIterator tmp = *this;
-                                                //_ptr = _ptr->left;
                                                 this->operator--();
                                                 return (tmp);
                                         }
@@ -231,7 +237,10 @@ namespace ft
                                                 firstSubRoot = _iterator->pair->first;
                                         }
                                         else if (firstNewNode == firstSubRoot)
+                                        {
+                                                delete new_node;
                                                 return (*_iterator->pair);
+                                        }
                                 }
                                 new_node->pair = _allocator.allocate(1);
                                 _allocator.construct(new_node->pair, pair);
