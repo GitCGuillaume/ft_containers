@@ -28,7 +28,7 @@ namespace ft
             typedef typename Allocator::pointer  pointer;
             typedef typename Allocator::const_pointer    const_pointer;
             typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>::BiDirectionnalIterator iterator;
-            typedef typename ft::RedBlackTree<const value_type, map, key_type, mapped_type, Allocator>::BiDirectionnalIterator const_iterator;
+            typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>::BiDirectionnalIterator const_iterator;
             //typedef ft::reverse_iterator<iterator>  reverse_iterator;
             //typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
             class   value_compare : public ft::binary_function<value_type, value_type, bool>
@@ -66,7 +66,29 @@ namespace ft
             }
             virtual ~map()
             {
-                //DOIT FAIRE AVEC ERASE OU LES ITERATORS POSES PROBLEMES
+                size_type   size = this->size();
+                /*
+                if (size > 0)
+                {
+                    while (size != 0)
+                    {
+                       // _tree.directDeleteNode(&_tree._iterator[0]);
+                        size--;
+                    }
+                }*/
+            }
+            size_type   size() const
+            {
+                size_type   i = 0;
+                const_iterator    it = this->begin();
+                //const_iterator    ite = this->end();
+
+                /*while (it != ite)
+                {
+                    i++;
+                    it++;
+                }*/
+                return (i);
             }
             /*
             Elements Access
@@ -100,14 +122,11 @@ namespace ft
             }
             iterator    begin()
             {
-                _RB_tree*   ptr_tree = &_tree;
-                //go to root in case it's not here
-                while (ptr_tree->_iterator->parent)
-                    ptr_tree->_iterator = ptr_tree->_iterator->parent;
-                //go to leftest structure
-                while (ptr_tree->_iterator->left)
-                    ptr_tree->_iterator = ptr_tree->_iterator->left;
-                return (iterator(_tree, ptr_tree->_iterator));
+                return (iterator(_tree, _tree.begin()));
+            }
+            const_iterator    begin() const
+            {
+                return (const_iterator(_tree, _tree.begin()));
             }
             iterator    end()
             {
@@ -120,6 +139,11 @@ namespace ft
                     ptr_tree->_iterator = ptr_tree->_iterator->right;
                 return (iterator(_tree, ptr_tree->_iterator->right));
             }
+            /*const_iterator    end() const
+            {
+                return (const_iterator(this->end()));
+            }*/
+
         private:
             typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>   _RB_tree;
             _RB_tree    _tree; //need to use RD iterator nodes somewhere

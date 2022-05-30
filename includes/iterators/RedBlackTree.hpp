@@ -24,7 +24,6 @@ struct s_node
         int    colour;
 };
 
-
 /*
         RB tree
         0 = none
@@ -58,8 +57,19 @@ namespace ft
                                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::iterator_category    iterator_category;
                         
                                         BiDirectionnalIterator() : _ptr(), _old(){}
-                                        BiDirectionnalIterator(const RedBlackTree& src, node* ptr) : _ptr(ptr), _old(src._iterator){}
-                                        BiDirectionnalIterator(const BiDirectionnalIterator& rhs) : _ptr(rhs._ptr), _old(rhs._old){}
+                                        
+                                        //BiDirectionnalIterator(const BiDirectionnalIterator<U
+                                        //        , typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value),
+                                        //        Container>::type>& rhs) : _ptr(rhs.base()){}
+                                        
+                                        //BiDirectionnalIterator(const RedBlackTree& src, node* ptr, typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value),
+                                        //        Container>::type) : _ptr(ptr), _old(src._iterator){}
+                                        template<typename U>
+                                        BiDirectionnalIterator(const RedBlackTree<U, typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type
+                                                , key_type, mapped_type, Allocator>& src, node* ptr) : _ptr(ptr), _old(src._iterator){}
+                                        template<typename U>
+                                        BiDirectionnalIterator(const RedBlackTree<U, typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type
+                                                , key_type, mapped_type, Allocator>& rhs) : _ptr(rhs._ptr), _old(rhs._old){}
                                         BiDirectionnalIterator &        operator=(const BiDirectionnalIterator& rhs)
                                         {
                                                 if (this != &rhs)
@@ -158,7 +168,7 @@ namespace ft
                                         node*   _ptr;    //pointer of pair
                                         node*   _old;
                         };
-                        RedBlackTree(){}
+                        RedBlackTree() : _iterator(NULL){}
                         ~RedBlackTree(){}
                         RedBlackTree(node* iterator) : _iterator(iterator){}
                         
@@ -246,7 +256,7 @@ namespace ft
                                 _allocator.construct(new_node->pair, pair);
                                 //red colour
                                 new_node->colour = 1;
-                                _repearTree(new_node);
+                                _repearTreeInsert(new_node);
                                 while (_getParent(_iterator))
                                         _iterator = _iterator->parent;
                                 return (*new_node->pair);
@@ -296,24 +306,163 @@ namespace ft
                                 }
                                 newNode->colour = 1;
                                 //detech wich type of violate
-                                _repearTree(newNode);
+                                _repearTreeInsert(newNode);
                                 //_iterator = newNode;
                                 //find new root
                                 while (_getParent(_iterator))
                                         _iterator = _iterator->parent;
                                 return (NULL);
                         }
+                        
+                        void    directDeleteNode(node *current)
+                        {
+                                node            *left_child = NULL;
+                                node            *right_child = NULL;
+                                short int       nb_child = 0;
+
+                                if (!current)
+                                        return ;
+                                if (current->left)
+                                {
+                                        nb_child++;
+                                        left_child = current->left;
+                                }
+                                if (current->right)
+                                {
+                                        nb_child++;
+                                        right_child = current->right;
+                                }
+                                //if ( nb_child < 2)
+                                  //      _deleteOneChild(&current, &left_child, &right_child);
+                                /*if (nb_child == 2)
+                                {
+                                        _deleteTwoChild(&current, left_child, right_child);
+                                }*/
+                        }
+                        void    deleteNode(Key const &key)
+                        {
+                                //node*    search_node = _search(key);
+
+                                //if (search_node)
+                                //{
+                                //        if (search)
+                                //}
+                        }
                         node*   getIterator() const
                         {
                                 return (_iterator);
                         }
+                        node*   begin() const
+                        {
+                                node    *start = _iterator;
+
+                                while (start->parent)
+                                        start = start->parent;
+                                while (start->left)
+                                        start = start->left;
+                                return (start);
+                        }
                         node*  _iterator; // struct stocked here, used to iterate
+
                         private:
                                 /*
                                 0 =null
                                 1 = red
                                 >1 black
                                 */
+                                void    _caseOneColourRed(node **current, node **child)
+                                {
+                                        node*   parent = _getParent(*current);
+
+                                        _destroyNode(*current);
+                                        delete *current;
+                                        *current = NULL;
+                                        if (child && *child)
+                                        {
+                                                *current = *child;
+                                                *current->parent = parent;
+                                                *current->colour = 2;
+                                        }
+                                }
+                                /* in case current or child is red */
+                                bool    _caseTwoDelete(node **current, node **left_child, node **right_child)
+                                {
+                                        if (left_child && left_child->colour == 1)
+                                        {
+                                                _caseOneColourRed(current, left_child);
+                                                return (true);
+                                        }
+                                        else if (right_child && right_child->colour == 1)
+                                        {
+                                                _caseOneColourRed(current, right_child);
+                                                return (true);
+                                        }
+                                        else if (*current->colour == 1)
+                                        {
+                                                //if (left_child)
+                                                _caseOneColourRed(current, left_child);
+                                                //if (right_child)
+                                                //        _caseOneColourRed(current, right_child);
+                                                return (true);
+                                        }
+                                        return (false);
+                                }
+                                /*
+                                        Case left left delete
+                                                or left right
+                                */
+                                /*void    _caseThreeLeftDelete(node *current, current *child)
+                                {
+                                        node    *sibling = _getSibling(current);
+                                        //left left
+
+                                }*/
+                                /*
+                                        Case right right delete
+                                                or right right
+                                        child is left child (current will become left child)
+                                */
+                                void    _caseThreeRightDelete(node *current, node* sibling, node *child)
+                                {
+                                        //current->colour = 3;
+                                        //_destroyNode(current);
+                                }
+                                /* if both current and child are black
+                                        or one is red */
+                                /*void    _deleteTwoChild(node **current, node *left_child, node *right_child)
+                                {
+                                        node*   parent = _getParent(*current);
+
+                                        if (_caseTwoDelete(current, left_child, right_child))
+                                                return ;
+                                        if (parent && parent->left == current)
+                                        {
+                                                //call right correction
+                                                _caseThreeRightDelete(current, _getSibling(current), left_child);
+                                        }
+                                        
+                                }*/
+                                void    _deleteOneChild(node **current, node **left_child, node **right_child)
+                                {
+                                        node*   parent = _getParent(*current);
+
+                                        _destroyNode(*current);
+                                        delete *current;
+                                        if (*left_child)
+                                                *current = *left_child;
+                                        if (*right_child)
+                                                *current = *right_child;
+                                        if (*current)
+                                                (*current)->colour = 2;
+                                        (*current)->parent = parent;
+                                }
+                                void    _destroyNode(node *current)
+                                {
+                                        if (!current || !current->pair)
+                                                return ;
+                                        _allocator.destroy(current->pair);
+                                        _allocator.deallocate(current->pair, 1);
+                                }
                                 void    _swapColour(int *colour)
                                 {
                                         if (*colour == 1)
@@ -386,6 +535,18 @@ namespace ft
                                                 return (gParentNode->right);
                                         return (NULL);
                                 }
+                                node    *_getSibling(node *current)
+                                {
+                                        node    *parent = getParent(current);
+
+                                        if (!parent)
+                                                return (NULL);
+                                        if (parent->left && parent->left != current)
+                                                return (parent->left);
+                                        else if (parent->right && parent->right != current)
+                                                return (parent->right);
+                                        return (NULL);
+                                }
                                 void    _repearCaseOne(node *current)
                                 {
                                         node    *parent = _getParent(current);
@@ -398,9 +559,9 @@ namespace ft
                                         if (gParentNode)
                                                 gParentNode->colour = 1;
                                         //return (gParentNode);
-                                        _repearTree(gParentNode);
+                                        _repearTreeInsert(gParentNode);
                                 }
-                                void    _repearTree(node *current)
+                                void    _repearTreeInsert(node *current)
                                 {
                                         node    *uncle = _getUncle(current);
                                         node    *parentNode = NULL;
