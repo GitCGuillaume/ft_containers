@@ -172,10 +172,9 @@ namespace ft
                         ~RedBlackTree(){}
                         RedBlackTree(node* iterator) : _iterator(iterator){}
                         
-                        node*    _search(Key const &key)
+                        node*    search(Key const &key)
                         {
                                 node    *subRoot = _iterator;
-
                                 Key     firstSubRoot = subRoot->pair->first;
                                 Key     firstNewNode = key;
                                 //std::cout << "SEARCH" << std::endl;
@@ -201,12 +200,12 @@ namespace ft
                                 return (NULL);
                         }
                         template<typename U, typename X>
-                        ft::pair<U, X>&    normalInsert(const ft::pair<U, X>& pair)
+                        node*    normalInsert(const ft::pair<U, X>& pair)
                         {
                                 node    *new_node = NULL;
                                 Key     firstSubRoot = _iterator->pair->first;
                                 Key     firstNewNode = pair.first;
-                                ft::pair<U, X>  ret;
+                                //ft::pair<U, X>  ret;
 
                                 if (!_iterator->right && !_iterator->left
                                         && _iterator->colour == 0) //no root
@@ -217,7 +216,7 @@ namespace ft
                                         _allocator.construct(_iterator->pair, pair);
                                         //black colour
                                         _iterator->colour = 2;
-                                        return (*_iterator->pair);
+                                        return (_iterator);
                                 }
                                 new_node = new node();
                                 //Search
@@ -233,7 +232,6 @@ namespace ft
                                                  }
                                                 _iterator = _iterator->right;
                                                 firstSubRoot = _iterator->pair->first;
-                                               
                                         }
                                         else if (firstNewNode < firstSubRoot)
                                         {
@@ -249,7 +247,7 @@ namespace ft
                                         else if (firstNewNode == firstSubRoot)
                                         {
                                                 delete new_node;
-                                                return (*_iterator->pair);
+                                                return (_iterator);
                                         }
                                 }
                                 new_node->pair = _allocator.allocate(1);
@@ -259,9 +257,9 @@ namespace ft
                                 _repearTreeInsert(new_node);
                                 while (_getParent(_iterator))
                                         _iterator = _iterator->parent;
-                                return (*new_node->pair);
+                                return (new_node);
                         }
-                        node*    insertOperator(node *newNode)
+                        /*node*    insertOperator(node *newNode)
                         {
                                 Key     firstSubRoot = _iterator->pair->first;
                                 Key     firstNewNode = newNode->pair->first;
@@ -312,16 +310,27 @@ namespace ft
                                 while (_getParent(_iterator))
                                         _iterator = _iterator->parent;
                                 return (NULL);
-                        }
+                        }*/
                         
-                        void    directDeleteNode(node *current)
+                        void    deleteNode(Key const & key)
                         {
+                                node            *current = NULL;
                                 node            *left_child = NULL;
                                 node            *right_child = NULL;
+                                int             memory_colour = 0;
                                 short int       nb_child = 0;
 
+                                current = search(key);
                                 if (!current)
                                         return ;
+                                memory_colour = current->colour;
+                               /* if (!current->parent) //is root
+                                {
+
+                                }*/
+                               // std::cout << "current addr : " << current << std::endl;
+
+                                std::cout << "first :: " << current->pair->first << std::endl;
                                 if (current->left)
                                 {
                                         nb_child++;
@@ -332,21 +341,30 @@ namespace ft
                                         nb_child++;
                                         right_child = current->right;
                                 }
-                                //if ( nb_child < 2)
-                                  //      _deleteOneChild(&current, &left_child, &right_child);
+                                //std::cout << "nb_child : " << nb_child << std::endl;
+                                std::cout << "COLOUR BEFORE ::: " << current->colour << std::endl;
+                                if ( nb_child < 2)
+                                {
+                                        _deleteOneChild(&current, &left_child, &right_child);
+                                        //need to memore deleted node colour
+                                }
+                                else if (nb_child == 2)
+                                {
+                                        //find smallest key of right (or left) subtree
+                                        //findKey(current->right) then loop left
+                                        // or left then loop right
+                                        //left probably best
+                                        //deleted node become smallest key node
+                                         //delete node from subtree
+                                        //need to memore the deleted node colour
+                                }
+                                //REPEAR TREE
+                                if (current)
+                                        std::cout << "COLOUR AFTER ::: " << current->colour << std::endl;
                                 /*if (nb_child == 2)
                                 {
                                         _deleteTwoChild(&current, left_child, right_child);
                                 }*/
-                        }
-                        void    deleteNode(Key const &key)
-                        {
-                                //node*    search_node = _search(key);
-
-                                //if (search_node)
-                                //{
-                                //        if (search)
-                                //}
                         }
                         node*   getIterator() const
                         {
@@ -362,6 +380,17 @@ namespace ft
                                         start = start->left;
                                 return (start);
                         }
+                        node*   end() const
+                        {
+                                node    *start = _iterator;
+
+                                while (start->parent)
+                                        start = start->parent;
+                                while (start->right)
+                                        start = start->right;
+                                return (start->right);
+                        }
+
                         node*  _iterator; // struct stocked here, used to iterate
 
                         private:
@@ -385,7 +414,7 @@ namespace ft
                                         }
                                 }
                                 /* in case current or child is red */
-                                bool    _caseTwoDelete(node **current, node **left_child, node **right_child)
+                                bool    _caseTwoDelete(node **current, node **child)
                                 {
                                         if (left_child && left_child->colour == 1)
                                         {
@@ -442,19 +471,48 @@ namespace ft
                                         }
                                         
                                 }*/
-                                void    _deleteOneChild(node **current, node **left_child, node **right_child)
+                                void    _deleteTwoChild(node **curent, node **child, node **sibling)
+                                {
+
+                                }
+                                int    _deleteOneChild(node **current, node **left_child, node **right_child)
                                 {
                                         node*   parent = _getParent(*current);
 
+                                        if (parent && parent->left == *current)
+                                        {
+                                                parent->left = NULL;
+                                                if (*left_child)
+                                                        parent->left = *left_child;
+                                                if (*right_child)
+                                                        parent->left = *right_child;
+                                        }
+                                        else if (parent && parent->right == *current)
+                                        {
+                                                parent->right = NULL;
+                                                if (*left_child)
+                                                        parent->right = *left_child;
+                                                if (*right_child)
+                                                        parent->right = *right_child;
+                                        }
                                         _destroyNode(*current);
                                         delete *current;
+                                        *current = NULL;
                                         if (*left_child)
+                                        {
+                                                (*left_child)->parent = parent;
                                                 *current = *left_child;
-                                        if (*right_child)
+                                                return ((*current)->colour);
+                                                //(*current)->colour = 2;
+                                        }
+                                        else if (*right_child)
+                                        {
+                                                (*right_child)->parent = parent;
                                                 *current = *right_child;
-                                        if (*current)
-                                                (*current)->colour = 2;
-                                        (*current)->parent = parent;
+                                                return ((*current)->colour);
+                                                //(*current)->colour = 2;
+                                        }
+                                        return (0);
                                 }
                                 void    _destroyNode(node *current)
                                 {
@@ -568,6 +626,7 @@ namespace ft
                                         node    *gParentNode = NULL;
                                         parentNode = _getParent(current);
                                         gParentNode = _getGrandParent(current);
+
                                         if (!current->parent)
                                                 current->colour = 2;
                                         else if (parentNode->colour == 2)

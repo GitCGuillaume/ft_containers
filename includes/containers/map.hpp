@@ -66,28 +66,31 @@ namespace ft
             }
             virtual ~map()
             {
-                size_type   size = this->size();
-                /*
-                if (size > 0)
+                iterator    it = this->begin();
+                iterator    ite = this->end();
+                iterator    copy;
+                std::cout << "--------------------------------------------DESTRUCTOR------------------------------------------------------- " << std::endl;
+                while (it != ite)
                 {
-                    while (size != 0)
-                    {
-                       // _tree.directDeleteNode(&_tree._iterator[0]);
-                        size--;
-                    }
-                }*/
+                   // copy = it;
+                    //it++;
+                   // std::cout << "size avant : " << this->size() << std::endl;
+                   // std::cout << "KEY : " << copy->first << std::endl;
+                    _tree.deleteNode((it++)->first);
+                   // std::cout << "size après : " << this->size() << std::endl;
+                }
             }
             size_type   size() const
             {
                 size_type   i = 0;
                 const_iterator    it = this->begin();
-                //const_iterator    ite = this->end();
+                const_iterator    ite = this->end();
 
-                /*while (it != ite)
+                while (it != ite)
                 {
                     i++;
                     it++;
-                }*/
+                }
                 return (i);
             }
             /*
@@ -96,14 +99,20 @@ namespace ft
             T&  at(const Key& key)
             {
                 typename _RB_tree::node* new_node;
-                new_node = _tree._search(key);
+                new_node = _tree.search(key);
                 if (!new_node)
                     throw std::out_of_range("map::at");
                 return (new_node->pair->second);
             }
             T&  operator[](const Key& key)
             {
-                typename _RB_tree::node* new_node;
+                ft::pair<key_type, mapped_type> new_pair(key, T());
+                typename _RB_tree::node*   ret = _tree.normalInsert(new_pair);
+                while (_tree._iterator->parent)
+                        _tree._iterator = _tree._iterator->parent;
+                return (ret->pair->second);
+                
+                /*typename _RB_tree::node* new_node;
                 typename _RB_tree::node* res;
                 new_node = new typename _RB_tree::node();
                 new_node->pair = _allocator.allocate(1);
@@ -118,7 +127,7 @@ namespace ft
                         _tree._iterator = _tree._iterator->parent;
                     return (res->pair->second);
                 }
-                return (new_node->pair->second);
+                return (new_node->pair->second);*/
             }
             iterator    begin()
             {
@@ -130,19 +139,20 @@ namespace ft
             }
             iterator    end()
             {
-                _RB_tree*   ptr_tree = &_tree;
+                /*_RB_tree*   ptr_tree = &_tree;
                 //go to root in case it's not here
                 while (ptr_tree->_iterator->parent)
                     ptr_tree->_iterator = ptr_tree->_iterator->parent;
                 //go to rightest structure
                 while (ptr_tree->_iterator->right)
-                    ptr_tree->_iterator = ptr_tree->_iterator->right;
-                return (iterator(_tree, ptr_tree->_iterator->right));
+                    ptr_tree->_iterator = ptr_tree->_iterator->right;*/    
+                //return (iterator(_tree, ptr_tree->_iterator->right));
+                return (const_iterator(_tree, _tree.end()));
             }
-            /*const_iterator    end() const
+            const_iterator    end() const
             {
-                return (const_iterator(this->end()));
-            }*/
+                return (const_iterator(_tree, _tree.end()));
+            }
 
         private:
             typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>   _RB_tree;
