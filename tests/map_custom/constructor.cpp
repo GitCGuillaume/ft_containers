@@ -112,3 +112,34 @@ void  constructor_copy_speed()
     map[i] = i;
   std::map<double, double> map2(map);
 }*/
+
+void  destructor_1()
+{
+  ft::map<int, int> map_1;
+  map_1[1] = 1;
+  map_1[2] = 2;
+  ft::map<int, int> map_2;
+  map_2[1] = 1;
+  map_2[2] = 2;
+  map_2[3] = 3;
+  ft::map<int, int> map_3;
+  map_3[1] = 1;
+  map_3[2] = 2;
+  map_3[3] = 3;
+  map_3[4] = 4;
+  ft::map<int, int> map_4;
+  map_4[1] = 1;
+  map_4[2] = 2;
+  map_4[3] = 3;
+  map_4[4] = 4;
+  map_4[5] = 5;
+  map_4[6] = 6;
+  map_4[7] = 7;
+  map_4[8] = 8;
+  
+  /*map_4[9] = 9;
+  map_4[10] = 10;
+  map_4[11] = 11;
+  map_4[12] = 12;
+  map_4[13] = 13;*/
+}

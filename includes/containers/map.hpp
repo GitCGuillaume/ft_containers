@@ -47,8 +47,9 @@ namespace ft
             {
                 _tree._iterator = new typename _RB_tree::node();
                 _tree._iterator->colour = 0;
-                _tree._iterator->pair = _allocator.allocate(1);
-                _allocator.construct(_tree._iterator->pair, value_type()); //Call pair<>() constructor
+                _tree._iterator->pair = NULL;
+                //_tree._iterator->pair = _allocator.allocate(1);
+                //_allocator.construct(_tree._iterator->pair, value_type()); //Call pair<>() constructor
             }
             template<class InputIt>
             map(InputIt first, InputIt second, const Compare& comp = Compare(),
@@ -56,8 +57,9 @@ namespace ft
             {
                 _tree._iterator = new typename _RB_tree::node();
                 _tree._iterator->colour = 0;
-                _tree._iterator->pair = _allocator.allocate(1);
-                _allocator.construct(_tree._iterator->pair, value_type());
+                _tree._iterator->pair = NULL;
+                //_tree._iterator->pair = _allocator.allocate(1);
+                //_allocator.construct(_tree._iterator->pair, value_type());
                 while (first != second)
                 {
                     _tree.normalInsert(*first);
@@ -68,17 +70,10 @@ namespace ft
             {
                 iterator    it = this->begin();
                 iterator    ite = this->end();
-                iterator    copy;
+
                 std::cout << "--------------------------------------------DESTRUCTOR------------------------------------------------------- " << std::endl;
                 while (it != ite)
-                {
-                   // copy = it;
-                    //it++;
-                   // std::cout << "size avant : " << this->size() << std::endl;
-                   // std::cout << "KEY : " << copy->first << std::endl;
                     _tree.deleteNode((it++)->first);
-                   // std::cout << "size après : " << this->size() << std::endl;
-                }
             }
             size_type   size() const
             {
