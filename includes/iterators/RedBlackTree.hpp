@@ -1,6 +1,9 @@
 #ifndef REDBLACKTREE_HPP
 # define REDBLACKTREE_HPP
 
+# define RED 1
+# define BLACK 2
+
 #include "iterator_traits.hpp"
 #include "iterator.hpp"
 #include "../library_headers/is_integral.hpp"
@@ -215,7 +218,7 @@ namespace ft
                                         _iterator->pair = _allocator.allocate(1);
                                         _allocator.construct(_iterator->pair, pair);
                                         //black colour
-                                        _iterator->colour = 2;
+                                        _iterator->colour = BLACK;
                                         return (_iterator);
                                 }
                                 new_node = new node();
@@ -253,7 +256,7 @@ namespace ft
                                 new_node->pair = _allocator.allocate(1);
                                 _allocator.construct(new_node->pair, pair);
                                 //red colour
-                                new_node->colour = 1;
+                                new_node->colour = RED;
                                 _repearTreeInsert(new_node);
                                 while (_getParent(_iterator))
                                         _iterator = _iterator->parent;
@@ -315,6 +318,7 @@ namespace ft
                         void    deleteNode(Key const & key)
                         {
                                 node            *current = NULL;
+                                node            *smallest_key = NULL;
                                 node            *left_child = NULL;
                                 node            *right_child = NULL;
                                 int             memory_colour = 0;
@@ -345,18 +349,28 @@ namespace ft
                                 std::cout << "COLOUR BEFORE ::: " << current->colour << std::endl;
                                 if ( nb_child < 2)
                                 {
-                                        _deleteOneChild(&current, &left_child, &right_child);
-                                        //need to memore deleted node colour
+                                        memory_colour = current->colour;
+                                        _deleteOneChild(&current, &left_child, &right_child
+                                                , memory_colour);
+                                        //moved up is either left or right child just do if left / right
                                 }
                                 else if (nb_child == 2)
                                 {
                                         //find smallest key of right (or left) subtree
-                                        //findKey(current->right) then loop left
-                                        // or left then loop right
-                                        //left probably best
+                                        smallest_key = current;
+                                        smallest_key = smallest_key->left;
+                                        while (smallest_key->right)
+                                                smallest_key = smallest_key->right;
+                                        _destroyPair(current);
                                         //deleted node become smallest key node
-                                         //delete node from subtree
-                                        //need to memore the deleted node colour
+                                        current->pair = _allocator.allocate(1);
+                                        _allocator.construct(&current->pair, smallest_key->pair);
+                                        //delete node from subtree
+                                        memory_colour = smallest_key->colour;
+                                        _deleteOneChild(&smallest_key, &smallest_key->left, &smallest_key->right
+                                                , memory_colour);
+                                        smallest_key = NULL;
+                                        //moved up is smallest key
                                 }
                                 //REPEAR TREE
                                 if (current)
@@ -395,11 +409,11 @@ namespace ft
 
                         private:
                                 /*
-                                0 =null
-                                1 = red
-                                >1 black
+                                        0 =null
+                                        1 = red
+                                        >1 black
                                 */
-                                void    _caseOneColourRed(node **current, node **child)
+                                /*void    _caseOneColourRed(node **current, node **child)
                                 {
                                         node*   parent = _getParent(*current);
 
@@ -410,72 +424,11 @@ namespace ft
                                         {
                                                 *current = *child;
                                                 *current->parent = parent;
-                                                *current->colour = 2;
+                                                *current->colour = BLACK;
                                         }
-                                }
-                                /* in case current or child is red */
-                                bool    _caseTwoDelete(node **current, node **child)
-                                {
-                                        if (left_child && left_child->colour == 1)
-                                        {
-                                                _caseOneColourRed(current, left_child);
-                                                return (true);
-                                        }
-                                        else if (right_child && right_child->colour == 1)
-                                        {
-                                                _caseOneColourRed(current, right_child);
-                                                return (true);
-                                        }
-                                        else if (*current->colour == 1)
-                                        {
-                                                //if (left_child)
-                                                _caseOneColourRed(current, left_child);
-                                                //if (right_child)
-                                                //        _caseOneColourRed(current, right_child);
-                                                return (true);
-                                        }
-                                        return (false);
-                                }
-                                /*
-                                        Case left left delete
-                                                or left right
-                                */
-                                /*void    _caseThreeLeftDelete(node *current, current *child)
-                                {
-                                        node    *sibling = _getSibling(current);
-                                        //left left
-
                                 }*/
-                                /*
-                                        Case right right delete
-                                                or right right
-                                        child is left child (current will become left child)
-                                */
-                                void    _caseThreeRightDelete(node *current, node* sibling, node *child)
-                                {
-                                        //current->colour = 3;
-                                        //_destroyNode(current);
-                                }
-                                /* if both current and child are black
-                                        or one is red */
-                                /*void    _deleteTwoChild(node **current, node *left_child, node *right_child)
-                                {
-                                        node*   parent = _getParent(*current);
-
-                                        if (_caseTwoDelete(current, left_child, right_child))
-                                                return ;
-                                        if (parent && parent->left == current)
-                                        {
-                                                //call right correction
-                                                _caseThreeRightDelete(current, _getSibling(current), left_child);
-                                        }
-                                        
-                                }*/
-                                void    _deleteTwoChild(node **curent, node **child, node **sibling)
-                                {
-
-                                }
-                                int    _deleteOneChild(node **current, node **left_child, node **right_child)
+                                void    _deleteOneChild(node **current, node **left_child, node **right_child
+                                        , int memory_colour)
                                 {
                                         node*   parent = _getParent(*current);
 
@@ -495,26 +448,23 @@ namespace ft
                                                 if (*right_child)
                                                         parent->right = *right_child;
                                         }
-                                        _destroyNode(*current);
+                                        _destroyPair(*current);
                                         delete *current;
                                         *current = NULL;
                                         if (*left_child)
                                         {
                                                 (*left_child)->parent = parent;
                                                 *current = *left_child;
-                                                return ((*current)->colour);
-                                                //(*current)->colour = 2;
                                         }
                                         else if (*right_child)
                                         {
                                                 (*right_child)->parent = parent;
                                                 *current = *right_child;
-                                                return ((*current)->colour);
-                                                //(*current)->colour = 2;
                                         }
-                                        return (0);
+                                        else if (memory_colour == BLACK)
+                                                *current = new node();
                                 }
-                                void    _destroyNode(node *current)
+                                void    _destroyPair(node *current)
                                 {
                                         if (!current || !current->pair)
                                                 return ;
@@ -523,10 +473,10 @@ namespace ft
                                 }
                                 void    _swapColour(int *colour)
                                 {
-                                        if (*colour == 1)
-                                                *colour = 2;
+                                        if (*colour == RED)
+                                                *colour = BLACK;
                                         else
-                                                *colour = 1;
+                                                *colour = RED;
                                 }
                                 void    _rotateRight(node *current)
                                 {
@@ -611,11 +561,11 @@ namespace ft
                                         node    *uncle = _getUncle(current);
                                         node    *gParentNode = _getGrandParent(current);
                                         if (parent)
-                                                parent->colour = 2;
+                                                parent->colour = BLACK;
                                         if (uncle)
-                                                uncle->colour = 2;
+                                                uncle->colour = BLACK;
                                         if (gParentNode)
-                                                gParentNode->colour = 1;
+                                                gParentNode->colour = RED;
                                         //return (gParentNode);
                                         _repearTreeInsert(gParentNode);
                                 }
@@ -628,10 +578,10 @@ namespace ft
                                         gParentNode = _getGrandParent(current);
 
                                         if (!current->parent)
-                                                current->colour = 2;
-                                        else if (parentNode->colour == 2)
+                                                current->colour = BLACK;
+                                        else if (parentNode->colour == BLACK)
                                                 return ;
-                                        else if (uncle && uncle->colour == 1) //oncle and parent must be black
+                                        else if (uncle && uncle->colour == RED) //oncle and parent must be black
                                                 _repearCaseOne(current);
                                         else
                                         {
@@ -653,8 +603,8 @@ namespace ft
                                                         _rotateRight(gParentNode);
                                                 else if (gParentNode && current == parentNode->right)
                                                         _rotateLeft(gParentNode);
-                                                parentNode->colour = 2;
-                                                gParentNode->colour = 1;
+                                                parentNode->colour = BLACK;
+                                                gParentNode->colour = RED;
                                         }
                                 }
                                 allocator_type	_allocator;
