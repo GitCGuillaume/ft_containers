@@ -41,14 +41,15 @@ namespace ft
                         return (comp(lhs.first, rhs.first));
                     }
             };
-
             explicit    map(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
                 : _comp(comp), _allocator(alloc), _capacity_allocator(1)
             {
-                _tree._iterator = new typename _RB_tree::node();
-                _tree._iterator->colour = 0;
-                _tree._iterator->pair = _allocator.allocate(1);
-                _allocator.construct(_tree._iterator->pair, value_type()); //Call pair<>() constructor
+                _tree._iterator = NULL;
+                //_tree._iterator = new typename _RB_tree::node();
+                //_tree._iterator->colour = 0;
+                //_tree._iterator->pair = NULL;
+                //_tree._iterator->pair = _allocator.allocate(1);
+                //_allocator.construct(_tree._iterator->pair, value_type()); //Call pair<>() constructor
             }
             template<class InputIt>
             map(InputIt first, InputIt second, const Compare& comp = Compare(),
@@ -70,9 +71,7 @@ namespace ft
                 iterator    it = this->begin();
                 iterator    ite = this->end();
 
-                //std::cout << "it : " << *it << std::endl;
-               // std::cout << "ite : " << *ite << std::endl;
-               std::cout << "destructor" << std::endl;
+                //if (_tree._iterator)
                 while (it != ite)
                     _tree.deleteNode((it++)->first);
             }
@@ -127,10 +126,14 @@ namespace ft
             }
             iterator    begin()
             {
+                if (!_tree._iterator || !_tree._iterator->pair)
+                    iterator(_tree, _tree.end());
                 return (iterator(_tree, _tree.begin()));
             }
             const_iterator    begin() const
             {
+                if (!_tree._iterator || !_tree._iterator->pair)
+                    const_iterator(_tree, _tree.end());
                 return (const_iterator(_tree, _tree.begin()));
             }
             iterator    end()
@@ -143,13 +146,20 @@ namespace ft
                 while (ptr_tree->_iterator->right)
                     ptr_tree->_iterator = ptr_tree->_iterator->right;*/    
                 //return (iterator(_tree, ptr_tree->_iterator->right));
-                return (const_iterator(_tree, _tree.end()));
+                return (iterator(_tree, _tree.end()));
             }
             const_iterator    end() const
             {
                 return (const_iterator(_tree, _tree.end()));
             }
+            void    clear()
+            {
+                iterator    it = this->begin();
+                iterator    ite = this->end();
 
+                while (it != ite)
+                    _tree.deleteNode((it++)->first);
+            }
         private:
             typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>   _RB_tree;
             _RB_tree    _tree; //need to use RD iterator nodes somewhere

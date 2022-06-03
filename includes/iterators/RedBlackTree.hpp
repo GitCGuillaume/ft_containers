@@ -83,6 +83,7 @@ namespace ft
                                                 }
                                                 return (*this);
                                         }
+                                        ~BiDirectionnalIterator(){}
                                         reference operator*() const
                                         {
                                                 return (*_ptr->pair);
@@ -208,13 +209,12 @@ namespace ft
                         {
                                 node    *new_node = NULL;
 
-                                if (!_iterator->colour || !_iterator->pair) //no root
+                                if (!_iterator || !_iterator->colour || !_iterator->pair) //no root
                                 {
-                                        if (_iterator->pair)
-                                        {
-                                                _allocator.destroy(_iterator->pair);
-                                                _allocator.deallocate(_iterator->pair, 1);
-                                        }
+                                        if (!_iterator)
+                                                _iterator = new node();
+                                        //if (_iterator->pair)
+                                        //        _destroyPair(_iterator);
                                         _iterator->pair = _allocator.allocate(1);
                                         _allocator.construct(_iterator->pair, pair);
                                         //black colour
@@ -306,11 +306,10 @@ namespace ft
                                 {
                                         //find smallest key of right (or left) subtree
                                         smallest_key = _getInorder(current);
-                                        //std::cout << "inorder is : " << smallest_key->pair->first << std::endl;
                                         _destroyPair(current);
                                         //deleted node become smallest key node
                                         current->pair = _allocator.allocate(1);
-                                        _allocator.construct(&current->pair, smallest_key->pair);
+                                        _allocator.construct(current->pair, *smallest_key->pair);
                                         //delete node from subtree
                                         memory_colour = smallest_key->colour;
                                         null_node = _deleteOneChild(&smallest_key, &smallest_key->left, &smallest_key->right
@@ -321,6 +320,8 @@ namespace ft
                                         else if (smallest_key->colour == BLACK && memory_colour == BLACK)
                                                 _repearDoubleBlack(smallest_key);
                                 }
+                                if (_iterator && !_iterator->pair)
+                                        _iterator = NULL;
                                 if (null_node && smallest_key)
                                 {
                                         delete smallest_key->left;
@@ -342,6 +343,8 @@ namespace ft
                         {
                                 node    *start = _iterator;
 
+                                if (!start)
+                                        return (NULL);
                                 while (start->parent)
                                         start = start->parent;
                                 while (start->left)
@@ -352,6 +355,8 @@ namespace ft
                         {
                                 node    *start = _iterator;
 
+                                if (!_iterator)
+                                        return (NULL);
                                 while (start->parent)
                                         start = start->parent;
                                 while (start->right)
@@ -435,7 +440,7 @@ namespace ft
                                 {
                                         node    *sibling = _getSibling(current);
 
-                                        current->colour = DOUBLE;
+                                        //current->colour = DOUBLE;
                                         if (!current->parent)
                                         {
                                                 _iterator = current;

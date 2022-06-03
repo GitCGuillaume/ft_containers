@@ -6,9 +6,9 @@ void    default_constructor_map_custom()
   ft::map<std::string, int> map;
   const ft::map<std::string, int> const_map;
 
-  std::cout << map.begin()->first << std::endl;
-  //std::cout << "Size default constructor : " << map.size() << std::endl;
-  //std::cout << "Size default const constructor : " << const_map.size() << std::endl;
+  std::cout << "CRASH SI JE it->first" << std::endl;
+  std::cout << "Size default constructor : " << map.size() << std::endl;
+  std::cout << "Size default const constructor : " << const_map.size() << std::endl;
   //ft::map<std::string, int> map_alloc(map.key_comp(), map.get_allocator());
 }
 
@@ -93,25 +93,26 @@ void    operator_assignation_map()
     for (std::map<std::string, int>::iterator	it = map1.begin(); it != map1.end(); it++)
 		  std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
 }
-
-void  constructor_range_speed()
+*/
+void  constructor_range_speed_custom()
 {
-  std::cout << "Constructor range speed" << std::endl;
-  std::map<double, double> map;
+  std::cout << "Constructor range speed CUSTOM" << std::endl;
+  ft::map<double, double> map;
 
-  for (double i = 0; i < 40000; i++)
+  for (double i = 0; i < 100000; i++)
     map[i] = i;
-  std::map<double, double> map2(map.begin(), map.end());
+  ft::map<double, double> map2(map.begin(), map.end());
+  ft::map<double, double>::iterator  it = map2.end();
 }
-
+/*
 void  constructor_copy_speed()
 {
   std::cout << "Constructor COPY range speed" << std::endl;
-  std::map<double, double> map;
+  ft::map<double, double> map;
 
   for (double i = 0; i < 40000; i++)
     map[i] = i;
-  std::map<double, double> map2(map);
+  ft::map<double, double> map2(map);
 }*/
 
 void  destructor_1()
@@ -143,4 +144,25 @@ void  destructor_1()
   map_4[11] = 11;
   map_4[12] = 12;
   map_4[13] = 13;
+}
+
+void  destructor_right_emplacement()
+{
+  ft::map<int, int> map_4;
+  map_4[1] = 1;
+  map_4[2] = 2;
+  map_4[3] = 3;
+  map_4[4] = 4;
+  map_4[5] = 5;
+  map_4[6] = 6;
+  map_4[7] = 7;
+  map_4[8] = 8;
+  
+  map_4[9] = 9;
+  map_4[10] = 10;
+  map_4[11] = 11;
+  map_4[12] = 12;
+  map_4[13] = 13;
+  map_4[14] = 14;
+  map_4[15] = 15;
 }

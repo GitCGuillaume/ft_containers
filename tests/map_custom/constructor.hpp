@@ -8,7 +8,7 @@ void    default_constructor_map_custom();
 void    constructor_range_map_custom();
 //void    copy_constructor_map_custom();
 //void    operator_assignation_map_custom();
-//void  constructor_range_speed_custom();
+void  constructor_range_speed_custom();
 //void  constructor_copy_speed_custom();
 void  destructor_1();
 

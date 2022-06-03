@@ -6,7 +6,6 @@ void    default_constructor_map()
   std::map<std::string, int> map;
   const std::map<std::string, int> const_map;
 
-  std::cout << map.begin()->first << std::endl;
   std::cout << "Size default constructor : " << map.size() << std::endl;
   std::cout << "Size default const constructor : " << const_map.size() << std::endl;
   std::map<std::string, int> map_alloc(map.key_comp(), map.get_allocator());
@@ -25,7 +24,6 @@ void    constructor_range_map()
   map["m"] = 1;
   map["pqr"] = 1;
   map["stu"] = 2145;
-  std::map<std::string, int>::iterator it = map.begin();
   //it++;
   //it++;
   map.insert(/*it, */std::make_pair("m", 123));
@@ -95,9 +93,10 @@ void  constructor_range_speed()
   std::cout << "Constructor range speed" << std::endl;
   std::map<double, double> map;
 
-  for (double i = 0; i < 40000; i++)
+  for (double i = 0; i < 100000; i++)
     map[i] = i;
   std::map<double, double> map2(map.begin(), map.end());
+  std::map<double, double>::iterator  it = map2.end();
 }
 
 void  constructor_copy_speed()
