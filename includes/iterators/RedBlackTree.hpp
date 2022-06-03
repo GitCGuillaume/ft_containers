@@ -179,13 +179,11 @@ namespace ft
                         node*    search(Key const &key)
                         {
                                 node    *subRoot = _iterator;
-                //std::cout << "_iterator addr : " << _iterator << std::endl;
                                 if (!subRoot || !subRoot->pair)
                                         return (NULL);
                                 Key     firstSubRoot = subRoot->pair->first;
                                 Key     firstNewNode = key;
-                        std::cout << "sub key : " << firstSubRoot << std::endl;
-                        std::cout << "key : " << firstNewNode << std::endl;
+
                                 while (subRoot)
                                 {
                                         if (firstSubRoot < firstNewNode)
@@ -212,8 +210,11 @@ namespace ft
 
                                 if (!_iterator->colour || !_iterator->pair) //no root
                                 {
-                                        //_allocator.destroy(_iterator->pair);
-                                        //_allocator.deallocate(_iterator->pair, 1);
+                                        if (_iterator->pair)
+                                        {
+                                                _allocator.destroy(_iterator->pair);
+                                                _allocator.deallocate(_iterator->pair, 1);
+                                        }
                                         _iterator->pair = _allocator.allocate(1);
                                         _allocator.construct(_iterator->pair, pair);
                                         //black colour
@@ -263,80 +264,6 @@ namespace ft
                                         _iterator = _iterator->parent;
                                 return (new_node);
                         }
-                        /*node*    insertOperator(node *newNode)
-                        {
-                                Key     firstSubRoot = _iterator->pair->first;
-                                Key     firstNewNode = newNode->pair->first;
-
-                                if (!_iterator->right && !_iterator->left
-                                        && _iterator->colour == 0) //no root
-                                {
-                                        _allocator.destroy(_iterator->pair);
-                                        _allocator.deallocate(_iterator->pair, 1);
-                                        _iterator->pair = newNode->pair;
-                                        _iterator->colour = 2;
-                                        return (NULL);
-                                }
-                                //Search
-                                while (_iterator)
-                                {
-                                        if (firstSubRoot < firstNewNode)
-                                        {
-                                                 if (!_iterator->right)
-                                                 {
-                                                        newNode->parent = _iterator;
-                                                        _iterator->right = newNode;
-                                                        break ;
-                                                 }
-                                                _iterator = _iterator->right;
-                                                firstSubRoot = _iterator->pair->first;
-                                               
-                                        }
-                                        else if (firstNewNode < firstSubRoot)
-                                        {
-                                                if (!_iterator->left)
-                                                {
-                                                        newNode->parent = _iterator;
-                                                        _iterator->left = newNode;
-                                                        break ;
-                                                }
-                                                _iterator = _iterator->left;
-                                                firstSubRoot = _iterator->pair->first;
-                                        }
-                                        else if (firstNewNode == firstSubRoot)
-                                                return (_iterator);
-                                }
-                                newNode->colour = 1;
-                                //detech wich type of violate
-                                _repearTreeInsert(newNode);
-                                //_iterator = newNode;
-                                //find new root
-                                while (_getParent(_iterator))
-                                        _iterator = _iterator->parent;
-                                return (NULL);
-                        }*/
-                        node    *getInorder(node *current)
-                        {
-                                if (!current)
-                                        return (NULL);
-                                if (current->right)
-                                {
-                                        current = current->right;
-                                        while (current->left)
-                                                current = current->left;
-                                }
-                                //if node is left side of it's parent, next node is it's parent
-                                else if (current->parent && current->parent->left)
-                                        current = current->parent;
-                                //or current is max, go to parent until we find one if a left child
-                                else
-                                {
-                                        while (current->parent && current->parent->right == current)
-                                                current = current->parent;
-                                        current = current->parent;
-                                }
-                                return (current);
-                        }
                         void    deleteNode(Key const & key)
                         {
                                 node            *current = NULL;
@@ -363,27 +290,22 @@ namespace ft
                                 }
                                 if (nb_child < 2)
                                 {
-                                        //std::cout << "aaabb" << std::endl;
                                         memory_colour = current->colour;
                                         null_node = _deleteOneChild(&current, &left_child, &right_child
                                                 , memory_colour);
-                                        //U = current
-                                        //V = old
                                         if ((current && current->colour == RED) || (current && memory_colour == RED))
                                         {
                                                 current->colour = BLACK;
                                                 if (!current->parent)
                                                         _iterator = current;
                                         }
-                                        else if (current->colour == BLACK && memory_colour == BLACK)
+                                        else if (current && current->colour == BLACK && memory_colour == BLACK)
                                                 _repearDoubleBlack(current);
-                                        //if (memory_colour == BLACK)
-                                        //        _repearTreeDelete(current);
                                 }
                                 else if (nb_child == 2)
                                 {
                                         //find smallest key of right (or left) subtree
-                                        smallest_key = getInorder(current);
+                                        smallest_key = _getInorder(current);
                                         //std::cout << "inorder is : " << smallest_key->pair->first << std::endl;
                                         _destroyPair(current);
                                         //deleted node become smallest key node
@@ -398,11 +320,7 @@ namespace ft
                                                 smallest_key->colour = BLACK;
                                         else if (smallest_key->colour == BLACK && memory_colour == BLACK)
                                                 _repearDoubleBlack(smallest_key);
-                                        /*else */
-                                        //if (memory_colour == BLACK)
-                                        //        _repearTreeDelete(smallest_key);
                                 }
-                                std::cout << "lefttt" << std::endl;
                                 if (null_node && smallest_key)
                                 {
                                         delete smallest_key->left;
@@ -415,137 +333,6 @@ namespace ft
                                         delete current->right;
                                         delete current;
                                 }
-                        }
-                        void    _repearDoubleBlack(node *current)
-                        {
-                                std::cout << "reparation !" << std::endl;
-                                if (current->pair)
-                                        std::cout << "CURRENT IS : " << current->pair->first << std::endl;
-                                node    *sibling = _getSibling(current);
-                               // std::cout << "reparation2 !" << std::endl;
-//std::cout << "addr current pair : " << current->pair << std::endl;
-//std::cout << "addr parent : " << current->parent << std::endl;
-                                current->colour = DOUBLE;
-                                if (!current->parent)
-                                {
-                                        std::cout << "!current->parent" << std::endl;
-                                      //  std::cout << "current :: " << current->pair->first << std::endl; 
-                                        _iterator = current;
-                                        current->colour = BLACK;
-                                        return ;
-                                }
-                                if (!sibling)
-                                {
-                                        std::cout << "no sibling" << std::endl;
-                                        _repearDoubleBlack(current->parent);
-                                }
-                                //std::cout << "allo" << std::endl;
-                                if (current && current->parent && sibling)
-                                {
-                                        std::cout << "current par all that" << std::endl;
-                                        std::cout << "sibli col : " << sibling->colour << " sib le col : "
-                                                << sibling->left << "si : " << sibling->right << std::endl;
-                                        if (sibling->colour == BLACK
-                                                && ((sibling->left && sibling->left->colour == RED)
-                                                || (sibling->right && sibling->right->colour == RED)))
-                                        {
-                                                //left left case
-                                                if (sibling->parent && sibling == sibling->parent->left
-                                                        && (sibling->left->colour == RED
-                                                        || (sibling->left->colour == RED && sibling->right->colour == RED)))
-                                                {
-                                                        sibling->left->colour = BLACK;
-                                                        sibling->colour = sibling->parent->colour;
-                                                        _rotateRight(sibling->parent);
-                                                        std::cout << "LEFT LEFT CASE" << std::endl;
-                                                }
-                                                //left right case
-                                                else if (sibling->parent && sibling->parent->left == current
-                                                        && sibling->right->colour == RED)
-                                                {
-                                                        _rotateLeft(sibling);
-                                                        _rotateRight(current->parent);
-                                                        //sibling = _getSibling(current);
-                                                      //   std::cout << "sib left" << std::endl;
-                                                        std::cout << "LEFT RIGHT CASE " << std::endl;
-                                                }
-                                                //right right case
-                                                else if (sibling->parent && sibling == sibling->parent->right
-                                                        && (sibling->right->colour == RED
-                                                        || (sibling->left->colour == RED && sibling->right->colour == RED)))
-                                                {
-                                                        sibling->right->colour = BLACK;
-                                                        sibling->colour = sibling->parent->colour;
-                                                        _rotateLeft(sibling->parent);
-                                                        std::cout << "RIGHT RIGHT CASE" << std::endl;
-                                                }
-                                                else if (sibling->parent && sibling->parent->right == current
-                                                        && sibling->left->colour == RED) // Right left case
-                                                {
-                                                        _rotateRight(sibling);
-                                                        _rotateLeft(current->parent);
-                                                        //sibling = _getSibling(current);
-                                                     //   std::cout << "sib right " << std::endl;
-                                                        std::cout << "RIGHT LEFT CASE" << std::endl;
-                                                }
-                                               // std::cout << "sib val : " << sibling->pair->first << std::endl;
-                                                std::cout << "ikkk" << std::endl;
-                                                if (!sibling->parent)
-                                                        _iterator = sibling;
-                                               // std::cout << "zzzkkk" << std::endl;
-                                                
-                                        }
-                                        else if (sibling->colour == RED)
-                                                _repearDoubleBlackTwo(current);
-                                        else if (sibling->colour == BLACK
-                                                && ((sibling->left && sibling->left->colour == BLACK)
-                                                && (sibling && sibling->right->colour == BLACK))
-                                                || (sibling->colour == BLACK && !sibling->left && !sibling->right))
-                                        {
-                                                std::cout << "àkkk" << std::endl;
-                                                sibling->colour = RED;
-                                                if (current->parent && current->parent->colour == BLACK)
-                                                        _repearDoubleBlack(current->parent);
-                                                else if (current->parent)
-                                                        current->parent->colour = BLACK;
-                                        }
-                                }
-                        }
-                        void    _repearDoubleBlackTwo(node *current)
-                        {
-                                //node*   save = current;
-                                node*   sibling = _getSibling(current);
-
-                                if (!sibling)
-                                        return ;
-                                sibling->colour = BLACK;
-                                current->parent->colour = RED;
-                                std::cout << "kmdqsfqd" << std::endl;
-                                //std::cout << "aaaaaaaaaaa : " << current->pair->first << std::endl;
-                                if (sibling == sibling->parent->left)
-                                {
-                                      //  std::cout << "right rota ! " << std::endl;
-                                        _rotateRight(current->parent);
-                                        //current = current->right;
-                                }
-                                else if (sibling == sibling->parent->right)
-                                {
-                                      //  std::cout << "current --- : " << current->parent->pair->first << std::endl; 
-                                      //  std::cout << "left rota ! " << std::endl;
-                                        _rotateLeft(current->parent);
-                                        //current = current->left;
-                                }
-                                if (!_getGrandParent(current)->parent)
-                                        _iterator = _getGrandParent(current);
-                                //std::cout << "pair : " << current->pair << std::endl;
-                                //std::cout << "current --- : " << current->parent->parent->parent->pair->first << std::endl; 
-                                //std::cout << "current->f : " << current->pair->first << std::endl;
-                                //std::cout << "save : " << save->pair->first << std::endl;
-                                //if (!save->parent)
-                                //        _iterator = save;
-                                //if (current->parent && current->parent->pair)
-                                //        std::cout << "bbbbbbbb : " << current->parent->pair->first << std::endl;
-                                _repearDoubleBlack(current);
                         }
                         node*   getIterator() const
                         {
@@ -575,25 +362,28 @@ namespace ft
                         node*  _iterator; // struct stocked here, used to iterate
 
                         private:
-                                /*
-                                        0 =null
-                                        1 = red
-                                        >1 black
-                                */
-                                /*void    _caseOneColourRed(node **current, node **child)
+                                node    *_getInorder(node *current)
                                 {
-                                        node*   parent = _getParent(*current);
-
-                                        _destroyNode(*current);
-                                        delete *current;
-                                        *current = NULL;
-                                        if (child && *child)
+                                        if (!current)
+                                                return (NULL);
+                                        if (current->right)
                                         {
-                                                *current = *child;
-                                                *current->parent = parent;
-                                                *current->colour = BLACK;
+                                                current = current->right;
+                                                while (current->left)
+                                                        current = current->left;
                                         }
-                                }*/
+                                        //if node is left side of it's parent, next node is it's parent
+                                        else if (current->parent && current->parent->left)
+                                                current = current->parent;
+                                        //or current is max, go to parent until we find one if a left child
+                                        else
+                                        {
+                                                while (current->parent && current->parent->right == current)
+                                                        current = current->parent;
+                                                current = current->parent;
+                                        }
+                                        return (current);
+                                }
                                 node*    _deleteOneChild(node **current, node **left_child, node **right_child
                                         , int memory_colour)
                                 {
@@ -615,7 +405,6 @@ namespace ft
                                                 if (*right_child)
                                                         parent->right = *right_child;
                                         }
-                                      //  std::cout << "*current addr : " << *current << std::endl;
                                         _destroyPair(*current);
                                         delete *current;
                                         *current = NULL;
@@ -641,9 +430,90 @@ namespace ft
                                                 return (*current);
                                         }
                                         return (NULL);
-                                       // std::cout << "left addr : " << left_child << std::endl;
-                                       // std::cout << "*current addr : " << *current << std::endl;
-                                       // std::cout << "right addr : " << right_child << std::endl;
+                                }
+                                void    _repearDoubleBlack(node *current)
+                                {
+                                        node    *sibling = _getSibling(current);
+
+                                        current->colour = DOUBLE;
+                                        if (!current->parent)
+                                        {
+                                                _iterator = current;
+                                                current->colour = BLACK;
+                                                return ;
+                                        }
+                                        if (!sibling)
+                                                _repearDoubleBlack(current->parent);
+                                        if (current && current->parent && sibling)
+                                        {
+                                                if (sibling->colour == BLACK
+                                                        && ((sibling->left && sibling->left->colour == RED)
+                                                        || (sibling->right && sibling->right->colour == RED)))
+                                                {
+                                                        if (sibling->parent->left == sibling)
+                                                        {
+                                                                if (sibling->left->colour == RED) //left left case
+                                                                {
+                                                                        sibling->left->colour = BLACK;
+                                                                        sibling->colour = sibling->parent->colour;
+                                                                        _rotateRight(sibling->parent);
+                                                                }
+                                                                else //left right case
+                                                                {
+                                                                        sibling->right->colour = BLACK;
+                                                                        _rotateLeft(sibling);
+                                                                        _rotateRight(current->parent);
+                                                                }
+                                                        }
+                                                        else
+                                                        {
+                                                                if (sibling->right->colour == RED) //right right case
+                                                                {
+                                                                        sibling->right->colour = BLACK;
+                                                                        sibling->colour = sibling->parent->colour;
+                                                                        _rotateLeft(sibling->parent);
+                                                                }
+                                                                else //right left case
+                                                                {
+                                                                        sibling->left->colour = BLACK;
+                                                                        _rotateRight(sibling);
+                                                                        _rotateLeft(current->parent);
+                                                                }
+                                                        }
+                                                        if (!sibling->parent)
+                                                                _iterator = sibling;
+                                                        
+                                                }
+                                                else if (sibling->colour == RED)
+                                                        _repearDoubleBlackTwo(current);
+                                                else if (sibling->colour == BLACK
+                                                        && ((sibling->left && sibling->left->colour == BLACK)
+                                                        && (sibling && sibling->right->colour == BLACK))
+                                                        || (sibling->colour == BLACK && !sibling->left && !sibling->right))
+                                                {
+                                                        sibling->colour = RED;
+                                                        if (current->parent && current->parent->colour == BLACK)
+                                                                _repearDoubleBlack(current->parent);
+                                                        else if (current->parent)
+                                                                current->parent->colour = BLACK;
+                                                }
+                                        }
+                                }
+                                void    _repearDoubleBlackTwo(node *current)
+                                {
+                                        node*   sibling = _getSibling(current);
+
+                                        if (!sibling)
+                                                return ;
+                                        sibling->colour = BLACK;
+                                        current->parent->colour = RED;
+                                        if (sibling == sibling->parent->left)
+                                                _rotateRight(current->parent);
+                                        else if (sibling == sibling->parent->right)
+                                                _rotateLeft(current->parent);
+                                        if (!_getGrandParent(current)->parent)
+                                                _iterator = _getGrandParent(current);
+                                        _repearDoubleBlack(current);
                                 }
                                 void    _destroyPair(node *current)
                                 {
@@ -720,11 +590,7 @@ namespace ft
                                 node    *_getSibling(node *current)
                                 {
                                         node    *parent = _getParent(current);
-/*std::cout << "parent : " << parent->pair->first << std::endl;
-if (parent->left)
-        std::cout << "gauche : " << parent->left->pair->first << std::endl;
-if (parent->right)
-        std::cout << "droite : " << parent->right->pair->first << std::endl;*/
+
                                         if (!parent)
                                                 return (NULL);
                                         if (parent->left && parent->left != current)
@@ -744,184 +610,8 @@ if (parent->right)
                                                 uncle->colour = BLACK;
                                         if (gParentNode)
                                                 gParentNode->colour = RED;
-                                        //return (gParentNode);
                                         _repearTreeInsert(gParentNode);
                                 }
-                                /*void    _repearTreeDelete(node *current)
-                                {
-                                        node*   sibling = NULL;
-
-                                        if (!current)
-                                                return ;
-                                        if (!current->parent) //is_root
-                                        {
-                                                current->colour = BLACK;
-                                                _iterator = current;
-                                                return ;
-                                        }
-                                        sibling = _getSibling(current);
-                                        
-                                        */
-                                        /*if (current)
-                                                std::cout << "current is : " << current->pair << std::endl;
-                                        if (current && current->pair)
-                                                std::cout << "current first is : " << current->pair->first << std::endl;
-                                        std::cout << "sibling colour : " << sibling->colour << std::endl;
-                                        std::cout << "sibling is : " << sibling->pair->first << std::endl;
-                                        */
-                                        /*if (!sibling)
-                                                return ;
-                                        if (sibling->colour == RED) //sibling is red
-                                        {
-                                                sibling->colour = BLACK;
-                                                current->parent->colour = RED;
-                                                if (current->parent->left == current)
-                                                {
-                                                        std::cout << "left rotate" << std::endl;
-                                                        _rotateLeft(current->parent);
-                                                }
-                                                else if (current->parent->right == current)
-                                                        _rotateRight(current->parent);
-                                                sibling = _getSibling(current);
-                                                std::cout << "sib par->par : " << sibling->parent->parent->pair->first << std::endl;
-                                                std::cout << "case 2 mes couilles" << std::endl;
-                                                //now we need to have correct black height node
-                                                //parent can't be red if it's sibling is black
-                                                //sibling->colour = RED;
-                                                //sibling->parent->colour = BLACK;
-                                        }
-                                        //check right number of case current and sibling black
-                                        if (sibling->colour == BLACK
-                                                && ((sibling->left && sibling->left->colour == BLACK)
-                                                && (sibling->right && sibling->right->colour == BLACK)
-                                                || (!sibling->left && !sibling->right)))
-                                        {
-                                                std::cout << "case 3" << std::endl;
-                                                sibling->colour = RED; //need to correct height black
-                                                if (sibling->parent->colour == RED) //if parent is red
-                                                        sibling->parent->colour = BLACK;
-                                                else if (sibling->parent->colour == BLACK) //if parent is black throw case sibling is red
-                                                        _repearTreeDelete(current->parent);
-                                        }
-                                        //else if (sibling->colour == BLACK
-                                        //        && ((sibling->left && sibling->left->colour == RED)
-                                        //        || (sibling->right && sibling->right->colour == RED)))
-                                        else
-                                        {
-                                                //current is on left
-                                                if (current->parent->left == current
-                                                        && sibling->right->colour == BLACK)
-                                                {
-                                                        sibling->left->colour = RED;
-                                                        sibling->colour = RED;
-                                                        _rotateRight(sibling);
-                                                        sibling = current->parent->right;
-                                                        */
-                                                        /*std::cout << "case 5 current left" << std::endl;
-                                                        //neveux est tout à droite
-                                                        //recolour inner nephew
-                                                        if (sibling->left)
-                                                                sibling->left->colour = BLACK;
-                                                        sibling->colour = RED;
-                                                        _rotateRight(sibling);
-                                                        sibling = current->parent->right;
-                                                        //sibling = _getSibling(current);
-                                                        sibling->colour = sibling->parent->colour;
-                                                        sibling->parent->colour = BLACK;
-                                                        if (sibling->right)
-                                                                sibling->right->colour = BLACK;
-                                                        _rotateLeft(sibling->parent);
-                                                        sibling = _getSibling(current);
-                                                        return ;*/
-                                                /*}
-                                                else if (current->parent->right == current
-                                                        && sibling->left->colour == BLACK)
-                                                {
-                                                        std::cout << "case 5 current right" << std::endl;
-                                                        sibling->right->colour = BLACK;
-                                                        sibling->colour = RED;
-                                                        _rotateLeft(sibling);
-                                                        sibling = current->parent->left;
-                                                        //neveux est tout à gauche
-                                                        */
-                                                        /*if (sibling->right)
-                                                                sibling->right->colour = BLACK;
-                                                        sibling->colour = RED;
-                                                        _rotateLeft(sibling);
-                                                        sibling = current->parent->left;
-                                                        //sibling = _getSibling(current);
-                                                        sibling->colour = sibling->parent->colour;
-                                                        sibling->parent->colour = BLACK;
-                                                        if (sibling->left)
-                                                                sibling->left->colour = BLACK;
-                                                        _rotateRight(sibling->parent);
-                                                        sibling = _getSibling(current);
-                                                        return ;*/
-                                                /*}
-                                                std::cout << "case 6" << std::endl;
-                                                sibling->colour = current->parent->colour;
-                                                current->parent->colour = BLACK;
-                                                if (current->parent->left == current)
-                                                {
-                                                        sibling->right->colour = BLACK;
-                                                        _rotateLeft(current->parent);
-                                                }
-                                                else
-                                                {
-                                                        sibling->left->colour = BLACK;
-                                                        _rotateRight(current->parent);
-                                                }
-                                                */
-                                                /*if (current->parent->left == current
-                                                        && sibling->right->colour == RED)
-                                                {
-                                                        std::cout << "case 6 current left" << std::endl;
-                                                        sibling->colour = sibling->parent->colour;
-                                                        sibling->parent->colour = BLACK;
-                                                        sibling->right->colour = BLACK;
-                                                        std::cout << "SIBLING PARENT :: " << sibling->parent->pair->first << std::endl;
-                                                        if (_getGrandParent(sibling))
-                                                                std::cout << "SIBLING GR PARENT :: " << _getGrandParent(sibling)->pair->first << std::endl;
-                                                        std::cout << "PARENT :: " << current->parent->pair->first << std::endl;
-                                                        if (_getGrandParent(current))
-                                                                std::cout << "GR PARENT :: " << _getGrandParent(current)->pair->first << std::endl;
-                                                        _rotateLeft(current->parent);
-                                                        if (current && current->pair)
-                                                                std::cout << "current pair first : " << current->pair->first << std::endl;
-                                                        if (sibling && sibling->pair)
-                                                                std::cout << "sibling pair first : " << sibling->pair->first << std::endl;
-                                                        sibling->parent = current->parent;
-                                                        _iterator = current->parent;
-                                                        std::cout << "CURRENT PARENT PARENT ADDR :: " << current->parent->parent->parent->parent->pair->first << std::endl;
-                                                        std::cout << "CURRENT PARENT :: " << current->parent->pair->first << std::endl;
-                                                        std::cout << "SIBLING PARENT ADDR :: " << sibling->parent << std::endl;
-                                                        std::cout << "SIBLING PARENT :: " << sibling->parent->pair->first << std::endl;
-                                                        //exit(0);
-                                                        //current = current->parent;
-                                                        //sibling = _getSibling(current);
-                                                        //if (!current->parent)
-                                                        //        _iterator = current;
-                                                        //std::cout << "sibling right now : " << current->pair->first << std::endl;
-                                                        //std::cout << "_it first : " << _iterator->pair->first << std::endl;
-                                                        //exit(0);
-                                                }
-                                                else if (current->parent->right == current
-                                                        && sibling->left->colour == RED)
-                                                {
-                                                        std::cout << "case 6 current right" << std::endl;
-                                                        sibling->colour = sibling->parent->colour;
-                                                        sibling->parent->colour = BLACK;
-                                                        if (sibling->left)
-                                                                sibling->left->colour = BLACK;
-                                                        _rotateRight(current->parent);
-                                                        std::cout << "CURRENT PARENT ADDR :: " << current->parent << std::endl;
-                                                        std::cout << "CURRENT PARENT :: " << current->parent->pair->first << std::endl;
-                                                        std::cout << "SIBLING PARENT ADDR :: " << sibling->parent << std::endl;
-                                                        std::cout << "SIBLING PARENT :: " << sibling->parent->pair->first << std::endl;
-                                                        exit(0);
-                                                }*/
-                                        //}
-                                //}
                                 void    _repearTreeInsert(node *current)
                                 {
                                         node    *uncle = _getUncle(current);

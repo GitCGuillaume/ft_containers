@@ -47,9 +47,8 @@ namespace ft
             {
                 _tree._iterator = new typename _RB_tree::node();
                 _tree._iterator->colour = 0;
-                _tree._iterator->pair = NULL;
-                //_tree._iterator->pair = _allocator.allocate(1);
-                //_allocator.construct(_tree._iterator->pair, value_type()); //Call pair<>() constructor
+                _tree._iterator->pair = _allocator.allocate(1);
+                _allocator.construct(_tree._iterator->pair, value_type()); //Call pair<>() constructor
             }
             template<class InputIt>
             map(InputIt first, InputIt second, const Compare& comp = Compare(),
@@ -71,7 +70,9 @@ namespace ft
                 iterator    it = this->begin();
                 iterator    ite = this->end();
 
-                std::cout << "--------------------------------------------DESTRUCTOR------------------------------------------------------- " << std::endl;
+                //std::cout << "it : " << *it << std::endl;
+               // std::cout << "ite : " << *ite << std::endl;
+               std::cout << "destructor" << std::endl;
                 while (it != ite)
                     _tree.deleteNode((it++)->first);
             }

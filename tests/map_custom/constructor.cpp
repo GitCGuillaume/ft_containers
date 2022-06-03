@@ -6,6 +6,7 @@ void    default_constructor_map_custom()
   ft::map<std::string, int> map;
   const ft::map<std::string, int> const_map;
 
+  std::cout << map.begin()->first << std::endl;
   //std::cout << "Size default constructor : " << map.size() << std::endl;
   //std::cout << "Size default const constructor : " << const_map.size() << std::endl;
   //ft::map<std::string, int> map_alloc(map.key_comp(), map.get_allocator());
@@ -115,7 +116,7 @@ void  constructor_copy_speed()
 
 void  destructor_1()
 {
-  /*ft::map<int, int> map_1;
+  ft::map<int, int> map_1;
   map_1[1] = 1;
   map_1[2] = 2;
   ft::map<int, int> map_2;
@@ -126,7 +127,7 @@ void  destructor_1()
   map_3[1] = 1;
   map_3[2] = 2;
   map_3[3] = 3;
-  map_3[4] = 4;*/
+  map_3[4] = 4;
   ft::map<int, int> map_4;
   map_4[1] = 1;
   map_4[2] = 2;
@@ -137,9 +138,9 @@ void  destructor_1()
   map_4[7] = 7;
   map_4[8] = 8;
   
-  //map_4[9] = 9;
- // map_4[10] = 10;
-  //map_4[11] = 11;
-  /*map_4[12] = 12;
-  map_4[13] = 13;*/
+  map_4[9] = 9;
+  map_4[10] = 10;
+  map_4[11] = 11;
+  map_4[12] = 12;
+  map_4[13] = 13;
 }

@@ -6,6 +6,7 @@ void    default_constructor_map()
   std::map<std::string, int> map;
   const std::map<std::string, int> const_map;
 
+  std::cout << map.begin()->first << std::endl;
   std::cout << "Size default constructor : " << map.size() << std::endl;
   std::cout << "Size default const constructor : " << const_map.size() << std::endl;
   std::map<std::string, int> map_alloc(map.key_comp(), map.get_allocator());

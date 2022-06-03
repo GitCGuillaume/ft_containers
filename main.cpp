@@ -164,7 +164,7 @@ int	main(void)
 	execute_function(&iterator_empty, 0);
 	execute_function(&iterator_empty_custom, 1);*/
 	//MAP PART
-	/*execute_function(default_constructor_map, 0);
+	execute_function(default_constructor_map, 0);
 	execute_function(constructor_range_map, 0);
 	execute_function(copy_constructor_map, 0);
 	execute_function(operator_assignation_map, 0);
@@ -172,7 +172,7 @@ int	main(void)
 	execute_function(constructor_copy_speed, 0);
 	
 	execute_function(default_constructor_map_custom, 1);
-	execute_function(constructor_range_map_custom, 1);*/
+	execute_function(constructor_range_map_custom, 1);
 	/*execute_function(pair_default, 0);
 	execute_function(pair_equal, 0);
 	execute_function(pair_not_equal, 0);
