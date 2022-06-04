@@ -169,12 +169,12 @@ int	main(void)
 	execute_function(constructor_range_map, 0);
 	execute_function(copy_constructor_map, 0);
 	execute_function(operator_assignation_map, 0);
-	execute_function(constructor_range_speed, 0);
-	execute_function(constructor_copy_speed, 0);
+	//execute_function(constructor_range_speed, 0);
+	//execute_function(constructor_copy_speed, 0);
 	
 	execute_function(default_constructor_map_custom, 1);
 	execute_function(constructor_range_map_custom, 1);
-	execute_function(constructor_range_speed_custom, 1);
+	//execute_function(constructor_range_speed_custom, 1);
 
 	/*execute_function(pair_default, 0);
 	execute_function(pair_equal, 0);
@@ -208,5 +208,11 @@ int	main(void)
 	//execute_function(destructor_1, 1);
 	execute_function(simple_clear, 0);
 	execute_function(simple_clear_custom, 1);
+	execute_function(simple_erase, 0);
+	execute_function(simple_erase_custom, 1);
+	execute_function(range_erase, 0);
+	execute_function(range_erase_custom, 1);
+	execute_function(erase_key, 0);
+	execute_function(erase_key_custom, 1);
 	return (0);
 }

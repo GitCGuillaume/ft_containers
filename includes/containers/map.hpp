@@ -66,6 +66,13 @@ namespace ft
                     first++;
                 }
             }
+            map(const map& other)
+            {
+                _comp = other._comp;
+                _allocator = other._allocator;
+                _capacity_allocator = other._capacity_allocator;
+                //FONCTION INSERT RANGE
+            }
             virtual ~map()
             {
                 iterator    it = this->begin();
@@ -159,6 +166,22 @@ namespace ft
 
                 while (it != ite)
                     _tree.deleteNode((it++)->first);
+            }
+            void    erase(iterator pos)
+            {
+                if (pos != this->end())
+                    _tree.deleteNode(pos->first);
+            }
+            void    erase(iterator first, iterator last)
+            {
+                while (first != last)
+                {
+                    _tree.deleteNode((first++)->first);
+                }
+            }
+            size_type    erase(const Key& key)
+            {
+                return (_tree.deleteNode(key));
             }
         private:
             typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>   _RB_tree;

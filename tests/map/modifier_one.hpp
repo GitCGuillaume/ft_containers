@@ -5,5 +5,8 @@
 #include <iostream>
 
 void    simple_clear();
+void    simple_erase();
+void    range_erase();
+void    erase_key();
 
 #endif

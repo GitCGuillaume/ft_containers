@@ -278,7 +278,7 @@ namespace ft
                                         _iterator = _iterator->parent;
                                 return (new_node);
                         }
-                        void    deleteNode(Key const & key)
+                        std::size_t    deleteNode(Key const & key)
                         {
                                 node            *current = NULL;
                                 node            *smallest_key = NULL;
@@ -290,7 +290,9 @@ namespace ft
 
                                 current = search(key);
                                 if (!current)
-                                        return ;
+                                {
+                                        return (0);
+                                }
                                 memory_colour = current->colour;
                                 if (current->left)
                                 {
@@ -326,13 +328,27 @@ namespace ft
                                         _allocator.construct(current->pair, *smallest_key->pair);
                                         //delete node from subtree
                                         memory_colour = smallest_key->colour;
-                                        null_node = _deleteOneChild(&smallest_key, &smallest_key->left, &smallest_key->right
+                                        left_child = smallest_key->left;
+                                        right_child = smallest_key->right;
+                                       // std::cout << "smallest is : " << smallest_key->pair->first << std::endl;
+                                        null_node = _deleteOneChild(&smallest_key, &left_child, &right_child
                                                 , memory_colour);
                                         //moved up is smallest key
-                                        if (smallest_key->colour == RED || memory_colour == RED)
+                                        if ((current && current->colour == RED) || (current && memory_colour == RED))
+                                        {
+                                                current->colour = BLACK;
+                                                if (!current->parent)
+                                                        _iterator = current;
+                                        }
+                                        else if (current && current->colour == BLACK && memory_colour == BLACK)
+                                                _repearDoubleBlack(current);
+                                        /*if ((smallest_key && smallest_key->colour == RED) || (smallest_key && memory_colour == RED))
+                                        {
                                                 smallest_key->colour = BLACK;
-                                        else if (smallest_key->colour == BLACK && memory_colour == BLACK)
+                                        }
+                                        else if (smallest_key && smallest_key->colour == BLACK && memory_colour == BLACK)
                                                 _repearDoubleBlack(smallest_key);
+                                        //std::cout << "parent ::: " << current->parent << std::endl;*/
                                 }
                                 if (_iterator && !_iterator->pair)
                                         _iterator = NULL;
@@ -348,6 +364,7 @@ namespace ft
                                         delete current->right;
                                         delete current;
                                 }
+                                return (1);
                         }
                         node*   getIterator() const
                         {
@@ -385,11 +402,11 @@ namespace ft
                                 {
                                         if (!current)
                                                 return (NULL);
-                                        if (current->right)
+                                        if (current->left)
                                         {
-                                                current = current->right;
-                                                while (current->left)
-                                                        current = current->left;
+                                                current = current->left;
+                                                while (current->right)
+                                                        current = current->right;
                                         }
                                         //if node is left side of it's parent, next node is it's parent
                                         else if (current->parent && current->parent->left)
