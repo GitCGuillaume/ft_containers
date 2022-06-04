@@ -37,6 +37,7 @@ void    iterator_forward_map()
     std::cout << "(it++)->first : " << (it++)->first << std::endl;
     std::cout << "(it++)->first : " << (it++)->first << std::endl;
     std::cout << "(it++)->first : " << (it++)->first << std::endl;
+    it = map.begin();
     std::cout << "(it++)->second : " << (it++)->second << std::endl;
     std::cout << "(it++)->second : " << (it++)->second << std::endl;
     std::cout << "(it++)->second : " << (it++)->second << std::endl;
@@ -45,8 +46,7 @@ void    iterator_forward_map()
     std::cout << "(++it)->first : " << (++it)->first << std::endl;
     std::cout << "(++it)->first : " << (++it)->first << std::endl;
     std::cout << "(++it)->first : " << (++it)->first << std::endl;
-    std::cout << "(++it)->first : " << (++it)->first << std::endl;
-    std::cout << "(++it)->second : " << (++it)->second << std::endl;
+    it = map.begin();
     std::cout << "(++it)->second : " << (++it)->second << std::endl;
     std::cout << "(++it)->second : " << (++it)->second << std::endl;
     std::cout << "(++it)->second : " << (++it)->second << std::endl;

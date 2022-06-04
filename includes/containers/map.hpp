@@ -21,14 +21,14 @@ namespace ft
             typedef ft::pair<const Key, T> value_type;
             typedef std::size_t size_type;
             typedef std::ptrdiff_t  difference_type;
-            typedef Compare key;
+            typedef Compare key_compare;
             typedef Allocator   allocator_type;
             typedef value_type& reference;
             typedef const value_type& const_reference;
             typedef typename Allocator::pointer  pointer;
             typedef typename Allocator::const_pointer    const_pointer;
-            typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>::BiDirectionnalIterator iterator;
-            typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>::BiDirectionnalIterator const_iterator;
+            typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>::BiDirectionnalIterator iterator;
+            typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>::BiDirectionnalIterator const_iterator;
             //typedef ft::reverse_iterator<iterator>  reverse_iterator;
             //typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
             class   value_compare : public ft::binary_function<value_type, value_type, bool>
@@ -161,9 +161,9 @@ namespace ft
                     _tree.deleteNode((it++)->first);
             }
         private:
-            typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, Allocator>   _RB_tree;
+            typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>   _RB_tree;
             _RB_tree    _tree; //need to use RD iterator nodes somewhere
-            Compare const  _comp;
+            key_compare  _comp;
             allocator_type	_allocator;
 			size_type		_capacity_allocator;
     };

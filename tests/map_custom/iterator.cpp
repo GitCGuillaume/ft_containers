@@ -24,7 +24,7 @@ void    iterator_assignation_map_custom()
 
 void    iterator_forward_map_custom()
 {
-    std::cout << "Iterator forward map custom" << std::endl;
+    std::cout << "Iterator forward map" << std::endl;
     ft::map<int, int>  map;
     map[3] = 1;
     map[4] = 2;
@@ -33,10 +33,11 @@ void    iterator_forward_map_custom()
     ft::map<int, int>::iterator    it = map.begin();
     std::cout << "it->first : " << it->first << std::endl;
     std::cout << "it->second : " << it->second << std::endl;
-    /*std::cout << "(it++)->first : " << (it++)->first << std::endl;
     std::cout << "(it++)->first : " << (it++)->first << std::endl;
     std::cout << "(it++)->first : " << (it++)->first << std::endl;
     std::cout << "(it++)->first : " << (it++)->first << std::endl;
+    std::cout << "(it++)->first : " << (it++)->first << std::endl;
+    it = map.begin();
     std::cout << "(it++)->second : " << (it++)->second << std::endl;
     std::cout << "(it++)->second : " << (it++)->second << std::endl;
     std::cout << "(it++)->second : " << (it++)->second << std::endl;
@@ -45,10 +46,8 @@ void    iterator_forward_map_custom()
     std::cout << "(++it)->first : " << (++it)->first << std::endl;
     std::cout << "(++it)->first : " << (++it)->first << std::endl;
     std::cout << "(++it)->first : " << (++it)->first << std::endl;
-    std::cout << "(++it)->first : " << (++it)->first << std::endl;
+    it = map.begin();
     std::cout << "(++it)->second : " << (++it)->second << std::endl;
     std::cout << "(++it)->second : " << (++it)->second << std::endl;
     std::cout << "(++it)->second : " << (++it)->second << std::endl;
-    std::cout << "(++it)->second : " << (++it)->second << std::endl;
-    */
 }

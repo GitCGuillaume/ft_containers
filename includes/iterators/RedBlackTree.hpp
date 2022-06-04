@@ -37,7 +37,7 @@ struct s_node
 */
 namespace ft
 {
-        template<class It, class Container, class Key, class T, class Allocator>
+        template<class It, class Container, class Key, class T, class Compare,class Allocator>
         class   RedBlackTree
         {
                 public:
@@ -48,6 +48,7 @@ namespace ft
                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::iterator_category    iterator_category;
                         typedef Key key_type;
                         typedef T   mapped_type;
+                        typedef Compare key_compare;
                         typedef Allocator   allocator_type;
                         typedef  s_node<pointer>       node;
                         class   BiDirectionnalIterator //nested class
@@ -60,7 +61,7 @@ namespace ft
                                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::pointer    pointer;
                                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::iterator_category    iterator_category;
                         
-                                        BiDirectionnalIterator() : _ptr(), _old(){}
+                                        BiDirectionnalIterator() : _ptr(NULL), _old(NULL){}
                                         
                                         //BiDirectionnalIterator(const BiDirectionnalIterator<U
                                         //        , typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value),
@@ -70,10 +71,10 @@ namespace ft
                                         //        Container>::type) : _ptr(ptr), _old(src._iterator){}
                                         template<typename U>
                                         BiDirectionnalIterator(const RedBlackTree<U, typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type
-                                                , key_type, mapped_type, Allocator>& src, node* ptr) : _ptr(ptr), _old(src._iterator){}
+                                                , key_type, mapped_type, key_compare, Allocator>& src, node* ptr) : _ptr(ptr), _old(src._iterator){}
                                         template<typename U>
                                         BiDirectionnalIterator(const RedBlackTree<U, typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type
-                                                , key_type, mapped_type, Allocator>& rhs) : _ptr(rhs._ptr), _old(rhs._old){}
+                                                , key_type, mapped_type, key_compare, Allocator>& rhs) : _ptr(rhs._ptr), _old(rhs._old){}
                                         BiDirectionnalIterator &        operator=(const BiDirectionnalIterator& rhs)
                                         {
                                                 if (this != &rhs)
@@ -86,11 +87,21 @@ namespace ft
                                         ~BiDirectionnalIterator(){}
                                         reference operator*() const
                                         {
+                                                if (!_ptr)
+                                                {
+                                                        value_type      pair = value_type();
+                                                        pointer ptr = &pair;
+                                                        return (*ptr);
+                                                }
                                                 return (*_ptr->pair);
                                         }
                                         pointer operator->() const
                                         {
-                                                return (_ptr->pair);
+                                                if (_ptr)
+                                                        return (_ptr->pair);
+                                                value_type      pair = value_type();
+                                                pointer ptr = &pair;
+                                                return (ptr);
                                         }
                                         /* PREFIX */
                                         /*
@@ -99,6 +110,8 @@ namespace ft
                                         */
                                         BiDirectionnalIterator& operator++()
                                         {
+                                                if (!_ptr)
+                                                        return (*this);
                                                 _old = _ptr->parent;
                                                 if (_ptr->right) //check if struct on right
                                                 {
@@ -187,13 +200,14 @@ namespace ft
 
                                 while (subRoot)
                                 {
-                                        if (firstSubRoot < firstNewNode)
+                                        //if (firstSubRoot < firstNewNode)
+                                        if (_comp(firstSubRoot, firstNewNode))
                                         {
                                                 subRoot = subRoot->right;
                                                 if (subRoot && subRoot->pair)
                                                         firstSubRoot = subRoot->pair->first;
                                         }
-                                        else if (firstNewNode < firstSubRoot)
+                                        else if (_comp(firstNewNode, firstSubRoot))
                                         {
                                                 subRoot = subRoot->left;
                                                 if (subRoot && subRoot->pair)
@@ -227,7 +241,7 @@ namespace ft
                                 //Search
                                while (_iterator)
                                 {
-                                        if (firstSubRoot < firstNewNode)
+                                        if (_comp(firstSubRoot, firstNewNode))
                                         {
                                                  if (!_iterator->right)
                                                  {
@@ -238,7 +252,7 @@ namespace ft
                                                 _iterator = _iterator->right;
                                                 firstSubRoot = _iterator->pair->first;
                                         }
-                                        else if (firstNewNode < firstSubRoot)
+                                        else if (_comp(firstNewNode, firstSubRoot))
                                         {
                                                 if (!_iterator->left)
                                                 {
@@ -655,6 +669,7 @@ namespace ft
                                                 gParentNode->colour = RED;
                                         }
                                 }
+                                key_compare     _comp;
                                 allocator_type	_allocator;
         };
 }

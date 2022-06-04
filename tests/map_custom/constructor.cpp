@@ -7,6 +7,7 @@ void    default_constructor_map_custom()
   const ft::map<std::string, int> const_map;
 
   std::cout << "CRASH SI JE it->first" << std::endl;
+  std::cout << "it TEST : " << map.begin()->first << std::endl;
   std::cout << "Size default constructor : " << map.size() << std::endl;
   std::cout << "Size default const constructor : " << const_map.size() << std::endl;
   //ft::map<std::string, int> map_alloc(map.key_comp(), map.get_allocator());

@@ -198,13 +198,13 @@ int	main(void)
 	execute_function(bracket_map_custom, 1);
 	execute_function(at_map, 0);
 	execute_function(at_map_custom, 1);
+	*/
 	execute_function(iterator_assignation_map, 0);
 	execute_function(iterator_assignation_map_custom, 1);
 	execute_function(iterator_forward_map, 0);
 	execute_function(iterator_forward_map_custom, 1);
 	execute_function(equal_map, 0);
 	execute_function(equal_map_custom, 1);
-	*/
 	//execute_function(destructor_1, 1);
 	execute_function(simple_clear, 0);
 	execute_function(simple_clear_custom, 1);
