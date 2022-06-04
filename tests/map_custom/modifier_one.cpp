@@ -43,7 +43,7 @@ void    range_erase_custom()
     for (int i = 0; i < 2; i++, it++)
          std::cout  << "first value erase(first, last) : " << it->first << std::endl;
     it = map.begin();
-    map.erase(it, map.end());
+    map.erase(it, map.end());    
     //std::cout  << "first value erase(first, last) : " << it->first << std::endl;
 }
 
@@ -54,8 +54,32 @@ void    erase_key_custom()
 
     map["one"] = 1;
     map["two"] = 2;
-    std::cout << map.erase("zero") << std::endl;;
-    std::cout << map.erase("one") << std::endl;;
-    std::cout << map.erase("two") << std::endl;;
-    std::cout << map.erase("three") << std::endl;;
+    map["ten"] = 10;
+    map["thousand"] = 10;
+    map["fourty"] = 10;
+    map["seventy"] = 10;
+    std::cout << map.erase("zero") << std::endl;
+    for (ft::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("one") << std::endl;
+    for (ft::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("ten") << std::endl;
+    for (ft::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("two") << std::endl;
+    for (ft::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("three") << std::endl;
+    for (ft::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("thousand") << std::endl;
+    for (ft::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("fourty") << std::endl;
+    for (ft::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("seventy") << std::endl;
+    for (ft::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
 }

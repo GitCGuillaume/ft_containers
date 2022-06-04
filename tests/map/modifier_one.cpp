@@ -49,13 +49,36 @@ void    range_erase()
 
 void    erase_key()
 {
-    std::cout << "erase KEY" << std::endl; 
     std::map<std::string, int>  map;
 
     map["one"] = 1;
     map["two"] = 2;
-    std::cout << map.erase("zero") << std::endl;;
-    std::cout << map.erase("one") << std::endl;;
-    std::cout << map.erase("two") << std::endl;;
-    std::cout << map.erase("three") << std::endl;;
+    map["ten"] = 10;
+    map["thousand"] = 10;
+    map["fourty"] = 10;
+    map["seventy"] = 10;
+    std::cout << map.erase("zero") << std::endl;
+    for (std::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("one") << std::endl;
+    for (std::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("ten") << std::endl;
+    for (std::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("two") << std::endl;
+    for (std::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("three") << std::endl;
+    for (std::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("thousand") << std::endl;
+    for (std::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("fourty") << std::endl;
+    for (std::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
+    std::cout << map.erase("seventy") << std::endl;
+    for (std::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it : " << it->first << std::endl;
 }
