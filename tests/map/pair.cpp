@@ -101,3 +101,13 @@ void    pair_right_equal()
     std::cout <<" pair is >= " << (pair4 >= pair) << std::endl;
     std::cout <<" pair is >= " << (pair >= pair4) << std::endl;
 }
+
+void    pair_copy()
+{
+    std::cout << "Pair copy" << std::endl;
+    std::pair<double, double>   pair(1.006000, 2.005000);
+    std::pair<double, double>   pair2 = pair;
+    pair2 = std::make_pair(3, 3);
+    std::cout << "first : " << pair2.first << std::endl;
+    std::cout << "second : " << pair2.second << std::endl;
+}

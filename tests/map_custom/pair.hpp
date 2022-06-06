@@ -11,5 +11,6 @@ void    pair_left();
 void    pair_left_equal_custom();
 void    pair_right_custom();
 void    pair_right_equal_custom();
+void    pair_copy_custom();
 
 #endif

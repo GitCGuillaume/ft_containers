@@ -89,6 +89,21 @@ void    operator_assignation_map()
 		  std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
 }
 
+void  assignation_speed()
+{
+  std::cout << "Assignation copy speed" << std::endl;
+  std::map<double, double> map;
+  std::map<double, double>  map2;
+  for (double i = 0; i < 100000; i++)
+    map[i] = i;
+  map.insert(map.find(1), std::make_pair(30000000, 123));
+  map.insert(map.find(50000), std::make_pair(10000000, 123));
+  map.insert(map.find(98000), std::make_pair(20000000, 123));
+  map2 = map;
+  std::map<double, double>::iterator  it = map2.end();
+  static_cast<void>(it);
+}
+
 void  constructor_range_speed()
 {
   std::cout << "Constructor range speed" << std::endl;
@@ -96,8 +111,12 @@ void  constructor_range_speed()
 
   for (double i = 0; i < 100000; i++)
     map[i] = i;
+  map.insert(map.find(1), std::make_pair(30000000, 123));
+  map.insert(map.find(50000), std::make_pair(10000000, 123));
+  map.insert(map.find(98000), std::make_pair(20000000, 123));
   std::map<double, double> map2(map.begin(), map.end());
   std::map<double, double>::iterator  it = map2.end();
+  static_cast<void>(it);
 }
 
 void  constructor_copy_speed()

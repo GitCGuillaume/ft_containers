@@ -21,10 +21,10 @@
 template<class T>
 struct s_node
 {
-        struct s_node*  parent = NULL;
-        struct s_node*  left = NULL;
-        struct s_node*  right = NULL;
-        T      pair = NULL;
+        struct s_node*  parent;
+        struct s_node*  left;
+        struct s_node*  right;
+        T      pair;
         int    colour;
 };
 
@@ -219,14 +219,17 @@ namespace ft
                                 return (NULL);
                         }
                         template<typename U, typename X>
-                        node*    normalInsert(const ft::pair<U, X>& pair)
+                        node*    insert(const ft::pair<U, X>& pair)
                         {
                                 node    *new_node = NULL;
 
                                 if (!_iterator || !_iterator->colour || !_iterator->pair) //no root
                                 {
                                         if (!_iterator)
+                                        {
                                                 _iterator = new node();
+                                                newNode(_iterator);
+                                        }
                                         //if (_iterator->pair)
                                         //        _destroyPair(_iterator);
                                         _iterator->pair = _allocator.allocate(1);
@@ -238,6 +241,71 @@ namespace ft
                                 Key     firstSubRoot = _iterator->pair->first;
                                 Key     firstNewNode = pair.first;
                                 new_node = new node();
+                                newNode(new_node);
+                                //Search
+                               while (_iterator)
+                                {
+                                        if (_comp(firstSubRoot, firstNewNode))
+                                        {
+                                                 if (!_iterator->right)
+                                                 {
+                                                        new_node->parent = _iterator;
+                                                        _iterator->right = new_node;
+                                                        break ;
+                                                 }
+                                                _iterator = _iterator->right;
+                                                firstSubRoot = _iterator->pair->first;
+                                        }
+                                        else if (_comp(firstNewNode, firstSubRoot))
+                                        {
+                                                if (!_iterator->left)
+                                                {
+                                                        new_node->parent = _iterator;
+                                                        _iterator->left = new_node;
+                                                        break ;
+                                                }
+                                                _iterator = _iterator->left;
+                                                firstSubRoot = _iterator->pair->first;
+                                        }
+                                        else if (firstNewNode == firstSubRoot)
+                                        {
+                                                delete new_node;
+                                                return (NULL);
+                                        }
+                                }
+                                new_node->pair = _allocator.allocate(1);
+                                _allocator.construct(new_node->pair, pair);
+                                //red colour
+                                new_node->colour = RED;
+                                _repearTreeInsert(new_node);
+                                while (_getParent(_iterator))
+                                        _iterator = _iterator->parent;
+                                return (new_node);
+                        }
+                        template<typename U, typename X>
+                        node*    normalInsert(const ft::pair<U, X>& pair)
+                        {
+                                node    *new_node = NULL;
+
+                                if (!_iterator || !_iterator->colour || !_iterator->pair) //no root
+                                {
+                                        if (!_iterator)
+                                        {
+                                                _iterator = new node();
+                                                newNode(_iterator);
+                                        }
+                                        //if (_iterator->pair)
+                                        //        _destroyPair(_iterator);
+                                        _iterator->pair = _allocator.allocate(1);
+                                        _allocator.construct(_iterator->pair, pair);
+                                        //black colour
+                                        _iterator->colour = BLACK;
+                                        return (_iterator);
+                                }
+                                Key     firstSubRoot = _iterator->pair->first;
+                                Key     firstNewNode = pair.first;
+                                new_node = new node();
+                                newNode(new_node);
                                 //Search
                                while (_iterator)
                                 {
@@ -457,8 +525,11 @@ namespace ft
                                         else if (memory_colour == BLACK)
                                         {
                                                 *current = new node();
+                                                newNode(*current);
                                                 (*current)->left = new node();
+                                                newNode((*current)->left);
                                                 (*current)->right = new node();
+                                                newNode((*current)->right);
                                                 (*current)->parent = parent;
                                                 (*current)->colour = BLACK;
                                                 (*current)->left->colour = BLACK;
@@ -488,13 +559,13 @@ namespace ft
                                                 {
                                                         if (sibling->parent->left == sibling)
                                                         {
-                                                                if (sibling->left->colour == RED) //left left case
+                                                                if (sibling->left && sibling->left->colour == RED) //left left case
                                                                 {
                                                                         sibling->left->colour = BLACK;
                                                                         sibling->colour = sibling->parent->colour;
                                                                         _rotateRight(sibling->parent);
                                                                 }
-                                                                else //left right case
+                                                                else if (sibling->right) //left right case
                                                                 {
                                                                         sibling->right->colour = BLACK;
                                                                         _rotateLeft(sibling);
@@ -503,13 +574,13 @@ namespace ft
                                                         }
                                                         else
                                                         {
-                                                                if (sibling->right->colour == RED) //right right case
+                                                                if (sibling->right && sibling->right->colour == RED) //right right case
                                                                 {
                                                                         sibling->right->colour = BLACK;
                                                                         sibling->colour = sibling->parent->colour;
                                                                         _rotateLeft(sibling->parent);
                                                                 }
-                                                                else //right left case
+                                                                else if (sibling->left)//right left case
                                                                 {
                                                                         sibling->left->colour = BLACK;
                                                                         _rotateRight(sibling);
@@ -523,9 +594,9 @@ namespace ft
                                                 else if (sibling->colour == RED)
                                                         _repearDoubleBlackTwo(current);
                                                 else if (sibling->colour == BLACK
-                                                        && ((sibling->left && sibling->left->colour == BLACK)
+                                                        && (((sibling->left && sibling->left->colour == BLACK)
                                                         && (sibling && sibling->right->colour == BLACK))
-                                                        || (sibling->colour == BLACK && !sibling->left && !sibling->right))
+                                                        || (sibling->colour == BLACK && !sibling->left && !sibling->right)))
                                                 {
                                                         sibling->colour = RED;
                                                         if (current->parent && current->parent->colour == BLACK)
@@ -685,6 +756,14 @@ namespace ft
                                                 parentNode->colour = BLACK;
                                                 gParentNode->colour = RED;
                                         }
+                                }
+                                void    newNode(node* current)
+                                {
+                                        current->parent = NULL;
+                                        current->left = NULL;
+                                        current->right = NULL;
+                                        current->pair = NULL;
+                                        current->colour = 0;
                                 }
                                 key_compare     _comp;
                                 allocator_type	_allocator;

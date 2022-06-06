@@ -11,5 +11,6 @@
 #include "at.hpp"
 #include "operator.hpp"
 #include "modifier_one.hpp"
+#include "lookup.hpp"
 
 #endif

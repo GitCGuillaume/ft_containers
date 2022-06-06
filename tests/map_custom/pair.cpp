@@ -101,3 +101,13 @@ void    pair_right_equal_custom()
     std::cout <<" pair is >= CUSTOM " << (pair4 >= pair) << std::endl;
     std::cout <<" pair is >= CUSTOM " << (pair >= pair4) << std::endl;
 }
+
+void    pair_copy_custom()
+{
+    std::cout << "Pair copy CUSTOM" << std::endl;
+    ft::pair<double, double>   pair(1.006000, 2.005000);
+    ft::pair<double, double>   pair2 = pair;
+    pair2 = ft::make_pair(3, 3);
+    std::cout << "first : " << pair2.first << std::endl;
+    std::cout << "second : " << pair2.second << std::endl;
+}

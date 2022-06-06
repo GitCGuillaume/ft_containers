@@ -5,6 +5,7 @@
 #include "../library_headers/less.hpp"
 #include "../library_headers/pair.hpp"
 #include <stdexcept>
+#include <limits>
 
 /*
     struct s_node* _node is a pointer because std::allocator allocate return pointer.
@@ -56,15 +57,14 @@ namespace ft
                 const Allocator& alloc = Allocator()) : _comp(comp), _allocator(alloc), _capacity_allocator(1)
             {
                 _tree._iterator = new typename _RB_tree::node();
-                _tree._iterator->colour = 0;
+                _tree._iterator->parent = NULL;
+                _tree._iterator->left = NULL;
+                _tree._iterator->right = NULL;
                 _tree._iterator->pair = NULL;
+                _tree._iterator->colour = 0;
                 //_tree._iterator->pair = _allocator.allocate(1);
                 //_allocator.construct(_tree._iterator->pair, value_type());
-                while (first != second)
-                {
-                    _tree.normalInsert(*first);
-                    first++;
-                }
+                this->insert(first, second);
             }
             map(const map& other)
             {
@@ -72,6 +72,23 @@ namespace ft
                 _allocator = other._allocator;
                 _capacity_allocator = other._capacity_allocator;
                 //FONCTION INSERT RANGE
+                this->insert(other.begin(), other.end());
+            }
+            map&    operator=(const map& other)
+            {
+                if (this != &other)
+                {
+                    this->clear();
+                    _comp = other._comp;
+                    _allocator = other._allocator;
+                    _capacity_allocator = other._capacity_allocator;
+                    this->insert(other.begin(), other.end());
+                }
+                return (*this);
+            }
+            allocator_type  get_allocator() const
+            {
+                return (_allocator);
             }
             virtual ~map()
             {
@@ -81,6 +98,12 @@ namespace ft
                 //if (_tree._iterator)
                 while (it != ite)
                     _tree.deleteNode((it++)->first);
+            }
+            bool    empty() const
+            {
+                if (this->begin() == this->end())
+                    return (true);
+                return (false);
             }
             size_type   size() const
             {
@@ -94,6 +117,10 @@ namespace ft
                     it++;
                 }
                 return (i);
+            }
+            size_type   max_size() const
+            {
+                return (std::numeric_limits<size_type>::max() / sizeof(typename _RB_tree::node));
             }
             /*
             Elements Access
@@ -145,14 +172,6 @@ namespace ft
             }
             iterator    end()
             {
-                /*_RB_tree*   ptr_tree = &_tree;
-                //go to root in case it's not here
-                while (ptr_tree->_iterator->parent)
-                    ptr_tree->_iterator = ptr_tree->_iterator->parent;
-                //go to rightest structure
-                while (ptr_tree->_iterator->right)
-                    ptr_tree->_iterator = ptr_tree->_iterator->right;*/    
-                //return (iterator(_tree, ptr_tree->_iterator->right));
                 return (iterator(_tree, _tree.end()));
             }
             const_iterator    end() const
@@ -166,6 +185,50 @@ namespace ft
 
                 while (it != ite)
                     _tree.deleteNode((it++)->first);
+            }
+            ft::pair<iterator, bool>   insert(const value_type& value)
+            {
+                iterator  it;
+                typename _RB_tree::node*    new_node = _tree.insert(value);
+
+                if (new_node)
+                    it = iterator(_tree, new_node);
+                else
+                {
+                    it = iterator(_tree, _tree._iterator);
+                    while (_tree._iterator->parent)
+                        _tree._iterator = _tree._iterator->parent;
+                    return (ft::make_pair(it, 0));
+                }
+                return (ft::make_pair(it, 1));
+            }
+            /* hint is suggestion as to where to start the search */
+            iterator    insert(iterator hint, const value_type& value)
+            {
+                iterator    it;
+
+                _tree.search(hint->first);
+                typename _RB_tree::node*    new_node = _tree.insert(value);
+                if (!new_node)
+                {
+                    it = iterator(_tree, _tree._iterator);
+                    while (_tree._iterator->parent)
+                        _tree._iterator = _tree._iterator->parent;
+                    return (it);
+                }
+                it = iterator(_tree, new_node);
+                return (it);
+            }
+            template<class InputIt>
+            void    insert(InputIt first, InputIt last)
+            {
+                while (first != last)
+                {
+                    _tree.insert(*(first)++);
+                    while (_tree._iterator->parent)
+                        _tree._iterator = _tree._iterator->parent;
+                }
+
             }
             void    erase(iterator pos)
             {
@@ -183,6 +246,30 @@ namespace ft
             {
                 return (_tree.deleteNode(key));
             }
+            /* Lookup */
+            iterator    find(const Key& key)
+            {
+                typename    _RB_tree::node* search_node = NULL;
+
+                search_node = _tree.search(key);
+                while (_tree._iterator->parent)
+                        _tree._iterator = _tree._iterator->parent;
+                if (!search_node)
+                    return (this->end());
+                return (iterator(_tree, search_node));
+            }
+            const_iterator  find(const Key& key) const
+            {
+                typename    _RB_tree::node* search_node = NULL;
+
+                search_node = _tree.search(key);
+                while (_tree._iterator->parent)
+                        _tree._iterator = _tree._iterator->parent;
+                if (!search_node)
+                    return (this->end());
+                return (const_iterator(_tree, search_node));
+            }
+
         private:
             typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>   _RB_tree;
             _RB_tree    _tree; //need to use RD iterator nodes somewhere

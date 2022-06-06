@@ -8,5 +8,8 @@ void    simple_clear_custom();
 void    simple_erase_custom();
 void    range_erase_custom();
 void    erase_key_custom();
+void    insert_value_type_custom();
+void    insert_hint_custom();
+void    insert_range_custom();
 
 #endif

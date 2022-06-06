@@ -5,9 +5,13 @@ void    simple_clear_custom()
     std::cout << "simple clear CUSTOM" << std::endl;
     ft::map<int, int>   map;
 
+    std::cout << "MAX SIZE : " << map.max_size() << std::endl;
     for (short int i = 0; i < 5000; i++)
         map[i] = i;
+    std::cout << "Is empty ? : " << map.empty() << std::endl;
     map.clear();
+    std::cout << "Is empty ? : " << map.empty() << std::endl;
+    std::cout << "MAX SIZE : " << map.max_size() << std::endl;
 }
 
 void    simple_erase_custom()
@@ -82,4 +86,69 @@ void    erase_key_custom()
     std::cout << map.erase("seventy") << std::endl;
     for (ft::map<std::string, int>::iterator it = map.begin(); it != map.end(); it++)
         std::cout << "it : " << it->first << std::endl;
+}
+
+void    insert_value_type_custom()
+{
+    std::cout << "Insert value type" << std::endl;
+    ft::map<int, int>  map;
+    ft::pair<ft::map<int, int>::iterator, bool>   pair;
+
+    pair = map.insert(ft::make_pair(10, 11));
+    std::cout << "bool : " << pair.second << std::endl;
+    pair = map.insert(ft::make_pair(10, 11));
+    std::cout << "bool : " << pair.second << std::endl;
+    map.insert(ft::make_pair(8, 10));
+    map.insert(ft::make_pair(10000, 10));
+    map.insert(ft::make_pair(1454, 14440));
+    pair = map.insert(ft::make_pair(11, 10));
+    std::cout << "bool : " << pair.second << std::endl;
+    pair = map.insert(ft::make_pair(11, 11));
+    std::cout << "bool : " << pair.second << std::endl;
+    for (ft::map<int, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
+}
+
+void    insert_hint_custom()
+{
+    std::cout << "Insert hint CUSTOM" << std::endl;
+    ft::map<int, int>  map;
+
+    map.insert(ft::make_pair(10, 0));
+    map.insert(ft::make_pair(0, 0));
+    map.insert(ft::make_pair(-10, 0));
+    map.insert(ft::make_pair(42254, 0));
+    map.insert(ft::make_pair(42, 0));
+    map.insert(ft::make_pair(21, 0));
+    map.insert(map.find(42), ft::pair<int, int>(5, 123));
+    map.insert(map.find(42), ft::pair<int, int>(43, 123));
+    map.insert(map.find(42254), ft::pair<int, int>(44, 123));
+    map.insert(map.find(0), ft::pair<int, int>(2147483647, 123));
+    map.insert(map.find(21), ft::pair<int, int>(10, 124));
+    map.insert(map.find(21), ft::pair<int, int>(42, 123));
+    for (int i = 0; i < 50000; i++)
+        map[i] = i;
+    map.insert(map.end(), ft::pair<int, int>(-1000, 123));
+    map.insert(map.begin(), ft::pair<int, int>(-2147483648, 123));
+ //   for (ft::map<int, int>::iterator it = map.begin(); it != map.end(); it++)
+   //     std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
+}
+
+void    insert_range_custom()
+{
+    std::cout << "Insert Range CUSTOM" << std::endl;
+    ft::map<double, int>   map;
+    map[456546] = 54;
+    map[546] = 54;
+    map[-154] = 5648;
+    map[1] = 1;
+    for (int i = 1; i < 11; i++)
+        map[i] = i;
+    ft::map<double, int>   range;
+    range.insert(map.begin(), map.end());
+    for (ft::map<double, int>::iterator it = map.begin(); it != map.end(); it++)
+        std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
+    //for (int i = 1; i < 100000; i++)
+   //     map[i] = i;
+    range.insert(map.begin(), map.end());
 }
