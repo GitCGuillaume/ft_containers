@@ -5,5 +5,6 @@
 #include <iostream>
 
 void    lookup_find_custom();
+void    map_count_custom();
 
 #endif

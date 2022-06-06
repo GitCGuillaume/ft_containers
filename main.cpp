@@ -234,5 +234,7 @@ int	main(void)
 	execute_function(lookup_find_custom, 1);
 	execute_function(insert_range, 0);
 	execute_function(insert_range_custom, 1);*/
+	execute_function(map_count, 0);
+	execute_function(map_count_custom, 1);
 	return (0);
 }

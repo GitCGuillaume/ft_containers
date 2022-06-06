@@ -189,8 +189,11 @@ namespace ft
                         RedBlackTree() : _iterator(NULL){}
                         ~RedBlackTree(){}
                         RedBlackTree(node* iterator) : _iterator(iterator){}
-                        
-                        node*    search(Key const &key)
+                        node*   find(Key const &key) const
+                        {
+                                
+                        }
+                        node*    search(Key const &key) const
                         {
                                 node    *subRoot = _iterator;
                                 if (!subRoot || !subRoot->pair)
@@ -217,6 +220,40 @@ namespace ft
                                                 return (subRoot);
                                 }
                                 return (NULL);
+                        }
+                        std::size_t       count(Key const &key) const
+                        {
+                                std::size_t n = 0;
+                                node    *subRoot = _iterator;
+                                if (!subRoot || !subRoot->pair)
+                                        return (0);
+                                Key     firstSubRoot = subRoot->pair->first;
+                                Key     firstNewNode = key;
+
+                                while (subRoot)
+                                {
+                                        //if (firstSubRoot < firstNewNode)
+                                        if (_comp(firstSubRoot, firstNewNode))
+                                        {
+                                                subRoot = subRoot->right;
+                                                if (subRoot && subRoot->pair)
+                                                        firstSubRoot = subRoot->pair->first;
+                                        }
+                                        else if (_comp(firstNewNode, firstSubRoot))
+                                        {
+                                                subRoot = subRoot->left;
+                                                if (subRoot && subRoot->pair)
+                                                        firstSubRoot = subRoot->pair->first;
+                                        }
+                                        else if (firstNewNode == firstSubRoot)
+                                        {
+                                                n++;
+                                                subRoot = subRoot->left;
+                                                if (subRoot && subRoot->pair)
+                                                        firstSubRoot = subRoot->pair->first;
+                                        }
+                                }
+                                return (n);
                         }
                         template<typename U, typename X>
                         node*    insert(const ft::pair<U, X>& pair)
@@ -402,21 +439,23 @@ namespace ft
                                         null_node = _deleteOneChild(&smallest_key, &left_child, &right_child
                                                 , memory_colour);
                                         //moved up is smallest key
-                                        if ((current && current->colour == RED) || (current && memory_colour == RED))
+                                        /*if ((current && current->colour == RED) || (current && memory_colour == RED))
                                         {
                                                 current->colour = BLACK;
                                                 if (!current->parent)
                                                         _iterator = current;
                                         }
                                         else if (current && current->colour == BLACK && memory_colour == BLACK)
-                                                _repearDoubleBlack(current);
-                                        /*if ((smallest_key && smallest_key->colour == RED) || (smallest_key && memory_colour == RED))
+                                                _repearDoubleBlack(current);*/
+                                        if ((smallest_key && smallest_key->colour == RED) || (smallest_key && memory_colour == RED))
                                         {
                                                 smallest_key->colour = BLACK;
+                                                if (!smallest_key->parent)
+                                                        _iterator = smallest_key;
                                         }
                                         else if (smallest_key && smallest_key->colour == BLACK && memory_colour == BLACK)
                                                 _repearDoubleBlack(smallest_key);
-                                        //std::cout << "parent ::: " << current->parent << std::endl;*/
+                                        //std::cout << "parent ::: " << current->parent << std::endl;
                                 }
                                 if (_iterator && !_iterator->pair)
                                         _iterator = NULL;

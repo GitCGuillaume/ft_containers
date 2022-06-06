@@ -30,3 +30,17 @@ void    lookup_find_custom()
     exist(map.find(-11), map);
     exist(map.find(46546456), map);
 }
+
+void    map_count_custom()
+{
+    std::cout << "COUNT CUSTOM" << std::endl;
+    ft::map<int, int>  map;
+    map[1] = 1;
+    map[1] = 0;
+    map[0] = 1;
+    ft::map<int, int>  map2;
+    std::cout << map.count(1) << std::endl;
+    std::cout << map.count(0) << std::endl;
+    std::cout << map.count(2) << std::endl;
+    std::cout << map2.count(0) << std::endl;
+}

@@ -233,7 +233,9 @@ namespace ft
             void    erase(iterator pos)
             {
                 if (pos != this->end())
+                {
                     _tree.deleteNode(pos->first);
+                }
             }
             void    erase(iterator first, iterator last)
             {
@@ -247,6 +249,10 @@ namespace ft
                 return (_tree.deleteNode(key));
             }
             /* Lookup */
+            size_type   count(const Key& key) const
+            {
+                return (_tree.count(key));
+            }
             iterator    find(const Key& key)
             {
                 typename    _RB_tree::node* search_node = NULL;
@@ -260,14 +266,7 @@ namespace ft
             }
             const_iterator  find(const Key& key) const
             {
-                typename    _RB_tree::node* search_node = NULL;
-
-                search_node = _tree.search(key);
-                while (_tree._iterator->parent)
-                        _tree._iterator = _tree._iterator->parent;
-                if (!search_node)
-                    return (this->end());
-                return (const_iterator(_tree, search_node));
+                return (const_iterator(_tree, _tree.find(key)));
             }
 
         private:
