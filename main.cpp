@@ -230,10 +230,10 @@ int	main(void)
 	execute_function(insert_value_type_custom, 1);
 	execute_function(insert_hint, 0);
 	execute_function(insert_hint_custom, 1);
-	execute_function(lookup_find, 0);
-	execute_function(lookup_find_custom, 1);
 	execute_function(insert_range, 0);
 	execute_function(insert_range_custom, 1);*/
+	execute_function(lookup_find, 0);
+	execute_function(lookup_find_custom, 1);
 	execute_function(map_count, 0);
 	execute_function(map_count_custom, 1);
 	return (0);

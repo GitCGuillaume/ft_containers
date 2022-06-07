@@ -1,6 +1,6 @@
 #include "lookup.hpp"
 
-static void    exist(std::map<int, int>::iterator it, std::map<int, int>& map)
+static void    exist(std::map<int, int>::const_iterator it, std::map<int, int>& map)
 {
     if (it == map.end())
         std::cout << "Does not exist" << std::endl;
@@ -12,7 +12,6 @@ void    lookup_find()
 {
     std::cout << "Map find" << std::endl;
     std::map<int, int>  map;
-    std::map<int, int>::iterator    it;
 
     map.insert(std::make_pair(10, 0));
     map.insert(std::make_pair(0, 0));

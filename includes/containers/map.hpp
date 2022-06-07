@@ -4,6 +4,7 @@
 #include "../iterators/RedBlackTree.hpp"
 #include "../library_headers/less.hpp"
 #include "../library_headers/pair.hpp"
+#include "../iterators/reverse_iterator.hpp"
 #include <stdexcept>
 #include <limits>
 
@@ -28,10 +29,10 @@ namespace ft
             typedef const value_type& const_reference;
             typedef typename Allocator::pointer  pointer;
             typedef typename Allocator::const_pointer    const_pointer;
-            typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>::BiDirectionnalIterator iterator;
-            typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>::BiDirectionnalIterator const_iterator;
-            //typedef ft::reverse_iterator<iterator>  reverse_iterator;
-            //typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
+            typedef typename ft::BiDirectionnalIterator<value_type, map, typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > iterator;
+            typedef typename ft::BiDirectionnalIterator<value_type const, map, const typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > const_iterator;
+            typedef ft::reverse_iterator<iterator>  reverse_iterator;
+            typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
             class   value_compare : public ft::binary_function<value_type, value_type, bool>
             {
                 protected:
@@ -92,8 +93,8 @@ namespace ft
             }
             virtual ~map()
             {
-                iterator    it = this->begin();
-                iterator    ite = this->end();
+                const_iterator    it = this->begin();
+                const_iterator    ite = this->end();
 
                 //if (_tree._iterator)
                 while (it != ite)
@@ -161,22 +162,22 @@ namespace ft
             iterator    begin()
             {
                 if (!_tree._iterator || !_tree._iterator->pair)
-                    iterator(_tree, _tree.end());
-                return (iterator(_tree, _tree.begin()));
+                    return (iterator(_tree.end(), _tree._iterator));
+                return (iterator(_tree.begin(), _tree._iterator));
             }
             const_iterator    begin() const
             {
                 if (!_tree._iterator || !_tree._iterator->pair)
-                    const_iterator(_tree, _tree.end());
-                return (const_iterator(_tree, _tree.begin()));
+                    return (const_iterator(_tree.end(), _tree._iterator));
+                return (const_iterator(_tree.begin(), _tree._iterator));
             }
             iterator    end()
             {
-                return (iterator(_tree, _tree.end()));
+                return (iterator(_tree.end(), _tree._iterator));
             }
             const_iterator    end() const
             {
-                return (const_iterator(_tree, _tree.end()));
+                return (const_iterator(_tree.end(), _tree._iterator));
             }
             void    clear()
             {
@@ -192,10 +193,10 @@ namespace ft
                 typename _RB_tree::node*    new_node = _tree.insert(value);
 
                 if (new_node)
-                    it = iterator(_tree, new_node);
+                    it = iterator(new_node, _tree._iterator);
                 else
                 {
-                    it = iterator(_tree, _tree._iterator);
+                    it = iterator(_tree._iterator, _tree._iterator);
                     while (_tree._iterator->parent)
                         _tree._iterator = _tree._iterator->parent;
                     return (ft::make_pair(it, 0));
@@ -211,12 +212,12 @@ namespace ft
                 typename _RB_tree::node*    new_node = _tree.insert(value);
                 if (!new_node)
                 {
-                    it = iterator(_tree, _tree._iterator);
+                    it = iterator(_tree._iterator, _tree._iterator);
                     while (_tree._iterator->parent)
                         _tree._iterator = _tree._iterator->parent;
                     return (it);
                 }
-                it = iterator(_tree, new_node);
+                it = iterator(new_node, _tree._iterator);
                 return (it);
             }
             template<class InputIt>
@@ -262,11 +263,11 @@ namespace ft
                         _tree._iterator = _tree._iterator->parent;
                 if (!search_node)
                     return (this->end());
-                return (iterator(_tree, search_node));
+                return (iterator(search_node, _tree._iterator));
             }
             const_iterator  find(const Key& key) const
             {
-                return (const_iterator(_tree, _tree.find(key)));
+                return (const_iterator(_tree.find(key), _tree._iterator));
             }
 
         private:

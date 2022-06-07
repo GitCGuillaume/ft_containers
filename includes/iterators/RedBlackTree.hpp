@@ -33,7 +33,6 @@ struct s_node
         0 = none
         1 = red
         2 = 2 black
-        3 = 3 black (delete part)
 */
 namespace ft
 {
@@ -51,148 +50,10 @@ namespace ft
                         typedef Compare key_compare;
                         typedef Allocator   allocator_type;
                         typedef  s_node<pointer>       node;
-                        class   BiDirectionnalIterator //nested class
-                        {
-                                public:
-                                        /* FOR STD DISTANCE */
-                                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::value_type    value_type;
-                                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::difference_type    difference_type;
-                                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::reference    reference;
-                                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::pointer    pointer;
-                                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::iterator_category    iterator_category;
-                        
-                                        BiDirectionnalIterator() : _ptr(NULL), _old(NULL){}
-                                        
-                                        //BiDirectionnalIterator(const BiDirectionnalIterator<U
-                                        //        , typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value),
-                                        //        Container>::type>& rhs) : _ptr(rhs.base()){}
-                                        
-                                        //BiDirectionnalIterator(const RedBlackTree& src, node* ptr, typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value),
-                                        //        Container>::type) : _ptr(ptr), _old(src._iterator){}
-                                        template<typename U>
-                                        BiDirectionnalIterator(const RedBlackTree<U, typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type
-                                                , key_type, mapped_type, key_compare, Allocator>& src, node* ptr) : _ptr(ptr), _old(src._iterator){}
-                                        template<typename U>
-                                        BiDirectionnalIterator(const RedBlackTree<U, typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type
-                                                , key_type, mapped_type, key_compare, Allocator>& rhs) : _ptr(rhs._ptr), _old(rhs._old){}
-                                        BiDirectionnalIterator &        operator=(const BiDirectionnalIterator& rhs)
-                                        {
-                                                if (this != &rhs)
-                                                {
-                                                        _ptr = rhs._ptr;
-                                                        _old = rhs._old;
-                                                }
-                                                return (*this);
-                                        }
-                                        ~BiDirectionnalIterator(){}
-                                        reference operator*() const
-                                        {
-                                                if (!_ptr)
-                                                {
-                                                        value_type      pair = value_type();
-                                                        pointer ptr = &pair;
-                                                        return (*ptr);
-                                                }
-                                                return (*_ptr->pair);
-                                        }
-                                        pointer operator->() const
-                                        {
-                                                if (_ptr)
-                                                        return (_ptr->pair);
-                                                value_type      pair = value_type();
-                                                pointer ptr = &pair;
-                                                return (ptr);
-                                        }
-                                        /* PREFIX */
-                                        /*
-                                                _old->right == _ptr will loop until parent root(NULL)
-                                                or until _ptr->right is not old anymore
-                                        */
-                                        BiDirectionnalIterator& operator++()
-                                        {
-                                                if (!_ptr)
-                                                        return (*this);
-                                                _old = _ptr->parent;
-                                                if (_ptr->right) //check if struct on right
-                                                {
-                                                        _ptr = _ptr->right; //go ro right
-                                                        while (_ptr->left) //then go to leftest key
-                                                                _ptr = _ptr->left;
-                                                }
-                                                else if (_old && _old->right == _ptr)
-                                                {
-                                                        while (_old && _old->right == _ptr)
-                                                        {
-                                                                _ptr = _old;
-                                                                _old = _ptr->parent;
-                                                        }
-                                                        _ptr = _old;
-                                                }
-                                                else
-                                                        _ptr = _ptr->parent;
-                                                return (*this);
-                                        }
-                                        BiDirectionnalIterator& operator--()
-                                        {
-                                                if (!_ptr)
-                                                {
-                                                        _ptr = _old;
-                                                        while (_ptr->right)
-                                                                _ptr = _ptr->right;
-                                                        return (*this);
-                                                }
-                                                _old = _ptr->parent;
-                                                if (_ptr->left) //check if struct on left
-                                                {
-                                                        _ptr = _ptr->left; //go ro left
-                                                        while (_ptr->right) //then go to leftest key
-                                                                _ptr = _ptr->right;
-                                                }
-                                                else if (_old && _old->left == _ptr)
-                                                {
-                                                        while (_old && _old->left == _ptr)
-                                                        {
-                                                                _ptr = _old;
-                                                                _old = _ptr->parent;
-                                                        }
-                                                        _ptr = _old;
-                                                }
-                                                else
-                                                        _ptr = _ptr->parent;
-                                                return (*this);
-                                        }
-                                        /* POSTFIX*/
-                                        BiDirectionnalIterator operator++(int)
-                                        {
-                                                BiDirectionnalIterator tmp = *this;
-                                                this->operator++();
-                                                return (tmp);
-                                        }
-                                        BiDirectionnalIterator   operator--(int)
-                                        {
-                                                BiDirectionnalIterator tmp = *this;
-                                                this->operator--();
-                                                return (tmp);
-                                        }
-                                        bool    operator==(BiDirectionnalIterator const & rhs)
-                                        {
-                                                return (_ptr == rhs._ptr);
-                                        }
-                                        bool    operator!=(BiDirectionnalIterator const & rhs)
-                                        {
-                                                return (_ptr != rhs._ptr);
-                                        }
-                                private:
-                                        node*   _ptr;    //pointer of pair
-                                        node*   _old;
-                        };
+
                         RedBlackTree() : _iterator(NULL){}
                         ~RedBlackTree(){}
                         RedBlackTree(node* iterator) : _iterator(iterator){}
-                        node*   find(Key const &key) const
-                        {
-                                
-                        }
                         node*    search(Key const &key) const
                         {
                                 node    *subRoot = _iterator;
@@ -203,7 +64,6 @@ namespace ft
 
                                 while (subRoot)
                                 {
-                                        //if (firstSubRoot < firstNewNode)
                                         if (_comp(firstSubRoot, firstNewNode))
                                         {
                                                 subRoot = subRoot->right;
@@ -221,7 +81,34 @@ namespace ft
                                 }
                                 return (NULL);
                         }
-                        std::size_t       count(Key const &key) const
+                        node*           find(Key const& key) const
+                        {
+                                node    *subRoot = _iterator;
+                                if (!subRoot || !subRoot->pair)
+                                        return (NULL);
+                                Key     firstSubRoot = subRoot->pair->first;
+                                Key     firstNewNode = key;
+
+                                while (subRoot)
+                                {
+                                        if (_comp(firstSubRoot, firstNewNode))
+                                        {
+                                                subRoot = subRoot->right;
+                                                if (subRoot && subRoot->pair)
+                                                        firstSubRoot = subRoot->pair->first;
+                                        }
+                                        else if (_comp(firstNewNode, firstSubRoot))
+                                        {
+                                                subRoot = subRoot->left;
+                                                if (subRoot && subRoot->pair)
+                                                        firstSubRoot = subRoot->pair->first;
+                                        }
+                                        else if (firstNewNode == firstSubRoot)
+                                                return (subRoot);
+                                }
+                                return (this->end());
+                        }
+                        std::size_t     count(Key const &key) const
                         {
                                 std::size_t n = 0;
                                 node    *subRoot = _iterator;
@@ -232,7 +119,6 @@ namespace ft
 
                                 while (subRoot)
                                 {
-                                        //if (firstSubRoot < firstNewNode)
                                         if (_comp(firstSubRoot, firstNewNode))
                                         {
                                                 subRoot = subRoot->right;
@@ -806,6 +692,137 @@ namespace ft
                                 }
                                 key_compare     _comp;
                                 allocator_type	_allocator;
+        };
+        template<typename It, class Container, typename Node>
+        class   BiDirectionnalIterator //nested class
+        {
+                public:
+                        /* FOR STD DISTANCE */
+                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::value_type    value_type;
+                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::difference_type    difference_type;
+                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::reference    reference;
+                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::pointer    pointer;
+                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::iterator_category    iterator_category;
+                        typedef  Node       node;
+
+                        BiDirectionnalIterator() : _ptr(NULL), _old(NULL){}
+                        BiDirectionnalIterator(node* ptr, node* iterator) : _ptr(ptr), _old(iterator){}
+                        template<typename U, typename V>
+                        BiDirectionnalIterator(const BiDirectionnalIterator<U
+                                , typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type
+                                , V>& rhs) : _ptr(rhs._ptr), _old(rhs._old){}
+                        //template<typename U>
+                        BiDirectionnalIterator &        operator=(const BiDirectionnalIterator& rhs)
+                        {
+                                if (this != &rhs)
+                                {
+                                        _ptr = rhs._ptr;
+                                        _old = rhs._old;
+                                }
+                                return (*this);
+                        }
+                        //template<typename U, typename key_type, typename mapped_type, typename key_compare, typename Allocator>
+                        virtual ~BiDirectionnalIterator(){}
+                        reference operator*() const
+                        {
+                                if (!_ptr)
+                                {
+                                        value_type      pair = value_type();
+                                        pointer ptr = &pair;
+                                        return (*ptr);
+                                }
+                                return (*_ptr->pair);
+                        }
+                        pointer operator->() const
+                        {
+                                if (_ptr)
+                                        return (_ptr->pair);
+                                value_type      pair = value_type();
+                                pointer ptr = &pair;
+                                return (ptr);
+                        }
+                        /* PREFIX */
+                        /*
+                                _old->right == _ptr will loop until parent root(NULL)
+                                or until _ptr->right is not old anymore
+                        */
+                        BiDirectionnalIterator& operator++()
+                        {
+                                if (!_ptr)
+                                        return (*this);
+                                _old = _ptr->parent;
+                                if (_ptr->right) //check if struct on right
+                                {
+                                        _ptr = _ptr->right; //go ro right
+                                        while (_ptr->left) //then go to leftest key
+                                                _ptr = _ptr->left;
+                                }
+                                else if (_old && _old->right == _ptr)
+                                {
+                                        while (_old && _old->right == _ptr)
+                                        {
+                                                _ptr = _old;
+                                                _old = _ptr->parent;
+                                        }
+                                        _ptr = _old;
+                                }
+                                else
+                                        _ptr = _ptr->parent;
+                                return (*this);
+                        }
+                        BiDirectionnalIterator& operator--()
+                        {
+                                if (!_ptr)
+                                {
+                                        _ptr = _old;
+                                        while (_ptr->right)
+                                                _ptr = _ptr->right;
+                                        return (*this);
+                                }
+                                _old = _ptr->parent;
+                                if (_ptr->left) //check if struct on left
+                                {
+                                        _ptr = _ptr->left; //go ro left
+                                        while (_ptr->right) //then go to leftest key
+                                                _ptr = _ptr->right;
+                                }
+                                else if (_old && _old->left == _ptr)
+                                {
+                                        while (_old && _old->left == _ptr)
+                                        {
+                                                _ptr = _old;
+                                                _old = _ptr->parent;
+                                        }
+                                        _ptr = _old;
+                                }
+                                else
+                                        _ptr = _ptr->parent;
+                                return (*this);
+                        }
+                        /* POSTFIX*/
+                        BiDirectionnalIterator operator++(int)
+                        {
+                                BiDirectionnalIterator tmp = *this;
+                                this->operator++();
+                                return (tmp);
+                        }
+                        BiDirectionnalIterator   operator--(int)
+                        {
+                                BiDirectionnalIterator tmp = *this;
+                                this->operator--();
+                                return (tmp);
+                        }
+                        bool    operator==(BiDirectionnalIterator const & rhs)
+                        {
+                                return (_ptr == rhs._ptr);
+                        }
+                        bool    operator!=(BiDirectionnalIterator const & rhs)
+                        {
+                                return (_ptr != rhs._ptr);
+                        }
+                //private:
+                        node*   _ptr;    //pointer of pair
+                        node*   _old;
         };
 }
 
