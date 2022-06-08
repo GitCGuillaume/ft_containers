@@ -13,6 +13,8 @@
 #include "../library_headers/pair.hpp"
 #include <iterator>
 #include <cstdlib>
+#include <limits>
+
 /*
         The iterator receive a ft::pair<>, but alone it won't do anything
         So need to create nodes for rotation + branches / leaves / whatever
@@ -387,7 +389,10 @@ namespace ft
                                         start = start->right;
                                 return (start->right);
                         }
-
+                        std::size_t   max_size() const
+                        {
+                                return (std::numeric_limits<std::size_t>::max() / sizeof(node));
+                        }
                         node*  _iterator; // struct stocked here, used to iterate
 
                         private:

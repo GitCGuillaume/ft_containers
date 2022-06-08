@@ -124,7 +124,7 @@ namespace ft
             }
             size_type   max_size() const
             {
-                return (std::numeric_limits<size_type>::max() / sizeof(typename _RB_tree::node));
+                return (_tree.max_size());
             }
             /*
             Elements Access
