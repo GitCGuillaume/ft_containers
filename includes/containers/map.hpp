@@ -29,14 +29,17 @@ namespace ft
             typedef const value_type& const_reference;
             typedef typename Allocator::pointer  pointer;
             typedef typename Allocator::const_pointer    const_pointer;
-            typedef typename ft::BiDirectionnalIterator<value_type, map, typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > iterator;
-            typedef typename ft::BiDirectionnalIterator<value_type const, map, const typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > const_iterator;
+            typedef typename ft::BiDirectionnalIterator<value_type, map
+                , typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > iterator;
+            typedef typename ft::BiDirectionnalIterator<value_type const, map
+                , const typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > const_iterator;
             typedef ft::reverse_iterator<iterator>  reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
             class   value_compare : public ft::binary_function<value_type, value_type, bool>
             {
                 protected:
                     Compare comp;
+                public :
                     value_compare(Compare C) : comp(C){}
                     bool    operator()(const value_type& lhs, const value_type& rhs) const
                     {
@@ -179,6 +182,7 @@ namespace ft
             {
                 return (const_iterator(_tree.end(), _tree._iterator));
             }
+            /* MODIFIERS */
             void    clear()
             {
                 iterator    it = this->begin();
@@ -249,6 +253,22 @@ namespace ft
             {
                 return (_tree.deleteNode(key));
             }
+            void    swap(map & other)
+            {
+                _RB_tree    tmp_tree = other._tree;
+                key_compare tmp_comp = other._comp;
+				allocator_type	tmp_alc = other._allocator;
+				size_type	tmp_cap = other._capacity_allocator;
+
+                other._tree = _tree;
+                other._comp = _comp;
+				other._allocator = _allocator;
+				other._capacity_allocator = _capacity_allocator;
+                _tree = tmp_tree;
+                _comp = tmp_comp;
+				_allocator = tmp_alc;
+				_capacity_allocator = tmp_cap;
+            }
             /* Lookup */
             size_type   count(const Key& key) const
             {
@@ -268,6 +288,120 @@ namespace ft
             const_iterator  find(const Key& key) const
             {
                 return (const_iterator(_tree.find(key), _tree._iterator));
+            }
+            ft::pair<iterator, iterator>   equal_range(const Key& key)
+            {
+                iterator    it = this->begin();
+                iterator    ite = this->end();
+                iterator    first;
+                bool        first_found = false;
+
+                if (key < it->first)
+                    return (ft::make_pair(it, it));
+                while (it != ite)
+                {
+                    if (!(_comp(it->first, key)) && first_found == false)
+                    {
+                        first = it;
+                        first_found = true;
+                        if (it->first != key)
+                            return (ft::make_pair(it, it));
+                    }
+                    else if (_comp(key, it->first))// && first_found == true)
+                        return (ft::make_pair(first, it));
+                    it++;
+                }
+                if (it == ite && first_found == true)
+                    return (ft::make_pair(first, ite));
+                return (ft::make_pair(ite, ite));
+            }
+            ft::pair<const_iterator, const_iterator>   equal_range(const Key& key) const
+            {
+                const_iterator    it = this->begin();
+                const_iterator    ite = this->end();
+                const_iterator    first;
+                bool        first_found = false;
+
+                if (key < it->first)
+                    return (ft::make_pair(it, it));
+                while (it != ite)
+                {
+                    if (!(_comp(it->first, key)) && first_found == false)
+                    {
+                        first = it;
+                        first_found = true;
+                        if (it->first != key)
+                            return (ft::make_pair(it, it));
+                    }
+                    else if (_comp(key, it->first))
+                        return (ft::make_pair(first, it));
+                    it++;
+                }
+                if (it == ite && first_found == true)
+                    return (ft::make_pair(first, ite));
+                return (ft::make_pair(ite, ite));
+            }
+            iterator    lower_bound(const Key& key)
+            {
+                iterator    it = this->begin();
+                iterator    ite = this->end();
+
+                while (it != ite)
+                {
+                    if (!(_comp(it->first, key)))
+                        return (it);
+                    it++;
+                }
+                return (ite);
+            }
+            const_iterator    lower_bound(const Key& key) const
+            {
+                const_iterator    it = this->begin();
+                const_iterator    ite = this->end();
+
+    
+                while (it != ite)
+                {
+                    if (!(_comp(it->first, key)))
+                        return (it);
+                    it++;
+                }
+                return (ite);
+            }
+            iterator    upper_bound(const Key& key)
+            {
+                iterator    it = this->begin();
+                iterator    ite = this->end();
+
+                while (it != ite)
+                {
+                    if (_comp(key, it->first))
+                        return (it);
+                    it++;
+                }
+                return (ite);
+            }
+            const_iterator    upper_bound(const Key& key) const
+            {
+                const_iterator    it = this->begin();
+                const_iterator    ite = this->end();
+
+    
+                while (it != ite)
+                {
+                    if (_comp(key, it->first))
+                        return (it);
+                    it++;
+                }
+                return (ite);
+            }
+            key_compare key_comp()  const
+            {
+                return (_comp);
+            }
+            value_compare  value_comp()    const
+            {
+                return (value_compare(_comp));
             }
 
         private:

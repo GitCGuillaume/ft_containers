@@ -151,3 +151,79 @@ void    insert_range()
     //    map[i] = i;
     range.insert(map.begin(), map.end());
 }
+
+void    map_swap()
+{
+    std::cout << "MAP SWAP" << std::endl;
+    std::map<std::string, int>    map_1;
+    std::map<std::string, int>    map_2;
+
+    map_1.swap(map_2);
+    map_1.insert(std::make_pair("one", 1));
+    map_1.insert(std::make_pair("hjfjhj", 6565));
+    map_1.insert(std::make_pair("gtgcfgfege", -45654));
+    map_1.insert(std::make_pair("42", 42));
+    map_1.insert(std::make_pair("rgrcgr", -78787));
+    map_2.insert(std::make_pair("gfxgd", 0));
+    map_2.insert(std::make_pair("trdrt", 1111));
+    std::map<std::string, int>::iterator it1 = map_1.begin();
+    std::map<std::string, int>::iterator it2 = map_2.begin();
+    std::cout << "BEFORE" << std::endl;
+    std::cout << "map_1 size : " << map_1.size() << std::endl;
+    std::cout << "map_2 size : " << map_2.size() << std::endl;
+    map_1.swap(map_2);
+    std::cout << "AFTER" << std::endl;
+    std::cout << "map_1 size : " << map_1.size() << std::endl;
+    std::cout << "map_2 size : " << map_2.size() << std::endl;
+    std::cout << "map_1" << std::endl;
+    for  (std::map<std::string, int>::const_iterator it = map_1.begin(); it != map_1.end(); it++)
+        std::cout << "first : " << it->first << " second : " << it->second << std::endl;    
+    std::cout << "map_2" << std::endl;
+    for  (std::map<std::string, int>::const_iterator it = map_2.begin(); it != map_2.end(); it++)
+        std::cout << "first : " << it->first << " second : " << it->second << std::endl;    
+    std::cout << "it_1 validity : " << (it1 == map_1.begin()) << std::endl;
+    std::cout << "it_2 validity : " << (it2 == map_2.begin()) << std::endl;
+}
+
+/*
+void    swap_map_non_member()
+{
+    std::cout << "Non-Member SWAP" << std::endl;
+    std::vector<int>    vec_1;
+    std::vector<int>    vec_2;
+
+    //for (int i = 0; i < 100000; i++)
+    //    vec_1.push_back(i);
+    //for (int i = 110000; 130000; i++)
+    //    vec_2.push_back(i);
+    std::swap(vec_1, vec_2);
+    vec_1.push_back(1);
+    vec_1.push_back(2);
+    vec_1.push_back(3);
+    vec_1.push_back(4);
+    vec_1.push_back(7);
+    vec_1.reserve(5);
+    vec_2.push_back(5);
+    vec_2.push_back(6);
+    std::vector<int>::iterator it1 = vec_1.begin();
+    std::vector<int>::iterator it2 = vec_2.begin();
+    std::cout << "BEFORE" << std::endl;
+    std::cout << "vec_1 size : " << vec_1.size() << std::endl
+        << "vec_1 capacity : " << vec_1.capacity() << std::endl;
+    std::cout << "vec_2 size : " << vec_2.size() << std::endl
+        << "vec_2 capacity : " << vec_2.capacity() << std::endl;
+    std::swap(vec_1, vec_2);
+    std::cout << "AFTER" << std::endl;
+    std::cout << "vec_1 size : " << vec_1.size() << std::endl
+        << "vec_1 capacity : " << vec_1.capacity() << std::endl;
+    std::cout << "vec_2 size : " << vec_2.size() << std::endl
+        << "vec_2 capacity : " << vec_2.capacity() << std::endl;
+    std::cout << "vec_1" << std::endl;
+    for  (std::vector<int>::iterator it = vec_1.begin(); it != vec_1.end(); it++)
+        std::cout << *it << std::endl;    
+    std::cout << "vec_2" << std::endl;
+    for  (std::vector<int>::iterator it = vec_2.begin(); it != vec_2.end(); it++)
+        std::cout << *it << std::endl;
+    std::cout << "it_1 validity : " << (it1 == vec_1.begin()) << std::endl;
+    std::cout << "it_2 validity : " << (it2 == vec_2.begin()) << std::endl;
+}*/

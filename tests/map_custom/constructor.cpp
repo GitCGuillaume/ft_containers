@@ -6,8 +6,8 @@ void    default_constructor_map_custom()
   ft::map<std::string, int> map;
   const ft::map<std::string, int> const_map;
 
-  std::cout << "CRASH SI JE it->first" << std::endl;
-  std::cout << "it TEST : " << map.begin()->first << std::endl;
+  //std::cout << "CRASH SI JE it->first" << std::endl;
+ // std::cout << "it TEST : " << map.begin()->first << std::endl;
   std::cout << "Size default constructor : " << map.size() << std::endl;
   std::cout << "Size default const constructor : " << const_map.size() << std::endl;
   //ft::map<std::string, int> map_alloc(map.key_comp(), map.get_allocator());
@@ -18,7 +18,7 @@ void    constructor_range_map_custom()
   std::cout << "constructor range (1) Map CUSTOM" << std::endl;
   ft::map<std::string, int> map;
   map["abc"] = -2147483647;
-  map["jkl"] = 2147483648;
+  map["jkl"] = -2147483648;
   map["ghi"] = 0;
   map["mno"] = 54644587;
   map["ghi"] = 1;
@@ -58,12 +58,12 @@ void    copy_constructor_map_custom()
 {
   std::cout << "Copy constructor CUSTOM" << std::endl;
   ft::map<std::string, float> map;
-  map["abc"] = -2147483647;
-  map["def"] = 2147483648;
+  map["abc"] = -2147483647.0;
+  map["def"] = -2147483648.0;
   map["ghi"] = 0;
-  map["jkl"] = 21354;
-  map["mno"] = 54644587;
-   map["m"] = 54644587;
+  map["jkl"] = 21354.0;
+  map["mno"] = 54644587.0;
+   map["m"] = 54644587.0;
   ft::map<std::string, float>  map_cpy(map);
   //std::cout << "Capacity count COPY constructor : " << map_cpy.capacity() << std::endl;
   std::cout << "Size count COPY constructor : " << map_cpy.size() << std::endl;
@@ -78,7 +78,7 @@ void    operator_assignation_map_custom()
     ft::map<std::string, int> map2;
 
     map1["abc"] = -2147483647;
-    map1["def"] = 2147483648;
+    map1["def"] = -2147483648;
     map1["ghi"] = 0;
     map1["jkl"] = 21354;
     map1["mno"] = 54644587;

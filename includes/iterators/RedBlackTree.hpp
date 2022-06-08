@@ -151,7 +151,7 @@ namespace ft
                                         if (!_iterator)
                                         {
                                                 _iterator = new node();
-                                                newNode(_iterator);
+                                                _newNode(_iterator);
                                         }
                                         //if (_iterator->pair)
                                         //        _destroyPair(_iterator);
@@ -164,7 +164,7 @@ namespace ft
                                 Key     firstSubRoot = _iterator->pair->first;
                                 Key     firstNewNode = pair.first;
                                 new_node = new node();
-                                newNode(new_node);
+                                _newNode(new_node);
                                 //Search
                                while (_iterator)
                                 {
@@ -215,7 +215,7 @@ namespace ft
                                         if (!_iterator)
                                         {
                                                 _iterator = new node();
-                                                newNode(_iterator);
+                                                _newNode(_iterator);
                                         }
                                         //if (_iterator->pair)
                                         //        _destroyPair(_iterator);
@@ -228,7 +228,7 @@ namespace ft
                                 Key     firstSubRoot = _iterator->pair->first;
                                 Key     firstNewNode = pair.first;
                                 new_node = new node();
-                                newNode(new_node);
+                                _newNode(new_node);
                                 //Search
                                while (_iterator)
                                 {
@@ -450,11 +450,11 @@ namespace ft
                                         else if (memory_colour == BLACK)
                                         {
                                                 *current = new node();
-                                                newNode(*current);
+                                                _newNode(*current);
                                                 (*current)->left = new node();
-                                                newNode((*current)->left);
+                                                _newNode((*current)->left);
                                                 (*current)->right = new node();
-                                                newNode((*current)->right);
+                                                _newNode((*current)->right);
                                                 (*current)->parent = parent;
                                                 (*current)->colour = BLACK;
                                                 (*current)->left->colour = BLACK;
@@ -682,7 +682,7 @@ namespace ft
                                                 gParentNode->colour = RED;
                                         }
                                 }
-                                void    newNode(node* current)
+                                void    _newNode(node* current)
                                 {
                                         current->parent = NULL;
                                         current->left = NULL;

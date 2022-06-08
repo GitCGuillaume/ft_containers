@@ -43,3 +43,116 @@ void    map_count()
     std::cout << map.count(2) << std::endl;
     std::cout << map2.count(0) << std::endl;
 }
+
+void    map_equal_range()
+{
+    std::cout << "Map Equal Range" << std::endl;
+    std::map<int, int>  map;
+    std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator> range_iterator;
+
+    map.insert(std::make_pair(2, 12));
+    map.insert(std::make_pair(3, -1));
+    map.insert(std::make_pair(4, 145));
+    map.insert(std::make_pair(123, 123));
+    map.insert(std::make_pair(42, 42));
+    map.insert(std::make_pair(4554, -1));
+    range_iterator = map.equal_range(42);
+    for (std::map<int, int>::iterator	it = range_iterator.first; it != range_iterator.second; it++)
+		std::cout << "it->first : " << it->first << std::endl;
+    std::cout << "New equal_range call (5)" << std::endl;
+    range_iterator = map.equal_range(5);
+	std::cout << "it->first : " << range_iterator.first->first << std::endl;
+    std::cout << "it->first : " << range_iterator.second->first << std::endl;
+    std::cout << "New equal_range call (123)" << std::endl;
+    range_iterator = map.equal_range(123);
+    for (std::map<int, int>::iterator	it = range_iterator.first; it != range_iterator.second; it++)
+		std::cout << "it->first : " << it->first << std::endl;
+    std::cout << "New equal_range call (1)" << std::endl;
+    range_iterator = map.equal_range(1);
+    if (range_iterator.first == map.begin())
+        std::cout << "Equal range(1) have no element not less than key." << std::endl;
+    if (range_iterator.second == map.begin())
+        std::cout << "Equal range(1) have no element not less than key." << std::endl;
+    range_iterator = map.equal_range(4554);
+    for (std::map<int, int>::iterator	it = range_iterator.first; it != range_iterator.second; it++)
+		std::cout << "it->first : " << it->first << std::endl;
+    if (range_iterator.second == map.end())
+        std::cout << "Equal range(4554) have no element greater than key." << std::endl;
+}
+
+void    map_equal_range_const()
+{
+    std::cout << "Map Equal Range CONST" << std::endl;
+    std::map<int, int>  map;
+    std::pair<std::map<int, int>::const_iterator, std::map<int, int>::const_iterator> range_iterator;
+
+    map.insert(std::make_pair(2, 12));
+    map.insert(std::make_pair(3, -1));
+    map.insert(std::make_pair(4, 145));
+    map.insert(std::make_pair(123, 123));
+    map.insert(std::make_pair(42, 42));
+    map.insert(std::make_pair(4554, -1));
+    const std::map<int, int>  map2(map.begin(), map.end());
+    range_iterator = map2.equal_range(42);
+    for (std::map<int, int>::const_iterator	it = range_iterator.first; it != range_iterator.second; it++)
+		std::cout << "it->first : " << it->first << std::endl;
+    std::cout << "New equal_range call (5)" << std::endl;
+    range_iterator = map2.equal_range(5);
+	std::cout << "it->first : " << range_iterator.first->first << std::endl;
+    std::cout << "it->first : " << range_iterator.second->first << std::endl;
+    std::cout << "New equal_range call (123)" << std::endl;
+    range_iterator = map2.equal_range(123);
+    for (std::map<int, int>::const_iterator	it = range_iterator.first; it != range_iterator.second; it++)
+		std::cout << "it->first : " << it->first << std::endl;
+    std::cout << "New equal_range call (1)" << std::endl;
+    range_iterator = map2.equal_range(1);
+    if (range_iterator.first == map2.begin())
+        std::cout << "Equal range(1) have no element not less than key." << std::endl;
+    if (range_iterator.second == map2.begin())
+        std::cout << "Equal range(1) have no element not less than key." << std::endl;
+    range_iterator = map2.equal_range(4554);
+    for (std::map<int, int>::const_iterator	it = range_iterator.first; it != range_iterator.second; it++)
+		std::cout << "it->first : " << it->first << std::endl;
+    if (range_iterator.second == map2.end())
+        std::cout << "Equal range(4554) have no element greater than key." << std::endl;
+}
+
+void    lower_bound_map()
+{
+    std::cout << "Map lower bound" << std::endl;
+    std::map<int, int>  map;
+    std::map<int, int>::iterator it;
+    std::map<int, int>::const_iterator cit;
+
+    map.insert(std::make_pair(2, 12));
+    map.insert(std::make_pair(3, -1));
+    map.insert(std::make_pair(4, 145));
+    const std::map<int, int>  map2(map.begin(), map.end());
+    for (int i = 1; i < 5; i++)
+    {
+        it = map.lower_bound(i);
+        std::cout << "first : " << it->first << std::endl;
+        cit = map2.lower_bound(i);
+        std::cout << "first : " << cit->first << std::endl;
+    }
+}
+
+void    upper_bound_map()
+{
+    std::cout << "Map upper bound" << std::endl;
+    std::map<int, int>  map;
+    std::map<int, int>::iterator it;
+    std::map<int, int>::const_iterator cit;
+
+    map.insert(std::make_pair(2, 12));
+    map.insert(std::make_pair(3, -1));
+    map.insert(std::make_pair(4, 145));
+    const std::map<int, int>  map2(map.begin(), map.end());
+    for (int i = 1; i < 4; i++)
+    {
+        it = map.upper_bound(i);
+        std::cout << "first : " << it->first << std::endl;
+        cit = map2.upper_bound(i);
+        std::cout << "first : " << cit->first << std::endl;
+    }
+}

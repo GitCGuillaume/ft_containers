@@ -12,5 +12,6 @@
 #include "operator.hpp"
 #include "modifier_one.hpp"
 #include "lookup.hpp"
+#include "observer.hpp"
 
 #endif
