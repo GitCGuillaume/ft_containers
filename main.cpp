@@ -220,6 +220,10 @@ int	main(void)
 	*/
 	execute_function(iterator_backward_map, 0);
 	execute_function(iterator_backward_map_custom, 1);
+	execute_function(reverse_iterator_map, 0);
+	execute_function(reverse_iterator_empty_map, 0);
+		execute_function(reverse_iterator_map, 1);
+	execute_function(reverse_iterator_empty_map, 1);
 	/*execute_function(equal_map, 0);
 	execute_function(equal_map_custom, 1);
 	//execute_function(destructor_1, 1);*/

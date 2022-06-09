@@ -85,3 +85,33 @@ void    iterator_backward_map_custom()
     std::cout << "(--it)->second : " << (--it)->second << std::endl;
     std::cout << "(--it)->second : " << (--it)->second << std::endl;
 }
+
+void    reverse_iterator_map_custom()
+{
+    std::cout << "Reverse iterator MAP CUSTOM" << std::endl;
+    ft::map<int, int>    map;
+	ft::map<int, int>::reverse_iterator it(map.rbegin());
+	ft::map<int, int>::const_reverse_iterator ite(map.rend());
+
+	it = map.rbegin();
+	ite = map.rbegin();
+    static_cast<void>(it);
+    static_cast<void>(ite);
+    for (int i = 1; i < 6; i++)
+        map.insert(ft::make_pair(i, i));
+    for (ft::map<int, int>::reverse_iterator rit = map.rbegin(); rit != map.rend(); rit++)
+        std::cout << (*rit).first << std::endl;
+    for (ft::map<int, int>::reverse_iterator rit = --map.rend(); rit != map.rbegin(); rit--)
+       std::cout << (*rit).first << std::endl;
+    for (ft::map<int, int>::reverse_iterator rit = --map.rend(); rit != map.rbegin(); rit--)
+        std::cout << (*rit).first << std::endl;
+}
+
+void    reverse_iterator_empty_map_custom()
+{
+    std::cout << "Reverse iterator empty MAP CUSTOM" << std::endl;
+    ft::map<int, int>    map;
+
+    for (ft::map<int, int>::reverse_iterator rit = map.rbegin(); rit != map.rend(); rit++)
+        std::cout << (*rit).first << std::endl;
+}

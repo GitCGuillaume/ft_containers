@@ -85,3 +85,33 @@ void    iterator_backward_map()
     std::cout << "(--it)->second : " << (--it)->second << std::endl;
     std::cout << "(--it)->second : " << (--it)->second << std::endl;
 }
+
+void    reverse_iterator_map()
+{
+    std::cout << "Reverse iterator MAP" << std::endl;
+    std::map<int, int>    map;
+	std::map<int, int>::reverse_iterator it(map.rbegin());
+	std::map<int, int>::const_reverse_iterator ite(map.rend());
+
+	it = map.rbegin();
+	ite = map.rbegin();
+    static_cast<void>(it);
+    static_cast<void>(ite);
+    for (int i = 1; i < 6; i++)
+        map.insert(std::make_pair(i, i));
+    for (std::map<int, int>::reverse_iterator rit = map.rbegin(); rit != map.rend(); rit++)
+        std::cout << (*rit).first << std::endl;
+    for (std::map<int, int>::reverse_iterator rit = --map.rend(); rit != map.rbegin(); rit--)
+       std::cout << (*rit).first << std::endl;
+    for (std::map<int, int>::reverse_iterator rit = --map.rend(); rit != map.rbegin(); rit--)
+        std::cout << (*rit).first << std::endl;
+}
+
+void    reverse_iterator_empty_map()
+{
+    std::cout << "Reverse iterator empty MAP" << std::endl;
+    std::map<int, int>    map;
+
+    for (std::map<int, int>::reverse_iterator rit = map.rbegin(); rit != map.rend(); rit++)
+        std::cout << (*rit).first << std::endl;
+}
