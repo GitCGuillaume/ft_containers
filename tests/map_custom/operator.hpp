@@ -5,5 +5,6 @@
 #include <iostream>
 
 void    equal_map_custom();
+void    non_member_operator_map_custom();
 
 #endif

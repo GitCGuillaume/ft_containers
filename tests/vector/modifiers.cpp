@@ -228,10 +228,6 @@ void    swap_vector()
     std::vector<int>    vec_1;
     std::vector<int>    vec_2;
 
-    //for (int i = 0; i < 100000; i++)
-    //    vec_1.push_back(i);
-    //for (int i = 110000; 130000; i++)
-    //    vec_2.push_back(i);
     vec_1.swap(vec_2);
     vec_1.push_back(1);
     vec_1.push_back(2);
@@ -271,10 +267,6 @@ void    swap_vector_non_member()
     std::vector<int>    vec_1;
     std::vector<int>    vec_2;
 
-    //for (int i = 0; i < 100000; i++)
-    //    vec_1.push_back(i);
-    //for (int i = 110000; 130000; i++)
-    //    vec_2.push_back(i);
     std::swap(vec_1, vec_2);
     vec_1.push_back(1);
     vec_1.push_back(2);

@@ -38,7 +38,7 @@ struct s_node
 */
 namespace ft
 {
-        template<class It, class Container, class Key, class T, class Compare,class Allocator>
+        template<class It, class Container, class Key, class T, class Compare, class Allocator>
         class   RedBlackTree
         {
                 public:
@@ -710,12 +710,12 @@ namespace ft
                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::iterator_category    iterator_category;
                         typedef  Node       node;
 
-                        BiDirectionnalIterator() : _ptr(NULL), _old(NULL){}
-                        BiDirectionnalIterator(node* ptr, node* iterator) : _ptr(ptr), _old(iterator){}
+                        BiDirectionnalIterator() : _ptr(NULL), _old(NULL), _root(NULL){}
+                        BiDirectionnalIterator(node* ptr, node* iterator) : _ptr(ptr), _old(iterator), _root(iterator){}
                         template<typename U, typename V>
                         BiDirectionnalIterator(const BiDirectionnalIterator<U
                                 , typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type
-                                , V>& rhs) : _ptr(rhs._ptr), _old(rhs._old){}
+                                , V>& rhs) : _ptr(rhs._ptr), _old(rhs._old), _root(rhs._root){}
                         //template<typename U>
                         BiDirectionnalIterator &        operator=(const BiDirectionnalIterator& rhs)
                         {
@@ -723,6 +723,7 @@ namespace ft
                                 {
                                         _ptr = rhs._ptr;
                                         _old = rhs._old;
+                                        _root = rhs._root;
                                 }
                                 return (*this);
                         }
@@ -754,16 +755,22 @@ namespace ft
                         BiDirectionnalIterator& operator++()
                         {
                                 if (!_ptr)
+                                {
+                                        _ptr = _root;
+                                        if (_ptr)
+                                                while (_ptr->left) //Go to leftest key
+                                                        _ptr = _ptr->left;
                                         return (*this);
-                                _old = _ptr->parent;
+                                }
                                 if (_ptr->right) //check if struct on right
                                 {
-                                        _ptr = _ptr->right; //go ro right
+                                        _ptr = _ptr->right; //go to right
                                         while (_ptr->left) //then go to leftest key
                                                 _ptr = _ptr->left;
                                 }
-                                else if (_old && _old->right == _ptr)
+                                else// if (_old && _old->right == _ptr)
                                 {
+                                        _old = _ptr->parent;
                                         while (_old && _old->right == _ptr)
                                         {
                                                 _ptr = _old;
@@ -771,28 +778,33 @@ namespace ft
                                         }
                                         _ptr = _old;
                                 }
-                                else
-                                        _ptr = _ptr->parent;
+                                //else
+                                //        _ptr = _ptr->parent;
                                 return (*this);
                         }
                         BiDirectionnalIterator& operator--()
                         {
                                 if (!_ptr)
                                 {
-                                        _ptr = _old;
-                                        while (_ptr->right)
-                                                _ptr = _ptr->right;
+                                        _ptr = _root;
+                                        if (_ptr)
+                                        {
+                                                while (_ptr->right)
+                                                        _ptr = _ptr->right;
+                                                //_old = _ptr;
+                                        }
                                         return (*this);
                                 }
-                                _old = _ptr->parent;
                                 if (_ptr->left) //check if struct on left
                                 {
-                                        _ptr = _ptr->left; //go ro left
-                                        while (_ptr->right) //then go to leftest key
+                                        _ptr = _ptr->left; //go to left
+                                        while (_ptr->right) //then go to rightest key
                                                 _ptr = _ptr->right;
                                 }
-                                else if (_old && _old->left == _ptr)
+                                else// if (_old && _old->left == _ptr)
                                 {
+                                        _old = _ptr->parent;
+                                        //_old = _ptr->parent;
                                         while (_old && _old->left == _ptr)
                                         {
                                                 _ptr = _old;
@@ -800,8 +812,8 @@ namespace ft
                                         }
                                         _ptr = _old;
                                 }
-                                else
-                                        _ptr = _ptr->parent;
+                               // else
+                                //        _ptr = _ptr->parent;
                                 return (*this);
                         }
                         /* POSTFIX*/
@@ -828,6 +840,7 @@ namespace ft
                 //private:
                         node*   _ptr;    //pointer of pair
                         node*   _old;
+                        node*   _root; //look like we need to keep root in memory to keep begin and last value
         };
 }
 

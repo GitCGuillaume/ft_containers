@@ -67,3 +67,70 @@ void    equal_map_custom()
     std::cout << (map_4["four"] >= map_1["one"])<< std::endl;
     std::cout << (map_1["one"] >= map_4["four"])<< std::endl;
 }
+
+void    non_member_operator_map_custom()
+{
+    std::cout << "Non Member Operator MAP CUSTOM" << std::endl;
+    ft::map<int, int>    map_1;
+    ft::map<int, int>    map_2;
+    ft::map<int, int>    map_3;
+    ft::map<int, int>    map_4;
+
+    map_1.insert(ft::make_pair(1, 2));
+    map_1.insert(ft::make_pair(2, 3));
+    map_1.insert(ft::make_pair(3, 4));
+    map_2.insert(ft::make_pair(4, 5));
+    map_2.insert(ft::make_pair(5, 6));
+    map_3.insert(ft::make_pair(1, 2));
+    map_3.insert(ft::make_pair(2, 3));
+    map_3.insert(ft::make_pair(3, 4));
+    map_4.insert(ft::make_pair(4, 5));
+    map_4.insert(ft::make_pair(5, 6));
+    map_4.insert(ft::make_pair(3, 1));
+    std::cout << "==" << std::endl;
+    std::cout << (map_1 == map_2) << std::endl;
+    std::cout << (map_2 == map_1) << std::endl;
+    std::cout << (map_1 == map_3) << std::endl;
+    std::cout << (map_1 == map_4) << std::endl;
+    std::cout << "!=" << std::endl;
+    std::cout << (map_1 != map_2) << std::endl;
+    std::cout << (map_2 != map_1) << std::endl;
+    std::cout << (map_1 != map_3) << std::endl;
+    std::cout << (map_1 != map_4) << std::endl;
+    std::cout << "<" << std::endl;
+    std::cout << (map_1 < map_2) << std::endl;
+    std::cout << (map_1 < map_3) << std::endl;
+    std::cout << (map_2 < map_1) << std::endl;
+    std::cout << (map_1 < map_4) << std::endl;
+    std::cout << (map_4 < map_1) << std::endl;
+    std::cout << "<=" << std::endl;
+    std::cout << (map_1 <= map_2) << std::endl;
+    std::cout << (map_1 <= map_3) << std::endl;
+    std::cout << (map_2 <= map_1) << std::endl;
+    std::cout << (map_4 <= map_1) << std::endl;
+    std::cout << (map_1 <= map_4) << std::endl;
+    std::cout << ">" << std::endl;
+    std::cout << (map_1 > map_2) << std::endl;
+    std::cout << (map_1 > map_3) << std::endl;
+    std::cout << (map_2 > map_1) << std::endl;
+    std::cout << (map_4 > map_1) << std::endl;
+    std::cout << (map_1 > map_4) << std::endl;
+    std::cout << ">=" << std::endl;
+    std::cout << (map_1 >= map_2)<< std::endl;
+    std::cout << (map_1 >= map_3)<< std::endl;
+    std::cout << (map_2 >= map_1)<< std::endl;
+    std::cout << (map_4 >= map_1)<< std::endl;
+    std::cout << (map_1 >= map_4)<< std::endl;
+     std::cout << "<=" << std::endl;
+    std::cout << (map_1 <= map_2) << std::endl;
+    std::cout << (map_1 <= map_3) << std::endl;
+    std::cout << (map_2 <= map_1) << std::endl;
+    std::cout << (map_4 <= map_1) << std::endl;
+    std::cout << (map_1 <= map_4) << std::endl;
+    std::cout << ">=" << std::endl;
+    std::cout << (map_1 >= map_2)<< std::endl;
+    std::cout << (map_1 >= map_3)<< std::endl;
+    std::cout << (map_2 >= map_1)<< std::endl;
+    std::cout << (map_4 >= map_1)<< std::endl;
+    std::cout << (map_1 >= map_4)<< std::endl;
+}

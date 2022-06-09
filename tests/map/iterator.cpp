@@ -51,3 +51,37 @@ void    iterator_forward_map()
     std::cout << "(++it)->second : " << (++it)->second << std::endl;
     std::cout << "(++it)->second : " << (++it)->second << std::endl;
 }
+
+void    iterator_backward_map()
+{
+    std::cout << "Iterator backward map" << std::endl;
+    std::map<int, int>  map;
+    map[3] = 1;
+    map[4] = 2;
+    map[0] = 3;
+    map[1] = 4;
+    std::map<int, int>::const_iterator    it = map.end();
+    it--;
+    std::cout << "it->first : " << it->first << std::endl;
+    std::cout << "it->second : " << it->second << std::endl;
+    std::cout << "(it--)->first : " << (it--)->first << std::endl;
+    std::cout << "(it--)->first : " << (it--)->first << std::endl;
+    std::cout << "(it--)->first : " << (it--)->first << std::endl;
+    std::cout << "(it--)->first : " << (it--)->first << std::endl;
+    it = map.end();
+    it--;
+    std::cout << "(it--)->second : " << (it--)->second << std::endl;
+    std::cout << "(it--)->second : " << (it--)->second << std::endl;
+    std::cout << "(it--)->second : " << (it--)->second << std::endl;
+    std::cout << "(it--)->second : " << (it--)->second << std::endl;
+    it = map.end();
+    std::cout << "(--it)->first : " << (--it)->first << std::endl;
+    std::cout << "(--it)->first : " << (--it)->first << std::endl;
+    std::cout << "(--it)->first : " << (--it)->first << std::endl;
+    std::cout << "(--it)->first : " << (--it)->first << std::endl;
+    it = map.end();
+    std::cout << "(--it)->second : " << (--it)->second << std::endl;
+    std::cout << "(--it)->second : " << (--it)->second << std::endl;
+    std::cout << "(--it)->second : " << (--it)->second << std::endl;
+    std::cout << "(--it)->second : " << (--it)->second << std::endl;
+}

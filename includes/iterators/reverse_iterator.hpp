@@ -45,32 +45,33 @@ namespace ft
             }
             reference   operator[](difference_type n) const
             {
-                return ((this->base()[-n - 1]));
+                return (this->base()[-n - 1]);
             }
             /* PRE */
             reverse_iterator&   operator++()
             {
-                this->_current = this->_current - 1;
+                --this->_current;
+                
                 return (*this);
             }
             reverse_iterator&   operator--()
             {
-                this->_current = this->_current + 1;
+                ++this->_current;
                 return (*this);
             }
             /* POST */
             reverse_iterator    operator++(int)
             {
-                reverse_iterator    tmp = *this;
+                reverse_iterator    tmp(*this);
 
-                this->_current = this->_current - 1;
+                --this->_current;
                 return (tmp);
             }
             reverse_iterator    operator--(int)
             {
-                reverse_iterator    tmp = *this;
+                reverse_iterator    tmp(*this);
 
-                this->_current = this->_current + 1;
+                ++this->_current;
                 return (tmp);
             }
             /*

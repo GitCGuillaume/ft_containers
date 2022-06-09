@@ -12,5 +12,6 @@ void    insert_value_type_custom();
 void    insert_hint_custom();
 void    insert_range_custom();
 void    map_swap_custom();
+void    map_swap_non_member_custom();
 
 #endif

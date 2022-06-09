@@ -185,3 +185,36 @@ void    map_swap_custom()
     std::cout << "it_1 validity : " << (it1 == map_1.begin()) << std::endl;
     std::cout << "it_2 validity : " << (it2 == map_2.begin()) << std::endl;
 }
+
+void    map_swap_non_member_custom()
+{
+    std::cout << "MAP SWAP NON MEMBER CUSTOM" << std::endl;
+    ft::map<std::string, int>    map_1;
+    ft::map<std::string, int>    map_2;
+
+    ft::swap(map_1, map_2);
+    map_1.insert(ft::make_pair("one", 1));
+    map_1.insert(ft::make_pair("hjfjhj", 6565));
+    map_1.insert(ft::make_pair("gtgcfgfege", -45654));
+    map_1.insert(ft::make_pair("42", 42));
+    map_1.insert(ft::make_pair("rgrcgr", -78787));
+    map_2.insert(ft::make_pair("gfxgd", 0));
+    map_2.insert(ft::make_pair("trdrt", 1111));
+    ft::map<std::string, int>::iterator it1 = map_1.begin();
+    ft::map<std::string, int>::iterator it2 = map_2.begin();
+    std::cout << "BEFORE" << std::endl;
+    std::cout << "map_1 size : " << map_1.size() << std::endl;
+    std::cout << "map_2 size : " << map_2.size() << std::endl;
+    ft::swap(map_1, map_2);
+    std::cout << "AFTER" << std::endl;
+    std::cout << "map_1 size : " << map_1.size() << std::endl;
+    std::cout << "map_2 size : " << map_2.size() << std::endl;
+    std::cout << "map_1" << std::endl;
+    for  (ft::map<std::string, int>::const_iterator it = map_1.begin(); it != map_1.end(); it++)
+        std::cout << "first : " << it->first << " second : " << it->second << std::endl;    
+    std::cout << "map_2" << std::endl;
+    for  (ft::map<std::string, int>::const_iterator it = map_2.begin(); it != map_2.end(); it++)
+        std::cout << "first : " << it->first << " second : " << it->second << std::endl;    
+    std::cout << "it_1 validity : " << (it1 == map_1.begin()) << std::endl;
+    std::cout << "it_2 validity : " << (it2 == map_2.begin()) << std::endl;
+}

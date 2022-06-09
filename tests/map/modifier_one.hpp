@@ -12,5 +12,6 @@ void    insert_value_type();
 void    insert_hint();
 void    insert_range();
 void    map_swap();
+void    map_swap_non_member();
 
 #endif

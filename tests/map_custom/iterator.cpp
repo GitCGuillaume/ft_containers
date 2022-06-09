@@ -24,7 +24,7 @@ void    iterator_assignation_map_custom()
 
 void    iterator_forward_map_custom()
 {
-    std::cout << "Iterator forward map" << std::endl;
+    std::cout << "Iterator forward map CUSTOM" << std::endl;
     ft::map<int, int>  map;
     map[3] = 1;
     map[4] = 2;
@@ -50,4 +50,38 @@ void    iterator_forward_map_custom()
     std::cout << "(++it)->second : " << (++it)->second << std::endl;
     std::cout << "(++it)->second : " << (++it)->second << std::endl;
     std::cout << "(++it)->second : " << (++it)->second << std::endl;
+}
+
+void    iterator_backward_map_custom()
+{
+    std::cout << "Iterator backward map CUSTOM" << std::endl;
+    ft::map<int, int>  map;
+    map[3] = 1;
+    map[4] = 2;
+    map[0] = 3;
+    map[1] = 4;
+    ft::map<int, int>::const_iterator    it = map.end();
+    it--;
+    std::cout << "it->first : " << it->first << std::endl;
+    std::cout << "it->second : " << it->second << std::endl;
+    std::cout << "(it--)->first : " << (it--)->first << std::endl;
+    std::cout << "(it--)->first : " << (it--)->first << std::endl;
+    std::cout << "(it--)->first : " << (it--)->first << std::endl;
+    std::cout << "(it--)->first : " << (it--)->first << std::endl;
+    it = map.end();
+    it--;
+    std::cout << "(it--)->second : " << (it--)->second << std::endl;
+    std::cout << "(it--)->second : " << (it--)->second << std::endl;
+    std::cout << "(it--)->second : " << (it--)->second << std::endl;
+    std::cout << "(it--)->second : " << (it--)->second << std::endl;
+    it = map.end();
+    std::cout << "(--it)->first : " << (--it)->first << std::endl;
+    std::cout << "(--it)->first : " << (--it)->first << std::endl;
+    std::cout << "(--it)->first : " << (--it)->first << std::endl;
+    std::cout << "(--it)->first : " << (--it)->first << std::endl;
+    it = map.end();
+    std::cout << "(--it)->second : " << (--it)->second << std::endl;
+    std::cout << "(--it)->second : " << (--it)->second << std::endl;
+    std::cout << "(--it)->second : " << (--it)->second << std::endl;
+    std::cout << "(--it)->second : " << (--it)->second << std::endl;
 }

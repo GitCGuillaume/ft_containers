@@ -4,6 +4,8 @@
 #include "../iterators/RedBlackTree.hpp"
 #include "../library_headers/less.hpp"
 #include "../library_headers/pair.hpp"
+#include "../library_headers/equal.hpp"
+#include "../library_headers/lexicographical_compare.hpp"
 #include "../iterators/reverse_iterator.hpp"
 #include <stdexcept>
 #include <limits>
@@ -174,6 +176,14 @@ namespace ft
                     return (const_iterator(_tree.end(), _tree._iterator));
                 return (const_iterator(_tree.begin(), _tree._iterator));
             }
+            reverse_iterator	rbegin()
+			{
+				return (reverse_iterator(this->end()));
+			}
+			const_reverse_iterator	rbegin() const
+			{
+				return (const_reverse_iterator(this->end()));
+			}
             iterator    end()
             {
                 return (iterator(_tree.end(), _tree._iterator));
@@ -182,6 +192,14 @@ namespace ft
             {
                 return (const_iterator(_tree.end(), _tree._iterator));
             }
+            reverse_iterator	rend()
+			{
+				return (reverse_iterator(this->begin()));
+			}
+			const_reverse_iterator	rend() const
+			{
+				return (const_reverse_iterator(this->begin()));
+			}
             /* MODIFIERS */
             void    clear()
             {
@@ -411,6 +429,76 @@ namespace ft
             allocator_type	_allocator;
 			size_type		_capacity_allocator;
     };
+    template<class Key, class T, class Compare, class Alloc>
+    bool    operator==(const ft::map<Key, T, Compare, Alloc>& lhs,
+        const ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        if (lhs.size() != rhs.size())
+			return (false);
+		bool	is_equal = ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+
+		return (is_equal);
+    }
+    template<class Key, class T, class Compare, class Alloc>
+    bool    operator!=(const ft::map<Key, T, Compare, Alloc>& lhs,
+        const ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        if (lhs.size() != rhs.size()) // Quicker
+			return (true);
+		bool	is_equal = ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+
+		return (!is_equal);
+    }
+    template<class Key, class T, class Compare, class Alloc>
+    bool    operator<(const ft::map<Key, T, Compare, Alloc>& lhs,
+        const ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        bool	is_left = ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	
+		return (is_left);
+    }
+    template<class Key, class T, class Compare, class Alloc>
+    bool    operator<=(const ft::map<Key, T, Compare, Alloc>& lhs,
+        const ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+		return (!(lhs > rhs));
+	}
+    template<class Key, class T, class Compare, class Alloc>
+    bool    operator>(const ft::map<Key, T, Compare, Alloc>& lhs,
+        const ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        typename ft::map<Key, T, Compare, Alloc>::const_iterator	it_lhs = lhs.begin();
+		typename ft::map<Key, T, Compare, Alloc>::const_iterator	it_rhs = rhs.begin();
+
+		while (it_lhs != lhs.end() && it_rhs != rhs.end())
+        {
+            if (*it_lhs > *it_rhs)
+                return (true);
+            if (*it_rhs > *it_lhs)
+                return (false);
+			it_lhs++;
+			it_rhs++;
+        }
+		//less bigger than right container, so lexicographical less
+        if (it_lhs != lhs.end() && it_rhs == rhs.end())
+            return (true);
+        return (false);
+    }
+    template<class Key, class T, class Compare, class Alloc>
+    bool    operator>=(const ft::map<Key, T, Compare, Alloc>& lhs,
+        const ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        return (!(lhs < rhs));
+    }
+    template<class Key, class T, class Compare, class Alloc>
+    void    swap(ft::map<Key, T, Compare, Alloc>& lhs
+        , ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        ft::map<Key, T, Compare, Alloc>	tmp = rhs;
+
+		rhs = lhs;
+		lhs = tmp;
+    }
 }
 
 #endif
