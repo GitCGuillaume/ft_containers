@@ -230,9 +230,10 @@ namespace ft
             /* hint is suggestion as to where to start the search */
             iterator    insert(iterator hint, const value_type& value)
             {
-                iterator    it;
+                iterator    it = this->begin();
 
-                _tree.search(hint->first);
+                while (it != hint)
+                    it++;
                 typename _RB_tree::node*    new_node = _tree.insert(value);
                 if (!new_node)
                 {
@@ -242,7 +243,18 @@ namespace ft
                     return (it);
                 }
                 it = iterator(new_node, _tree._iterator);
-                return (it);
+                /*typename _RB_tree::node*    new_node _tree.search(hint->first);
+
+                new_node = _tree.insert(value);
+                if (!new_node)
+                {
+                    it = iterator(_tree._iterator, _tree._iterator);
+                    while (_tree._iterator->parent)
+                        _tree._iterator = _tree._iterator->parent;
+                    return (it);
+                }
+                it = iterator(new_node, _tree._iterator);
+                */return (it);
             }
             template<class InputIt>
             void    insert(InputIt first, InputIt last)
@@ -496,10 +508,7 @@ namespace ft
     void    swap(ft::map<Key, T, Compare, Alloc>& lhs
         , ft::map<Key, T, Compare, Alloc>& rhs)
     {
-        ft::map<Key, T, Compare, Alloc>	tmp = rhs;
-
-		rhs = lhs;
-		lhs = tmp;
+        lhs.swap(rhs);
     }
 }
 

@@ -606,19 +606,22 @@ namespace ft
 			}
 			void	swap(vector& other)
 			{
-				pointer	tmp_vec = other._vec;
-				allocator_type	tmp_alc = other._allocator;
-				size_type	tmp_cap = other._capacity_allocator;
-				size_type	tmp_size = other._size;
+				if (*this != other)
+				{
+					pointer	tmp_vec = other._vec;
+					allocator_type	tmp_alc = other._allocator;
+					size_type	tmp_cap = other._capacity_allocator;
+					size_type	tmp_size = other._size;
 
-				other._vec = _vec;
-				other._allocator = _allocator;
-				other._capacity_allocator = _capacity_allocator;
-				other._size = _size;
-				_vec = tmp_vec;
-				_allocator = tmp_alc;
-				_capacity_allocator = tmp_cap;
-				_size = tmp_size;
+					other._vec = _vec;
+					other._allocator = _allocator;
+					other._capacity_allocator = _capacity_allocator;
+					other._size = _size;
+					_vec = tmp_vec;
+					_allocator = tmp_alc;
+					_capacity_allocator = tmp_cap;
+					_size = tmp_size;
+				}
 			}
 		private:
 			pointer			_vec;
@@ -689,10 +692,7 @@ namespace ft
 	template<class T, class Alloc>
 	void	swap(ft::vector<T, Alloc>& lhs, ft::vector<T, Alloc>& rhs)
 	{
-		ft::vector<T>	tmp = rhs;
-
-		rhs = lhs;
-		lhs = tmp;
+		lhs.swap(rhs);
 	}
 }
 

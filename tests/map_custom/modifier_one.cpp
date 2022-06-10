@@ -10,6 +10,7 @@ void    simple_clear_custom()
         map[i] = i;
     std::cout << "Is empty ? : " << map.empty() << std::endl;
     map.clear();
+    map.clear();
     std::cout << "Is empty ? : " << map.empty() << std::endl;
     std::cout << "MAX SIZE : " << map.max_size() << std::endl;
 }
@@ -129,6 +130,7 @@ void    insert_hint_custom()
     for (int i = 0; i < 50000; i++)
         map[i] = i;
     map.insert(map.end(), ft::pair<int, int>(-1000, 123));
+    map.insert(map.end(), ft::pair<int, int>(15, 442));
     map.insert(map.begin(), ft::pair<int, int>(-2147483648, 123));
  //   for (ft::map<int, int>::iterator it = map.begin(); it != map.end(); it++)
    //     std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
