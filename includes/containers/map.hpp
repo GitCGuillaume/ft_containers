@@ -62,12 +62,15 @@ namespace ft
             map(InputIt first, InputIt second, const Compare& comp = Compare(),
                 const Allocator& alloc = Allocator()) : _comp(comp), _allocator(alloc), _capacity_allocator(1)
             {
-                _tree._iterator = new typename _RB_tree::node();
+                //typename _RB_tree::rebind_node  _rebind_node;
+                _tree._iterator = NULL;
+                /*_tree._iterator = _rebind_node.allocate(1);
+                _rebind_node.construct(_tree._iterator, typename _RB_tree::node());
                 _tree._iterator->parent = NULL;
                 _tree._iterator->left = NULL;
                 _tree._iterator->right = NULL;
                 _tree._iterator->pair = NULL;
-                _tree._iterator->colour = 0;
+                _tree._iterator->colour = 0;*/
                 //_tree._iterator->pair = _allocator.allocate(1);
                 //_allocator.construct(_tree._iterator->pair, value_type());
                 this->insert(first, second);
@@ -101,7 +104,6 @@ namespace ft
                 const_iterator    it = this->begin();
                 const_iterator    ite = this->end();
 
-                //if (_tree._iterator)
                 while (it != ite)
                     _tree.deleteNode((it++)->first);
             }
@@ -203,8 +205,8 @@ namespace ft
             /* MODIFIERS */
             void    clear()
             {
-                iterator    it = this->begin();
-                iterator    ite = this->end();
+                const_iterator    it = this->begin();
+                const_iterator    ite = this->end();
 
                 while (it != ite)
                     _tree.deleteNode((it++)->first);

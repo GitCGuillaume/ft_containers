@@ -165,7 +165,7 @@ int	main(void)
 	execute_function(&iterator_empty_custom, 1);*/
 	//MAP PART
 
-	/*execute_function(default_constructor_map, 0);
+	execute_function(default_constructor_map, 0);
 	execute_function(constructor_range_map, 0);
 	execute_function(copy_constructor_map, 0);
 	execute_function(operator_assignation_map, 0);
@@ -178,7 +178,7 @@ int	main(void)
 	execute_function(operator_assignation_map_custom, 1);
 	execute_function(constructor_range_speed_custom, 1);
 	execute_function(constructor_copy_speed, 1);
-	execute_function(assignation_speed_custom, 1);*/
+	execute_function(assignation_speed_custom, 1);
 
 
 	/*execute_function(pair_default, 0);
@@ -204,7 +204,7 @@ int	main(void)
 
 
 
-	/*execute_function(iterator_map_default, 0);
+	execute_function(iterator_map_default, 0);
 	execute_function(iterator_map_default_custom, 1);
 	execute_function(empty_bracket, 0);
 	execute_function(empty_bracket_custom, 1);
@@ -217,19 +217,19 @@ int	main(void)
 	execute_function(iterator_assignation_map_custom, 1);
 	execute_function(iterator_forward_map, 0);
 	execute_function(iterator_forward_map_custom, 1);
-	*/
+	
 	execute_function(iterator_backward_map, 0);
 	execute_function(iterator_backward_map_custom, 1);
 	execute_function(reverse_iterator_map, 0);
 	execute_function(reverse_iterator_empty_map, 0);
-		execute_function(reverse_iterator_map, 1);
+	execute_function(reverse_iterator_map, 1);
 	execute_function(reverse_iterator_empty_map, 1);
-	/*execute_function(equal_map, 0);
+	execute_function(equal_map, 0);
 	execute_function(equal_map_custom, 1);
 	//execute_function(destructor_1, 1);*/
-/*	execute_function(simple_clear, 0);
-	execute_function(simple_clear_custom, 1);   */
-	/*execute_function(simple_erase, 0);
+	execute_function(simple_clear, 0);
+	execute_function(simple_clear_custom, 1);   
+	execute_function(simple_erase, 0);
 	execute_function(simple_erase_custom, 1);
 	execute_function(range_erase, 0);
 	execute_function(range_erase_custom, 1);
@@ -240,8 +240,8 @@ int	main(void)
 	execute_function(insert_hint, 0);
 	execute_function(insert_hint_custom, 1);
 	execute_function(insert_range, 0);
-	execute_function(insert_range_custom, 1);*/
-	/*execute_function(lookup_find, 0);
+	execute_function(insert_range_custom, 1);
+	execute_function(lookup_find, 0);
 	execute_function(lookup_find_custom, 1);
 	execute_function(map_count, 0);
 	execute_function(map_count_custom, 1);
@@ -262,6 +262,6 @@ int	main(void)
 	execute_function(test_value_comp, 0);
 	execute_function(test_value_comp_custom, 1);
 	execute_function(non_member_operator_map, 0);
-	execute_function(non_member_operator_map_custom, 1);*/
+	execute_function(non_member_operator_map_custom, 1);
 	return (0);
 }
