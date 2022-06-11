@@ -13,6 +13,7 @@ void    lookup_find_custom()
     std::cout << "Map find CUSTOM" << std::endl;
     ft::map<int, int>  map;
 
+    exist(map.find(0), map);
     map.insert(ft::make_pair(10, 0));
     map.insert(ft::make_pair(0, 0));
     map.insert(ft::make_pair(-10, 0));

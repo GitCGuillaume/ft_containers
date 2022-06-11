@@ -16,6 +16,7 @@ void    default_constructor()
 
 void    allocator_constructor()
 {
+    std::cout << "ALLOCATOR CONSTRUCTOR" << std::endl;
     std::vector<int> vec;
 
     std::cout << "Allocator vec.get_allocator()" << std::endl;
@@ -28,6 +29,7 @@ void    allocator_constructor()
 void    allocator_count_constructor()
 {
     std::cout << "Allocator count constructor" << std::endl;
+
     std::vector<std::string> vec(3, "str value");
     std::cout << "Capacity count allocator constructor : " << vec.capacity() << std::endl;
     std::cout << "Size count allocator constructor : " << vec.size() << std::endl;
@@ -77,7 +79,13 @@ void    operator_assignation_constructor()
     std::cout << "Capacity count ASSIGNATION constructor EMPTY : " << vec3.capacity() << std::endl;
     std::cout << "Size count ASSIGNATION constructor EMPTY : " << vec3.size() << std::endl;
     for (std::vector<int>::iterator	it = vec3.begin(); it != vec3.end(); it++)
-		std::cout << *it << std::endl;
+		  std::cout << *it << std::endl;
+    vec3.resize(50, 1);
+    vec4 = vec3;
+    std::cout << "Capacity count ASSIGNATION constructor EMPTY : " << vec3.capacity() << std::endl;
+    std::cout << "Size count ASSIGNATION constructor EMPTY : " << vec3.size() << std::endl;
+    std::cout << "Capacity count ASSIGNATION constructor EMPTY : " << vec4.capacity() << std::endl;
+    std::cout << "Size count ASSIGNATION constructor EMPTY : " << vec4.size() << std::endl;
 }
 
 void    fill_constructor()

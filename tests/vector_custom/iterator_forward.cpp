@@ -2,7 +2,7 @@
 
 void	test_ft_assign1_forward()
 {
-	std::cout << "TEST_FT_ASSIGN1_FORWARD" << std::endl;
+	std::cout << "TEST_FT_ASSIGN1_FORWARD CUSTOM" << std::endl;
 	ft::vector<int>	vec;
 
 	vec.assign(3, 'b');
@@ -26,7 +26,7 @@ void	test_ft_assign1_forward()
 
 void	test_ft_assign_it_forward()
 {
-	std::cout << "TEST_FT_ASSIGN_IT_FORWARD" << std::endl;
+	std::cout << "TEST_FT_ASSIGN_IT_FORWARD CUSTOM" << std::endl;
 	ft::vector<int>	vec_1;
 	ft::vector<int> vec_2;
 	ft::vector<int>::iterator	it_1;

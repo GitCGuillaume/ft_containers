@@ -16,6 +16,7 @@ void    default_custom_constructor()
 
 void    allocator_custom_constructor()
 {
+    std::cout << "ALLOCATOR CUSTOM CONSTRUCTOR" << std::endl;
     ft::vector<int> vec;
 
     std::cout << "Allocator custom vec.get_allocator()" << std::endl;
@@ -27,7 +28,8 @@ void    allocator_custom_constructor()
 
 void    allocator_custom_count_constructor()
 {
-    std::cout << "Allocator custom count constructor" << std::endl;
+    std::cout << "Allocator count constructor CUSTOM" << std::endl;
+
 	ft::vector<std::string> vec(3, "str value");
     std::cout << "Capacity custom count allocator constructor : " << vec.capacity() << std::endl;
     std::cout << "Size custom count allocator constructor : " << vec.size() << std::endl;
@@ -37,7 +39,8 @@ void    allocator_custom_count_constructor()
 
 void    allocator_custom_iterator()
 {
-    std::cout << "Allocator iterator constructor" << std::endl;
+    std::cout << "Allocator iterator constructor CUSTOM" << std::endl;
+
     ft::vector<float>  vec(3, 1.000000);
     ft::vector<float>  vec_2(vec.begin(), vec.end());
     std::cout << "Capacity custom count allocator constructor : " << vec_2.capacity() << std::endl;
@@ -48,7 +51,7 @@ void    allocator_custom_iterator()
 
 void    copy_custom_constructor()
 {
-    std::cout << "Copy custom constructor" << std::endl;
+    std::cout << "Copy custom constructor CUSTOM" << std::endl;
     ft::vector<float>  vec(3, 1.000000);
     ft::vector<float>  vec_2(vec.begin(), vec.end());
     ft::vector<float>  vec_cpy(vec_2);
@@ -60,7 +63,7 @@ void    copy_custom_constructor()
 
 void    operator_custom_assignation_constructor()
 {
-    std::cout << "Constructor custom assignation" << std::endl;
+    std::cout << "Constructor custom assignation CUSTOM" << std::endl;
     ft::vector<int> vec;
     ft::vector<int> vec2;
 
@@ -77,12 +80,18 @@ void    operator_custom_assignation_constructor()
     std::cout << "Capacity count ASSIGNATION constructor EMPTY CUSTOM : " << vec3.capacity() << std::endl;
     std::cout << "Size count ASSIGNATION constructor EMPTY CUSTOM : " << vec3.size() << std::endl;
     for (ft::vector<int>::iterator	it = vec3.begin(); it != vec3.end(); it++)
-		std::cout << *it << std::endl;
+		  std::cout << *it << std::endl;
+        vec3.resize(50, 1);
+    vec4 = vec3;
+    std::cout << "Capacity count ASSIGNATION constructor EMPTY : " << vec3.capacity() << std::endl;
+    std::cout << "Size count ASSIGNATION constructor EMPTY : " << vec3.size() << std::endl;
+    std::cout << "Capacity count ASSIGNATION constructor EMPTY : " << vec4.capacity() << std::endl;
+    std::cout << "Size count ASSIGNATION constructor EMPTY : " << vec4.size() << std::endl;
 }
 
 void    fill_constructor_custom()
 {
-    std::cout << "Fill constructor custom" << std::endl;
+    std::cout << "Fill constructor CUSTOM" << std::endl;
 
     ft::vector<int>    vec(5);
     std::cout << "Capacity count FILL constructor custom : " << vec.capacity() << std::endl;

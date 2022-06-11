@@ -5,7 +5,7 @@
 
 void    clear()
 {
-    std::cout << "Clear, no values be displayed below." << std::endl;
+    std::cout << "Clear, no values to be displayed below." << std::endl;
     std::vector<std::string>    vec(5, "test");
 
     vec.clear();
@@ -18,14 +18,17 @@ void    insert()
     std::cout << "Insert tests" << std::endl;
     std::vector<std::string>    vec;
     vec.insert(vec.begin(), "Insert first element");
+    std::cout << "capacity vector = " << vec.capacity() << std::endl;
     std::cout << "vec.begin() = " << vec[0] << std::endl;
     vec.insert(vec.begin() + 1, "Insert second element");
-    std::cout << "vec.begin() + 1 = " << vec[1] << std::endl;
     std::cout << "capacity vector = " << vec.capacity() << std::endl;
+    std::cout << "vec.begin() + 1 = " << vec[1] << std::endl;
     vec.insert(vec.end(), "Insert third element");
+    std::cout << "capacity vector = " << vec.capacity() << std::endl;
     std::cout << "vec.end() = " << vec[2] << std::endl;
     std::cout << vec[0] << " " << vec[1] << " " << vec[2] << std::endl;
     vec.insert(vec.end(), "Insert fourth element");
+    std::cout << "capacity vector = " << vec.capacity() << std::endl;
     std::cout << "vec.end() = " << vec[3] << std::endl;
     std::cout << vec[0] << " " << vec[1] << " "
         << vec[2] << " " << vec[3] << std::endl;
@@ -33,6 +36,7 @@ void    insert()
 
 void    insert_100k()
 {
+    std::cout << "Insert 100k" << std::endl;
     std::vector<double>  vec;
 
     vec.insert(vec.begin() + 0, 0.000000);
@@ -41,6 +45,8 @@ void    insert_100k()
     std::cout << "capacity vector begin() + 1 : " << vec.capacity() << std::endl;
     vec.insert(vec.begin() + 2, 2.000000);
     std::cout << "capacity vector begin() + 2 : " << vec.capacity() << std::endl;
+    vec.resize(10);
+    std::cout << "resize capacity vector = " << vec.capacity() << std::endl;
     for (double i = 3.000000; i < 50000.000000; i++)
         vec.insert(vec.begin() + static_cast<size_t>(i), i);
     std::cout << vec[0] << " " << vec[49999] << std::endl;
@@ -52,6 +58,7 @@ void    insert_100k()
 
 void    insert_reserve_100k()
 {
+    std::cout << "Insert reserve 100k" << std::endl;
     std::vector<double> vec;
 
     vec.reserve(100000);
@@ -63,7 +70,7 @@ void    insert_reserve_100k()
 
 void    insert_return()
 {
-        std::cout << "Insert return" << std::endl;
+    std::cout << "Insert return" << std::endl;
     std::vector<std::string>    vec;
     std::vector<std::string>::iterator  it;
     it = vec.insert(vec.begin(), "one");

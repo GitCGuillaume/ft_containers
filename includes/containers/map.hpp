@@ -311,8 +311,6 @@ namespace ft
                 typename    _RB_tree::node* search_node = NULL;
 
                 search_node = _tree.search(key);
-                while (_tree._iterator->parent)
-                        _tree._iterator = _tree._iterator->parent;
                 if (!search_node)
                     return (this->end());
                 return (iterator(search_node, _tree._iterator));

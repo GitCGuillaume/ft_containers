@@ -2,7 +2,7 @@
 
 void    front_custom()
 {
-    std::cout << "FRONT CUSTOM VECTOR : " << std::endl;
+    std::cout << "FRONT VECTOR CUSTOM : " << std::endl;
     ft::vector<int>vec;
     vec.assign(2, 1);
     const   ft::vector<int>vec_cpy(vec);
@@ -12,7 +12,7 @@ void    front_custom()
 
 void    back_custom()
 {
-    std::cout << "BACK CUSTOM VECTOR : " << std::endl;
+    std::cout << "BACK VECTOR CUSTOM : " << std::endl;
     ft::vector<int>vec;
     vec.assign(2, 1);
     const   ft::vector<int>vec_cpy(vec);

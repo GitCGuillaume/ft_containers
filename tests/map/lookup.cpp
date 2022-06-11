@@ -13,6 +13,7 @@ void    lookup_find()
     std::cout << "Map find" << std::endl;
     std::map<int, int>  map;
 
+    exist(map.find(0), map);
     map.insert(std::make_pair(10, 0));
     map.insert(std::make_pair(0, 0));
     map.insert(std::make_pair(-10, 0));

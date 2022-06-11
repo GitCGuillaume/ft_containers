@@ -72,10 +72,10 @@ namespace ft
 			{
 				_allocator = other.get_allocator();
 				//if (other.size() > 0)
-					_vec = _allocator.allocate(other.capacity());
+					_vec = _allocator.allocate(other.size());
 				//else
 				//	_vec = 0;
-				_capacity_allocator = other.capacity();
+				_capacity_allocator = other.size();
 				_size = other.size();
 				for (size_type i = 0; i < other.size(); i++)
 					_allocator.construct(_vec + i, other.at(i));
@@ -103,9 +103,12 @@ namespace ft
 					if (other.empty())
 						return (*this);
 					//_allocator = other.get_allocator();
-					_allocator.deallocate(_vec, _capacity_allocator);
-					_vec = _allocator.allocate(other.capacity());
-					_capacity_allocator = other.capacity();
+					if (this->capacity() < other.capacity())
+					{
+						_allocator.deallocate(_vec, _capacity_allocator);
+						_vec = _allocator.allocate(other.capacity());
+						_capacity_allocator = other.capacity();
+					}
 					_size = other.size();
 					for (size_type i = 0; i < other.size(); i++)
 						_allocator.construct(_vec + i, other.at(i));
@@ -338,13 +341,17 @@ namespace ft
 				iterator	it_end;
 				size_type	offset = pos - this->begin();
 				size_type	cpy_size = _size;
+				size_type	new_size = _size + 1;
 
-				if (_size + 1 > _capacity_allocator)
+				if (new_size > _capacity_allocator)
 				{
+					size_type multiple_two = _size << 1;
 					if (_capacity_allocator == 0)
-						this->reserve(1);
+						this->reserve(new_size);
+					else if (multiple_two > new_size)
+						this->reserve(multiple_two);
 					else
-						this->reserve(_capacity_allocator << 1);
+						this->reserve(new_size);
 				}
 				if (this->size() == 0)
 					_allocator.construct(_vec, value);
@@ -356,8 +363,8 @@ namespace ft
 					{
 						_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
 						_allocator.destroy(_vec + (cpy_size - 1));
-						cpy_size--;
-						it_end--;
+						--cpy_size;
+						--it_end;
 					}
 					_allocator.construct(_vec + cpy_size, value);
 				}
@@ -377,16 +384,19 @@ namespace ft
 			void	insert(iterator pos, size_type count, const T& value)
 			{
 				size_type	offset = pos - this->begin();
+				size_type	new_size = _size + count;
+
 				if (count == 0)
 					return ;
-				if (_size + count > _capacity_allocator)
+				if (new_size > _capacity_allocator)
 				{
+					size_type multiple_two = _size << 1;
 					if (_capacity_allocator == 0)
-						this->reserve(_size + count);
-					else if (_capacity_allocator + count > (_capacity_allocator << 1))
-						this->reserve(_capacity_allocator + count);
+						this->reserve(new_size);
+					else if (multiple_two > new_size)
+						this->reserve(multiple_two);
 					else
-						this->reserve(_capacity_allocator << 1);
+						this->reserve(new_size);
 				}
 				if (this->size() == 0)
 				{
@@ -404,10 +414,10 @@ namespace ft
 					{
 						_allocator.construct(&_vec[cpy_count], _vec[cpy]);
 						_allocator.destroy(&_vec[cpy]);
-						cpy_size--;
-						it_end--;
-						cpy--;
-						cpy_count--;
+						--cpy_size;
+						--it_end;
+						--cpy;
+						--cpy_count;
 					}
 					for (size_type nb_count = 0; nb_count < count; nb_count++)
 						_allocator.construct(_vec + (cpy_size + nb_count), value);
@@ -474,16 +484,19 @@ namespace ft
 				difference_type	distance = std::distance(first, last);
 				size_type	offset = pos - this->begin();
 				size_type	nb_count = 0;
+				size_type	new_size = _size + distance;
+
 				if (distance == 0)
 					return ;
-				if (_size + distance > _capacity_allocator)
+				if (new_size > _capacity_allocator)
 				{
+					size_type	multiple_two = _size << 1;
 					if (_capacity_allocator == 0)
-						this->reserve(_size + distance);
-					else if (_capacity_allocator + distance > (_capacity_allocator << 1))
-						this->reserve(_capacity_allocator + distance);
+						this->reserve(new_size);
+					else if (multiple_two > new_size)
+						this->reserve(multiple_two);
 					else
-						this->reserve(_capacity_allocator << 1);
+						this->reserve(new_size);
 				}
 				if (this->size() == 0)
 				{
@@ -501,10 +514,10 @@ namespace ft
 					{
 						_allocator.construct(&_vec[cpy_count], _vec[cpy]);
 						_allocator.destroy(&_vec[cpy]);
-						cpy_size--;
-						it_end--;
-						cpy--;
-						cpy_count--;
+						--cpy_size;
+						--it_end;
+						--cpy;
+						--cpy_count;
 					}
 					while (first != last)
 						_allocator.construct(_vec + (cpy_size + nb_count++), *(first)++);
@@ -567,10 +580,19 @@ namespace ft
 			}
 			void	push_back(const T& value)
 			{
-				if (_capacity_allocator == 0)
+				//size_type	new_size = _size + 1;
+
+				if (_capacity_allocator <= _size)
+				{
+					if (_capacity_allocator == 0)
+						this->reserve(1);
+					else
+						this->reserve(_size << 1);
+				}
+			/*	if (_capacity_allocator == 0)
 					this->reserve(1);
 				else if (_size + 1 > this->capacity())
-					this->reserve(_capacity_allocator << 1);
+					this->reserve(_capacity_allocator << 1);*/
 				_allocator.construct(_vec + _size, value);
 				_size++;
 			}
@@ -584,14 +606,15 @@ namespace ft
 			}
 			void	resize(size_type count, T value = T())
 			{
-				if (_capacity_allocator < count)
+				if (_capacity_allocator <= count)
 				{
+					size_type	multiple_two = _capacity_allocator << 1;
 					if (_capacity_allocator == 0)
-						this->reserve(_size + count);
-					else if (_capacity_allocator + count > (_capacity_allocator << 1))
-						this->reserve(_capacity_allocator + count);
+						this->reserve(count);
+					else if (count < multiple_two)
+						this->reserve(multiple_two);
 					else
-						this->reserve(_capacity_allocator << 1);
+						this->reserve(count);
 				}
 				while (_size < count)
 				{
