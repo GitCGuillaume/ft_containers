@@ -38,7 +38,7 @@ namespace ft
             */
             template<typename U>
             RandomAccessIterator(const RandomAccessIterator<U
-                , typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type>& rhs) : _ptr(rhs.base()){}
+                , typename ft::enable_if<ft::is_same<U, typename Container::value_type>::value, Container>::type>& rhs) : _ptr(rhs.base()){}
             pointer   base() const
             {
                 return (this->_ptr);

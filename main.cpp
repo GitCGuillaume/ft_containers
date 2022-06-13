@@ -40,6 +40,8 @@
 #include "tests/map/constructor_summary_map.hpp"
 #include "tests/map_custom/constructor_summary_map.hpp"
 #include "includes/containers/map.hpp"
+#include "tests/stack/constructor_summary_stack.hpp"
+#include "tests/stack_custom/constructor_summary_stack.hpp"
 
 /*
  *	true == green == std
@@ -71,7 +73,7 @@ void	execute_function(void (*ft)(void), bool colour_print)
 
 int	main(void)
 {
-	execute_function(&test_std_assign1_forward, 0);
+	/*execute_function(&test_std_assign1_forward, 0);
 	execute_function(&test_ft_assign1_forward, 1);
 	execute_function(&test_std_assign_it_forward, 0);
 	execute_function(&test_ft_assign_it_forward, 1);
@@ -247,6 +249,18 @@ int	main(void)
 	execute_function(test_value_comp, 0);
 	execute_function(test_value_comp_custom, 1);
 	execute_function(non_member_operator_map, 0);
-	execute_function(non_member_operator_map_custom, 1);
+	execute_function(non_member_operator_map_custom, 1);*/
+	execute_function(default_constructor_stack, 0);
+	execute_function(default_constructor_stack_custom, 1);
+	execute_function(constructor_stack_copy, 0);
+	execute_function(constructor_stack_copy_custom, 1);
+	execute_function(stack_empty, 0);
+	execute_function(stack_empty_custom, 1);
+	execute_function(stack_size, 0);
+	execute_function(stack_size_custom, 1);
+	execute_function(stack_equal, 0);
+	execute_function(stack_equal_custom, 1);
+	execute_function(std_mustant_stack, 0);
+	execute_function(ft_mustant_stack_custom, 1);
 	return (0);
 }
