@@ -834,9 +834,9 @@ namespace ft
                                 allocator_type	_allocator;
         };
         template<typename It, class Container, typename Node>
-        class   BiDirectionnalIterator //nested class
+        struct   BiDirectionnalIterator //nested class
         {
-                public:
+                //public:
                         /* FOR STD DISTANCE */
                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::value_type    value_type;
                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::difference_type    difference_type;
@@ -849,9 +849,8 @@ namespace ft
                         BiDirectionnalIterator(node* ptr, node* iterator) : _ptr(ptr), _old(iterator), _root(iterator){}
                         template<typename U, typename V>
                         BiDirectionnalIterator(const BiDirectionnalIterator<U
-                                , typename ft::enable_if<(ft::is_same<U, typename Container::value_type>::value), Container>::type
+                                , typename ft::enable_if<ft::is_same<U, typename Container::value_type>::value, Container>::type
                                 , V>& rhs) : _ptr(rhs._ptr), _old(rhs._old), _root(rhs._root){}
-                        //template<typename U>
                         BiDirectionnalIterator &        operator=(const BiDirectionnalIterator& rhs)
                         {
                                 if (this != &rhs)
@@ -862,7 +861,6 @@ namespace ft
                                 }
                                 return (*this);
                         }
-                        //template<typename U, typename key_type, typename mapped_type, typename key_compare, typename Allocator>
                         virtual ~BiDirectionnalIterator(){}
                         reference operator*() const
                         {
