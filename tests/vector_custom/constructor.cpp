@@ -87,6 +87,12 @@ void    operator_custom_assignation_constructor()
     std::cout << "Size count ASSIGNATION constructor EMPTY : " << vec3.size() << std::endl;
     std::cout << "Capacity count ASSIGNATION constructor EMPTY : " << vec4.capacity() << std::endl;
     std::cout << "Size count ASSIGNATION constructor EMPTY : " << vec4.size() << std::endl;
+    ft::vector<int> vec3;
+    ft::vector<int> vec4;
+    vec3.push_back(1);
+    vec3.push_back(2);
+    vec3.push_back(3);
+    vec4 = vec3;
 }
 
 void    fill_constructor_custom()

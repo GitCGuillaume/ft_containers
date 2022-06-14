@@ -61,15 +61,10 @@ namespace ft
                         node*    search(Key const &key) const
                         {
                                 node    *subRoot = _iterator;
-                           //     std::cout<<"key:"<< key<<std::endl;
-                                //std::cout<<"_iter : " << _iterator << std::endl;
-                                //if (_iterator->pair)
-                                //        std::cout<<"pair : " << _iterator->pair<<std::endl;
                                 if (!subRoot || !subRoot->pair)
                                         return (NULL);
                                 Key     firstSubRoot = subRoot->pair->first;
                                 Key     firstNewNode = key;
-
                                 while (subRoot)
                                 {
                                         if (_comp(firstSubRoot, firstNewNode))
@@ -149,7 +144,7 @@ namespace ft
                                 }
                                 return (n);
                         }
-                        //template<typename U, typename X>
+
                         node*    insert(const value_type& pair)
                         {
                                 node    *new_node = NULL;
@@ -162,11 +157,8 @@ namespace ft
                                                 _rebind_node.construct(_iterator, node());
                                                 _newNode(_iterator);
                                         }
-                                        //if (_iterator->pair)
-                                        //        _destroyPair(_iterator);
                                         _iterator->pair = _rebind_pair.allocate(1);
                                         _rebind_pair.construct(_iterator->pair, pair);
-                                        //black colour
                                         _iterator->colour = BLACK;
                                         return (_iterator);
                                 }
@@ -202,21 +194,18 @@ namespace ft
                                         }
                                         else if (firstNewNode == firstSubRoot)
                                         {
-                                                //delete new_node;
                                                 _destroyNode(new_node);
                                                 return (NULL);
                                         }
                                 }
                                 new_node->pair = _rebind_pair.allocate(1);
                                 _rebind_pair.construct(new_node->pair, pair);
-                                //red colour
                                 new_node->colour = RED;
                                 _repearTreeInsert(new_node);
                                 while (_getParent(_iterator))
                                         _iterator = _iterator->parent;
                                 return (new_node);
                         }
-                        //template<typename U, typename X>
                         node*    normalInsert(const value_type& pair)
                         {
                                 node    *new_node = NULL;
@@ -229,11 +218,8 @@ namespace ft
                                                 _rebind_node.construct(_iterator, node());
                                                 _newNode(_iterator);
                                         }
-                                        //if (_iterator->pair)
-                                        //        _destroyPair(_iterator);
                                         _iterator->pair = _rebind_pair.allocate(1);
                                         _rebind_pair.construct(_iterator->pair, pair);
-                                        //black colour
                                         _iterator->colour = BLACK;
                                         return (_iterator);
                                 }
@@ -269,14 +255,12 @@ namespace ft
                                         }
                                         else if (firstNewNode == firstSubRoot)
                                         {
-                                                //delete new_node;
                                                 _destroyNode(new_node);
                                                 return (_iterator);
                                         }
                                 }
                                 new_node->pair = _rebind_pair.allocate(1);
                                 _rebind_pair.construct(new_node->pair, pair);
-                                //red colour
                                 new_node->colour = RED;
                                 _repearTreeInsert(new_node);
                                 while (_getParent(_iterator))
@@ -292,7 +276,7 @@ namespace ft
                                 node            *null_node = NULL;
                                 int             memory_colour = 0;
                                 short int       nb_child = 0;
-//std::cout << "key : " << key << std::endl;
+
                                 current = search(key);
                                 if (!current)
                                         return (0);
@@ -309,38 +293,14 @@ namespace ft
                                 }
                                 if (nb_child < 2)
                                 {
-                                   //     if (current->parent)
-                                     //           std::cout << "root before : " << current->parent->pair << std::endl;
                                         memory_colour = current->colour;
-                                       // if (_iterator->parent)
-                                       //         std::cout << "iterator parent : " << _iterator->parent->pair->first << std::endl;
-                                       // if (_iterator && _iterator->pair)
-                                        //                std::cout << "root beffff afqsdqsdsqter : " << _iterator->pair->first << std::endl;
                                         null_node = _deleteOneChild(&current, &left_child, &right_child
                                                 , memory_colour);
-                                     //   if(current)
-                                      //          std::cout << "cur : " << current->pair->first<<std::endl;
-                                        
                                         if ((current && current->colour == RED) || (current && memory_colour == RED))
                                         {
-                                                //if (current->parent && current && current->parent->parent)
-                                                //        std::cout<<"gp pair : " << current->parent->parent<<std::endl;
-                                                //std::cout << "qsdqs"<<std::endl;
-                                                //if (current->parent)
-                                                //        std::cout << "current && red && parent : " << current->parent->pair->first << std::endl;
                                                 current->colour = BLACK;
                                                 if (!current->parent)
-                                                {
                                                         _iterator = current;
-                                                    //    std::cout<<"no_parent"<<std::endl;
-                                                }
-                                               // if (_iterator)
-                                                //{
-                                                      //  std::cout << "root after : " << _iterator<<std::endl;
-                                                        //std::cout << "root pair after : " << _iterator->pair->first << std::endl;
-                                                //}
-                                                ///if (_iterator && _iterator->pair)
-                                                  //      std::cout << "root afqsdqsdsqter : " << _iterator->pair->first << std::endl;
                                         }
                                         else if (current && current->colour == BLACK && memory_colour == BLACK)
                                                 _repearDoubleBlack(current);
@@ -349,6 +309,8 @@ namespace ft
                                 {
                                         //find smallest key of right (or left) subtree
                                         smallest_key = _getInorder(current);
+                                        if (!current)
+                                                return (0);
                                         _destroyPair(current);
                                         //deleted node become smallest key node
                                         current->pair = _rebind_pair.allocate(1);
@@ -357,18 +319,8 @@ namespace ft
                                         memory_colour = smallest_key->colour;
                                         left_child = smallest_key->left;
                                         right_child = smallest_key->right;
-                                       // std::cout << "smallest is : " << smallest_key->pair->first << std::endl;
                                         null_node = _deleteOneChild(&smallest_key, &left_child, &right_child
-                                                , memory_colour);
-                                        //moved up is smallest key
-                                        /*if ((current && current->colour == RED) || (current && memory_colour == RED))
-                                        {
-                                                current->colour = BLACK;
-                                                if (!current->parent)
-                                                        _iterator = current;
-                                        }
-                                        else if (current && current->colour == BLACK && memory_colour == BLACK)
-                                                _repearDoubleBlack(current);*/
+                                                , memory_colour);                                        
                                         if ((smallest_key && smallest_key->colour == RED) || (smallest_key && memory_colour == RED))
                                         {
                                                 smallest_key->colour = BLACK;
@@ -377,32 +329,15 @@ namespace ft
                                         }
                                         else if (smallest_key && smallest_key->colour == BLACK && memory_colour == BLACK)
                                                 _repearDoubleBlack(smallest_key);
-                                       // if (!smallest_key)
-                                         //       _iterator = NULL;
-                                        //std::cout << "parent ::: " << current->parent << std::endl;
                                 }
                                 if (null_node == _iterator)
                                         _iterator = NULL;
-                                if (null_node)// && smallest_key)
+                                if (null_node)
                                 {
-                                        //delete smallest_key->left;
                                         _destroyNode(null_node->left);
-                                        //delete smallest_key->right;
                                         _destroyNode(null_node->right);
-                                        //delete smallest_key;
                                         _destroyNode(null_node);
                                 }
-                              //  if (_iterator)
-                               //         std::cout << "_iterator pair : " << _iterator->pair->first << std::endl;
-                              /*  else if (null_node)
-                                {
-                                        //delete current->left;
-                                        _destroyNode(null_node->left);
-                                        //delete current->right;
-                                        _destroyNode(null_node->right);
-                                        //delete current;
-                                        _destroyNode(null_node);
-                                }*/
                                 return (1);
                         }
                         node*   getIterator() const
@@ -437,9 +372,13 @@ namespace ft
                         {
                                 return (std::numeric_limits<std::size_t>::max() / sizeof(node));
                         }
-                        node*  _iterator; // struct stocked here, used to iterate
+                        node*  _iterator;
 
                         private:
+                                /* Seek previous value of current
+                                        since this function is used into a double child, I just need to seek 
+                                        previous value
+                                */
                                 node    *_getInorder(node *current)
                                 {
                                         if (!current)
@@ -450,83 +389,8 @@ namespace ft
                                                 while (current->right)
                                                         current = current->right;
                                         }
-                                        //if node is left side of it's parent, next node is it's parent
-                                        else if (current->parent && current->parent->left)
-                                                current = current->parent;
-                                        //or current is max, go to parent until we find one if a left child
-                                        else
-                                        {
-                                                while (current->parent && current->parent->right == current)
-                                                        current = current->parent;
-                                                current = current->parent;
-                                        }
                                         return (current);
                                 }
-                                /* node*    _deleteOneChild(node **current, node **left_child, node **right_child
-                                        , int memory_colour)
-                                {
-                                        node*   mem_root = _iterator;
-                                        node*   parent = _getParent(*current);
-
-                                        _iterator = *current;
-                                        if (parent && parent->left == _iterator)
-                                        {
-                                                _iterator->parent->left = NULL;
-                                                if (*left_child)
-                                                        _iterator->parent->left = *left_child;
-                                                if (*right_child)
-                                                        _iterator->parent->left = *right_child;
-                                        }
-                                        else if (parent && parent->right == _iterator)
-                                        {
-                                                _iterator->parent->right = NULL;
-                                                if (*left_child)
-                                                        _iterator->parent->right = *left_child;
-                                                if (*right_child)
-                                                        _iterator->parent->right = *right_child;
-                                        }
-                                        _destroyPair(_iterator);
-                                        _destroyNode(_iterator);
-                                        _iterator = NULL;
-                                        if (*left_child)
-                                        {
-                                                (*left_child)->parent = parent;
-                                                _iterator = *left_child;
-                                        }
-                                        else if (*right_child)
-                                        {
-                                                (*right_child)->parent = parent;
-                                                _iterator = *right_child;
-                                        }
-                                        else if (memory_colour == BLACK)
-                                        {
-                                                _iterator = _rebind_node.allocate(1);
-                                                _rebind_node.construct(_iterator, node());
-                                                _newNode(_iterator);
-                                                (_iterator)->left = _rebind_node.allocate(1);
-                                                _rebind_node.construct((_iterator)->left, node());
-                                                _newNode((_iterator)->left);
-                                                (_iterator)->right = _rebind_node.allocate(1);
-                                                _rebind_node.construct((_iterator)->right, node());
-                                                _newNode((_iterator)->right);
-                                                (_iterator)->parent = parent;
-                                                (_iterator)->colour = BLACK;
-                                                (_iterator)->left->colour = BLACK;
-                                                (_iterator)->right->colour = BLACK;
-                                                *current = _iterator;
-                                                if (parent)
-                                                        _iterator = mem_root;
-                                                else
-                                                        _iterator = NULL;
-                                                return (*current);
-                                        }
-                                        *current = _iterator;
-                                        if (parent)
-                                                _iterator = mem_root;
-                                        //else
-                                          //      _iterator = NULL;
-                                        return (NULL);
-                                }*/
                                 
                                 node*    _deleteOneChild(node **current, node **left_child, node **right_child
                                         , int memory_colour)
@@ -550,26 +414,17 @@ namespace ft
                                                         parent->right = *right_child;
                                         }
                                         _destroyPair(*current);
-                                        //delete *current;
                                         _destroyNode(*current);
                                         *current = NULL;
-                                 //       std::cout << "parent : " << parent << std::endl;
-                                 //       std::cout << "left : " << *left_child << " right : " << *right_child << std::endl;
                                         if (*left_child)
                                         {
                                                 (*left_child)->parent = parent;
                                                 *current = *left_child;
-                                          //      std::cout<<"*current->pair first : " << (*current)->pair->first<<std::endl;
-                                           //     if((*current)->parent)
-                                            //            std::cout<<"*current->pair : " << (*current)->parent->pair->first<<std::endl;
                                         }
                                         else if (*right_child)
                                         {
                                                 (*right_child)->parent = parent;
                                                 *current = *right_child;
-                                             //   std::cout<<"*current->pair first : " << (*current)->pair->first<<std::endl;
-                                             //   if((*current)->parent)
-                                              //          std::cout<<"*current->pair : " << (*current)->parent->pair->first<<std::endl;
                                         }
                                         else if (memory_colour == BLACK)
                                         {
@@ -592,10 +447,8 @@ namespace ft
                                 }
                                 void    _repearDoubleBlack(node *current)
                                 {
-                                 //       std::cout<<"is in repear"<<std::endl;
                                         node    *sibling = _getSibling(current);
 
-                                        //current->colour = DOUBLE;
                                         if (!current->parent)
                                         {
                                                 _iterator = current;
@@ -803,14 +656,12 @@ namespace ft
                                                         _rotateLeft(parentNode);
                                                         parentNode = current; //parent is now current
                                                         current = current->left; //current node is now it's old parent
-                                                        //parentNode = _getParent(current); //get it's parent now
                                                 }
                                                 else if (gParentNode->right && current == gParentNode->right->left)
                                                 {
                                                         _rotateRight(parentNode);
                                                         parentNode = current;
                                                         current = current->right;
-                                                        //parentNode = _getParent(current);
                                                 }
                                                 if (gParentNode && current == parentNode->left)
                                                         _rotateRight(gParentNode);
@@ -901,7 +752,7 @@ namespace ft
                                         while (_ptr->left) //then go to leftest key
                                                 _ptr = _ptr->left;
                                 }
-                                else// if (_old && _old->right == _ptr)
+                                else
                                 {
                                         _old = _ptr->parent;
                                         while (_old && _old->right == _ptr)
@@ -911,8 +762,6 @@ namespace ft
                                         }
                                         _ptr = _old;
                                 }
-                                //else
-                                //        _ptr = _ptr->parent;
                                 return (*this);
                         }
                         BiDirectionnalIterator& operator--()
@@ -924,7 +773,6 @@ namespace ft
                                         {
                                                 while (_ptr->right)
                                                         _ptr = _ptr->right;
-                                                //_old = _ptr;
                                         }
                                         return (*this);
                                 }
@@ -934,10 +782,9 @@ namespace ft
                                         while (_ptr->right) //then go to rightest key
                                                 _ptr = _ptr->right;
                                 }
-                                else// if (_old && _old->left == _ptr)
+                                else
                                 {
                                         _old = _ptr->parent;
-                                        //_old = _ptr->parent;
                                         while (_old && _old->left == _ptr)
                                         {
                                                 _ptr = _old;
@@ -945,8 +792,6 @@ namespace ft
                                         }
                                         _ptr = _old;
                                 }
-                               // else
-                                //        _ptr = _ptr->parent;
                                 return (*this);
                         }
                         /* POSTFIX*/
@@ -970,7 +815,6 @@ namespace ft
                         {
                                 return (_ptr != rhs._ptr);
                         }
-                //private:
                         node*   _ptr;    //pointer of pair
                         node*   _old;
                         node*   _root; //look like we need to keep root in memory to keep begin and last value

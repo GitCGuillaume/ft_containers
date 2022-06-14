@@ -29,9 +29,7 @@ namespace ft
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::iterator_category    iterator_category;
 
             RandomAccessIterator() : _ptr(){};
-            //explicit RandomAccessIterator(const iterator_type it) : _ptr(it){}
             RandomAccessIterator(pointer ptr) : _ptr(ptr) {}
-           // RandomAccessIterator(RandomAccessIterator const & rhs) : _ptr(rhs.base()){}
             /*
              *  Convert iterator to const_iterator
              *  iterator will choose non const function if container is not const
@@ -96,12 +94,7 @@ namespace ft
             {
                 return (this->_ptr + n);
             }
-            //Peut être pas bersoin de la partie dif +
-            /*difference_type  operator+(reference const rhs) const
-            {
-                return (this->_ptr + rhs._ptr);
-            }*/
-             /* https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator
+            /* https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator
             b - a */
             RandomAccessIterator  operator-(const difference_type n) const
             {

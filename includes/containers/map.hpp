@@ -52,27 +52,12 @@ namespace ft
                 : _comp(comp), _allocator(alloc), _capacity_allocator(1)
             {
                 _tree._iterator = NULL;
-                //_tree._iterator = new typename _RB_tree::node();
-                //_tree._iterator->colour = 0;
-                //_tree._iterator->pair = NULL;
-                //_tree._iterator->pair = _allocator.allocate(1);
-                //_allocator.construct(_tree._iterator->pair, value_type()); //Call pair<>() constructor
             }
             template<class InputIt>
             map(InputIt first, InputIt second, const Compare& comp = Compare(),
                 const Allocator& alloc = Allocator()) : _comp(comp), _allocator(alloc), _capacity_allocator(1)
             {
-                //typename _RB_tree::rebind_node  _rebind_node;
                 _tree._iterator = NULL;
-                /*_tree._iterator = _rebind_node.allocate(1);
-                _rebind_node.construct(_tree._iterator, typename _RB_tree::node());
-                _tree._iterator->parent = NULL;
-                _tree._iterator->left = NULL;
-                _tree._iterator->right = NULL;
-                _tree._iterator->pair = NULL;
-                _tree._iterator->colour = 0;*/
-                //_tree._iterator->pair = _allocator.allocate(1);
-                //_allocator.construct(_tree._iterator->pair, value_type());
                 this->insert(first, second);
             }
             map(const map& other)
@@ -80,7 +65,6 @@ namespace ft
                 _comp = other._comp;
                 _allocator = other._allocator;
                 _capacity_allocator = other._capacity_allocator;
-                //FONCTION INSERT RANGE
                 this->insert(other.begin(), other.end());
             }
             map&    operator=(const map& other)
@@ -148,23 +132,6 @@ namespace ft
                 while (_tree._iterator->parent)
                         _tree._iterator = _tree._iterator->parent;
                 return (ret->pair->second);
-                
-                /*typename _RB_tree::node* new_node;
-                typename _RB_tree::node* res;
-                new_node = new typename _RB_tree::node();
-                new_node->pair = _allocator.allocate(1);
-                _allocator.construct(new_node->pair, ft::pair<key_type, mapped_type>(key, T()));
-                res = _tree.insertOperator(new_node);
-                if (res)
-                {
-                    _allocator.destroy(new_node->pair);
-                    _allocator.deallocate(new_node->pair, 1);
-                    delete new_node;
-                    while (_tree._iterator->parent)
-                        _tree._iterator = _tree._iterator->parent;
-                    return (res->pair->second);
-                }
-                return (new_node->pair->second);*/
             }
             iterator    begin()
             {
@@ -243,18 +210,7 @@ namespace ft
                     return (it);
                 }
                 it = iterator(new_node, _tree._iterator);
-                /*typename _RB_tree::node*    new_node _tree.search(hint->first);
-
-                new_node = _tree.insert(value);
-                if (!new_node)
-                {
-                    it = iterator(_tree._iterator, _tree._iterator);
-                    while (_tree._iterator->parent)
-                        _tree._iterator = _tree._iterator->parent;
-                    return (it);
-                }
-                it = iterator(new_node, _tree._iterator);
-                */return (it);
+                return (it);
             }
             template<class InputIt>
             void    insert(InputIt first, InputIt last)
@@ -337,7 +293,7 @@ namespace ft
                         if (it->first != key)
                             return (ft::make_pair(it, it));
                     }
-                    else if (_comp(key, it->first))// && first_found == true)
+                    else if (_comp(key, it->first))
                         return (ft::make_pair(first, it));
                     it++;
                 }
@@ -436,7 +392,7 @@ namespace ft
 
         private:
             typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>   _RB_tree;
-            _RB_tree    _tree; //need to use RD iterator nodes somewhere
+            _RB_tree    _tree;
             key_compare  _comp;
             allocator_type	_allocator;
 			size_type		_capacity_allocator;

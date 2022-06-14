@@ -160,7 +160,7 @@ int	main(void)
 	execute_function(&iterator_empty, 0);
 	execute_function(&iterator_empty_custom, 1);
 	//MAP PART
-
+*/
 	execute_function(default_constructor_map, 0);
 	execute_function(default_constructor_map_custom, 1);
 	execute_function(constructor_range_map, 0);
@@ -249,8 +249,8 @@ int	main(void)
 	execute_function(test_value_comp, 0);
 	execute_function(test_value_comp_custom, 1);
 	execute_function(non_member_operator_map, 0);
-	execute_function(non_member_operator_map_custom, 1);*/
-	execute_function(default_constructor_stack, 0);
+	execute_function(non_member_operator_map_custom, 1);/**/
+	/*execute_function(default_constructor_stack, 0);
 	execute_function(default_constructor_stack_custom, 1);
 	execute_function(constructor_stack_copy, 0);
 	execute_function(constructor_stack_copy_custom, 1);
@@ -262,5 +262,5 @@ int	main(void)
 	execute_function(stack_equal_custom, 1);
 	execute_function(std_mustant_stack, 0);
 	execute_function(ft_mustant_stack_custom, 1);
-	return (0);
+	*/return (0);
 }

@@ -11,7 +11,6 @@
 #include <exception>
 #include <sstream>
 #include <limits>
-//#include <memory>
 
 namespace ft
 {
@@ -32,24 +31,15 @@ namespace ft
 			typedef std::ptrdiff_t	difference_type;
 			typedef std::size_t	size_type;
 			/* MEMBERS FUNCTIONS */
-			/*vector() : _capacity_allocator(0), _size(0)
-			{
-				_allocator = Allocator();
-				_vec = _allocator.allocate(0);
-			}*/
 			/* TESTER CAPACITY ALLOCATORS */
 			explicit	vector(const allocator_type& alloc = allocator_type()) : _vec(0), _allocator(alloc), _capacity_allocator(0), _size(0)
 			{
-				//_vec = 0;
 				_vec = _allocator.allocate(0);
 			}
 			explicit	vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator()) :
 				_allocator(alloc), _capacity_allocator(count), _size(count)
 			{
-				//if (count > 0)
 				_vec = _allocator.allocate(count);
-				//else
-				//	_vec = 0;
 				for (size_type i = 0; i < count; i++)
 					_allocator.construct(_vec + i, value);
 			}
@@ -71,10 +61,7 @@ namespace ft
 			vector(const vector& other)
 			{
 				_allocator = other.get_allocator();
-				//if (other.size() > 0)
-					_vec = _allocator.allocate(other.size());
-				//else
-				//	_vec = 0;
+				_vec = _allocator.allocate(other.size());
 				_capacity_allocator = other.size();
 				_size = other.size();
 				for (size_type i = 0; i < other.size(); i++)
@@ -93,26 +80,20 @@ namespace ft
 			{
 				if (this != &other)
 				{
-					//if (_vec)
-					//{
 						for (size_type i = 0; i < _size; i++)
 							_allocator.destroy(_vec + i);
-						//_vec = NULL;
 						_size = 0;
-					//}
 					if (other.empty())
 						return (*this);
-					//_allocator = other.get_allocator();
 					if (this->capacity() < other.capacity())
 					{
 						_allocator.deallocate(_vec, _capacity_allocator);
-						_vec = _allocator.allocate(other.capacity());
-						_capacity_allocator = other.capacity();
+						_vec = _allocator.allocate(other.size());
+						_capacity_allocator = other.size();
 					}
 					_size = other.size();
 					for (size_type i = 0; i < other.size(); i++)
 						_allocator.construct(_vec + i, other.at(i));
-					//	_vec[i] = other.at(i);
 				}
 				return (*this);
 			}
@@ -125,7 +106,6 @@ namespace ft
 					_allocator.destroy(_vec + i);
 				if (this->capacity() < count)
 				{
-					//if (_vec)
 					_allocator.deallocate(_vec, _capacity_allocator);
 					_capacity_allocator = count;
 					_vec = _allocator.allocate(_capacity_allocator);
@@ -155,7 +135,6 @@ namespace ft
 					_allocator.construct(_vec + i++, *first);
 					first++;
 				}
-				//_allocator.construct(_vec + i++, *first);
 				_size = static_cast<size_type>(count);
 			}
 			allocator_type	get_allocator() const
@@ -424,59 +403,7 @@ namespace ft
 				}
 				_size += count;
 			}
-			/*
-				00
-				0111110 (2 - 1) + 5
-				0122211110 (7 - 1) + 3
-				Inserting element at a position other than end() cause element to relocate
-				from pos to end
-			*/
-			//_vec[cpy + count] = _vec[cpy_size - 1];
-			//_allocator.construct(_vec + (cpy + count), *(_vec + cpy));
-			//_allocator.destroy(_vec + cpy);
-			/*void	insert(iterator pos, size_type count, const T& value)
-			{
-				if (count == 0)
-					return ;
-				size_type	offset = pos - this->begin();
-				if (_size + count > _capacity_allocator)
-				{
-					if (_capacity_allocator == 0)
-						this->reserve(_size + count);
-					else if (_capacity_allocator + count > (_capacity_allocator << 1))
-						this->reserve(_capacity_allocator + count);
-					else
-						this->reserve(_capacity_allocator << 1);
-				}
-				if (this->size() == 0)
-				{
-					for (size_type nb_count = 0; nb_count < count; nb_count++)
-						_allocator.construct(_vec + nb_count, value);
-					_size += count;
-				}
-				else
-				{
-					iterator	new_it = offset + this->begin();
-					vector	vec_tmp(new_it, this->end());
-					
-					iterator	it_end = this->end();
-					size_type nb_pop_back = 0;
-					for (nb_pop_back = 0; nb_pop_back < vec_tmp.size(); nb_pop_back++)
-						this->pop_back();
-					size_type nb_count = 0;
-					for (nb_count = 0; nb_count < count; nb_count++)
-						_allocator.construct(&_vec[this->size() + nb_count], value);
-					_size += nb_count;
-					size_type i = 0;
-					for (iterator	iterator_tmp = vec_tmp.begin(); iterator_tmp != vec_tmp.end(); iterator_tmp++)
-					{
-						_allocator.construct(&_vec[_size], vec_tmp[i]);
-						i++;
-						_size++;
-					}
-				}
-				
-			}*/
+
 			template<class InputIt>
 			void	insert(iterator pos, InputIt first, InputIt last,
 				typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
@@ -580,8 +507,6 @@ namespace ft
 			}
 			void	push_back(const T& value)
 			{
-				//size_type	new_size = _size + 1;
-
 				if (_capacity_allocator <= _size)
 				{
 					if (_capacity_allocator == 0)
@@ -589,10 +514,6 @@ namespace ft
 					else
 						this->reserve(_size << 1);
 				}
-			/*	if (_capacity_allocator == 0)
-					this->reserve(1);
-				else if (_size + 1 > this->capacity())
-					this->reserve(_capacity_allocator << 1);*/
 				_allocator.construct(_vec + _size, value);
 				_size++;
 			}
@@ -608,7 +529,7 @@ namespace ft
 			{
 				if (_capacity_allocator <= count)
 				{
-					size_type	multiple_two = _capacity_allocator << 1;
+					size_type	multiple_two = _size << 1;
 					if (_capacity_allocator == 0)
 						this->reserve(count);
 					else if (count < multiple_two)
