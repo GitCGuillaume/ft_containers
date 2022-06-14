@@ -72,7 +72,7 @@ namespace ft
 				if (_vec)
 				{
 					for (size_type i = 0; i < _size; i++)
-						_allocator.destroy(_vec + i);
+						_allocator.destroy(&_vec[i]);
 					_allocator.deallocate(_vec, _capacity_allocator);
 				}
 			}
@@ -111,7 +111,7 @@ namespace ft
 					_vec = _allocator.allocate(_capacity_allocator);
 				}
 				for (i = 0; i < count; i++)
-					_allocator.construct(_vec + i, value);
+					_allocator.construct(&_vec[i], value);
 				_size = count;
 			}
 			/* ::type* = 0 () */
@@ -286,8 +286,8 @@ namespace ft
 					//std::uninitialized_copy(this->begin(), this->end(), ptr);
 					for (size_type i = 0; i < this->size(); i++)
 					{
-						_allocator.construct(ptr + i, *(_vec + i));
-						_allocator.destroy(_vec + i);
+						_allocator.construct(&ptr[i], *(_vec + i));
+						_allocator.destroy(&_vec[i]);
 					}
 					_allocator.deallocate(_vec, this->capacity());
 					_vec = ptr;
@@ -380,7 +380,7 @@ namespace ft
 				if (this->size() == 0)
 				{
 					for (size_type nb_count = 0; nb_count < count; nb_count++)
-						_allocator.construct(_vec + nb_count, value);
+						_allocator.construct(&_vec[nb_count], value);
 				}
 				else
 				{
@@ -399,7 +399,7 @@ namespace ft
 						--cpy_count;
 					}
 					for (size_type nb_count = 0; nb_count < count; nb_count++)
-						_allocator.construct(_vec + (cpy_size + nb_count), value);
+						_allocator.construct(&_vec[cpy_size + nb_count], value);
 				}
 				_size += count;
 			}
@@ -447,7 +447,10 @@ namespace ft
 						--cpy_count;
 					}
 					while (first != last)
-						_allocator.construct(_vec + (cpy_size + nb_count++), *(first)++);
+					{
+						_allocator.construct(&_vec[cpy_size + nb_count], *(first)++);
+						++nb_count;
+					}
 				}
 				_size += distance;
 			}
@@ -464,8 +467,8 @@ namespace ft
 					_allocator.destroy(_vec + distance);
 					if (it + 1 != it_end)
 						_allocator.construct(_vec + distance, _vec[distance + 1]);
-					distance++;
-					it++;
+					++distance;
+					++it;
 				}
 				if (pos != this->end())
 					_size--;
@@ -487,17 +490,17 @@ namespace ft
 					while (it != last)
 					{
 						_allocator.destroy(_vec + distance);
-						distance++;
-						reduce++;
-						it++;
+						++distance;
+						++reduce;
+						++it;
 					}
 					while (it != it_end)
 					{
 						_allocator.construct(_vec + cpy_distance, *it);
 						_allocator.destroy(_vec + distance);
-						it++;
-						distance++;
-						cpy_distance++;
+						++it;
+						++distance;
+						++cpy_distance;
 					}
 					_size -= reduce;
 				}
@@ -540,7 +543,7 @@ namespace ft
 				while (_size < count)
 				{
 					_allocator.construct(_vec + _size, value);
-					_size++;
+					++_size;
 				}
 				if (count < _size)
 				{

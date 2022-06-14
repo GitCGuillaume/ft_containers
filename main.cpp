@@ -121,7 +121,7 @@ int	main(void)
 	execute_function(&clear, 0);
 	execute_function(&clear_custom, 1);
 	execute_function(&insert, 0);
-	execute_function(&insert_custom, 1);
+	execute_function(&insert_custom, 1);*/
 	execute_function(&insert_100k, 0);
 	execute_function(&insert_100k_custom, 1);
 	execute_function(&insert_reserve_100k, 0);
@@ -132,7 +132,7 @@ int	main(void)
 	execute_function(&count_insert_100_custom, 1);
 	execute_function(&iterator_insert, 0);
 	execute_function(&iterator_insert_custom, 1);
-
+/*
 	execute_function(&erase, 0);
 	execute_function(&erase_custom, 1);
 	execute_function(&erase_30k, 0);
@@ -161,7 +161,7 @@ int	main(void)
 	execute_function(&iterator_empty_custom, 1);
 	//MAP PART
 */
-	execute_function(default_constructor_map, 0);
+/*	execute_function(default_constructor_map, 0);
 	execute_function(default_constructor_map_custom, 1);
 	execute_function(constructor_range_map, 0);
 	execute_function(constructor_range_map_custom, 1);
@@ -249,7 +249,7 @@ int	main(void)
 	execute_function(test_value_comp, 0);
 	execute_function(test_value_comp_custom, 1);
 	execute_function(non_member_operator_map, 0);
-	execute_function(non_member_operator_map_custom, 1);/**/
+	execute_function(non_member_operator_map_custom, 1);*//**/
 	/*execute_function(default_constructor_stack, 0);
 	execute_function(default_constructor_stack_custom, 1);
 	execute_function(constructor_stack_copy, 0);

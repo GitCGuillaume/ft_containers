@@ -370,7 +370,7 @@ namespace ft
                         }
                         std::size_t   max_size() const
                         {
-                                return (std::numeric_limits<std::size_t>::max() / sizeof(node));
+                                return (std::numeric_limits<std::size_t>::max() / sizeof(rebind_node));
                         }
                         node*  _iterator;
 
