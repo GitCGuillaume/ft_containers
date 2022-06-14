@@ -391,11 +391,14 @@ namespace ft
 					iterator	ite = this->end();
 					size_type	size = (_size + count) - 1;
 					size_type	slot = _size;
-					for (size_type i = 0; it_new != ite; it_new++, i++, size--)
+					for (size_type i = 0; it_new != ite;)
 					{
 						--slot;
 						_allocator.construct(&_vec[size], _vec[slot]);
 						_allocator.destroy(&_vec[slot]);
+						++it_new;
+						++i;
+						--size;
 					}
 					for (size_type nb_count = 0; nb_count < count; nb_count++)
 						_allocator.construct(&_vec[slot++], value);
