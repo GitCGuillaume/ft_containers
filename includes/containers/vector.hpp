@@ -11,6 +11,8 @@
 #include <exception>
 #include <sstream>
 #include <limits>
+#include <algorithm>
+#include <memory>
 
 namespace ft
 {
@@ -364,9 +366,10 @@ namespace ft
 			{
 				size_type	offset = pos - this->begin();
 				size_type	new_size = _size + count;
-
+				//size_type	dis = std::distance(this->begin(), pos);
 				if (count == 0)
 					return ;
+				//--dis;
 				if (new_size > _capacity_allocator)
 				{
 					size_type multiple_two = _size << 1;
@@ -384,22 +387,18 @@ namespace ft
 				}
 				else
 				{
-					size_type	cpy_size = _size;
-					iterator	new_it = (offset + this->begin()) + count;
-					iterator	it_end = this->end() + count;
-					size_type	cpy = cpy_size - 1;
-					size_type	cpy_count = cpy + count;
-					while (it_end != new_it)
+					iterator	it_new = offset + this->begin();
+					iterator	ite = this->end();
+					size_type	size = (_size + count) - 1;
+					size_type	slot = _size;
+					for (size_type i = 0; it_new != ite; it_new++, i++, size--)
 					{
-						_allocator.construct(&_vec[cpy_count], _vec[cpy]);
-						_allocator.destroy(&_vec[cpy]);
-						--cpy_size;
-						--it_end;
-						--cpy;
-						--cpy_count;
+						--slot;
+						_allocator.construct(&_vec[size], _vec[slot]);
+						_allocator.destroy(&_vec[slot]);
 					}
 					for (size_type nb_count = 0; nb_count < count; nb_count++)
-						_allocator.construct(&_vec[cpy_size + nb_count], value);
+						_allocator.construct(&_vec[slot++], value);
 				}
 				_size += count;
 			}

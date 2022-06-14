@@ -34,7 +34,7 @@ void    erase_30k()
     vec.erase(vec.begin() + 10000);
     vec.erase(vec.end() - 1);
     for (double i = 0.000000; i < 28000.000000; i++)
-        vec.insert(vec.end(), i);
+        vec.insert(vec.begin(), i);
     std::cout << "capacity : " << vec.capacity() << std::endl;
 }
 
