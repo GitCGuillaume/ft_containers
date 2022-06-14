@@ -95,7 +95,7 @@ namespace ft
 					}
 					_size = other.size();
 					for (size_type i = 0; i < other.size(); i++)
-						_allocator.construct(_vec + i, other.at(i));
+						_allocator.construct(_vec + i, other[i]);
 				}
 				return (*this);
 			}
@@ -134,8 +134,9 @@ namespace ft
 				i = 0;
 				while (first != last)
 				{
-					_allocator.construct(_vec + i++, *first);
-					first++;
+					_allocator.construct(&_vec[i], *first);
+					++first;
+					++i;
 				}
 				_size = static_cast<size_type>(count);
 			}
@@ -282,16 +283,15 @@ namespace ft
 				if (new_cap > this->max_size())
 					throw std::length_error("vector::reserve");
 				pointer	ptr = NULL;
-				if (new_cap > this->capacity())
+				if (new_cap > _capacity_allocator)
 				{
 					ptr = _allocator.allocate(new_cap);
-					//std::uninitialized_copy(this->begin(), this->end(), ptr);
-					for (size_type i = 0; i < this->size(); i++)
+					for (size_type i = 0; i < _size; i++)
 					{
-						_allocator.construct(&ptr[i], *(_vec + i));
+						_allocator.construct(&ptr[i], _vec[i]);
 						_allocator.destroy(&_vec[i]);
 					}
-					_allocator.deallocate(_vec, this->capacity());
+					_allocator.deallocate(_vec, _capacity_allocator);
 					_vec = ptr;
 					_capacity_allocator = new_cap;
 				}
@@ -318,10 +318,11 @@ namespace ft
 			*/
 			iterator	insert(iterator pos, const T& value)
 			{
-				iterator	new_it;
-				iterator	it_end;
+				//iterator	new_it;
+				//iterator	it_end;
 				size_type	offset = pos - this->begin();
-				size_type	cpy_size = _size;
+				size_type	slot = _size;
+				//size_type	cpy_size = _size;
 				size_type	new_size = _size + 1;
 
 				if (new_size > _capacity_allocator)
@@ -338,19 +339,21 @@ namespace ft
 					_allocator.construct(_vec, value);
 				else
 				{
-					new_it = offset + this->begin();
-					it_end = this->end();
-					while (it_end != new_it)
+					size_type	size = _size;
+					size_type i = 0;
+					size_type	max = _size - offset;
+					while (i < max)
 					{
-						_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
-						_allocator.destroy(_vec + (cpy_size - 1));
-						--cpy_size;
-						--it_end;
+						--slot;
+						_allocator.construct(&_vec[size], _vec[slot]);
+						_allocator.destroy(&_vec[slot]);
+						++i;
+						--size;
 					}
-					_allocator.construct(_vec + cpy_size, value);
+					_allocator.construct(&_vec[slot], value);
 				}
 				_size++;
-				return (&_vec[cpy_size]);
+				return (&_vec[slot]);
 			}
 			/*
 				00
@@ -368,9 +371,7 @@ namespace ft
 					return ;
 				size_type	offset = pos - this->begin();
 				size_type	new_size = _size + count;
-				//size_type	dis = std::distance(this->begin(), pos);
-				
-				//--dis;
+
 				if (new_size > _capacity_allocator)
 				{
 					size_type multiple_two = _size << 1;
@@ -388,9 +389,7 @@ namespace ft
 				}
 				else
 				{
-					//iterator	it_new = offset + this->begin();
-					//iterator	ite = this->end();
-					size_type	size = (_size + count) - 1;
+					size_type	size = _size + count - 1;
 					size_type	slot = _size;
 					size_type i = 0;
 					size_type	max = _size - offset;
@@ -439,7 +438,24 @@ namespace ft
 				}
 				else
 				{
-					size_type	cpy_size = _size;
+					size_type	size = _size + distance - 1;
+					size_type	slot = _size;
+					size_type i = 0;
+					size_type	max = _size - offset;
+					while (i < max)
+					{
+						--slot;
+						_allocator.construct(&_vec[size], _vec[slot]);
+						_allocator.destroy(&_vec[slot]);
+						++i;
+						--size;
+					}
+					while (first != last)
+					{
+						_allocator.construct(&_vec[slot], *(first)++);
+						++slot;
+					}
+					/*size_type	cpy_size = _size;
 					iterator	new_it = (offset + this->begin()) + distance;
 					iterator	it_end = this->end() + distance;
 					size_type	cpy = cpy_size - 1;
@@ -452,12 +468,12 @@ namespace ft
 						--it_end;
 						--cpy;
 						--cpy_count;
-					}
-					while (first != last)
+					}*/
+					/*while (first != last)
 					{
 						_allocator.construct(&_vec[cpy_size + nb_count], *(first)++);
 						++nb_count;
-					}
+					}*/
 				}
 				_size += distance;
 			}
