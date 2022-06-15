@@ -337,6 +337,10 @@ namespace ft
 				}
 				if (this->size() == 0)
 					_allocator.construct(_vec, value);
+				else if (pos == this->end())
+				{
+					_allocator.construct(_vec + _size, value);
+				}
 				else
 				{
 					size_type	size = _size;
@@ -387,25 +391,35 @@ namespace ft
 					for (size_type nb_count = 0; nb_count < count; nb_count++)
 						_allocator.construct(&_vec[nb_count], value);
 				}
+				else if (pos == this->end())
+				{
+					size_type	cpy = _size;
+					for (size_type nb_count = 0; nb_count < count; nb_count++)
+					{
+						_allocator.construct(_vec + cpy, value);
+						++cpy;
+					}
+				}
 				else
 				{
 					size_type	size = _size + count - 1;
 					size_type	slot = _size;
-					size_type i = 0;
 					size_type	max = _size - offset;
-					while (i < max)
+					for (size_type i = 0; i < max; i++)
 					{
 						--slot;
-						_allocator.construct(&_vec[size], _vec[slot]);
-						_allocator.destroy(&_vec[slot]);
-						++i;
+						//if (size < max)
+							_vec[size] = _vec[slot];
+						/*else
+						{
+							_allocator.construct(_vec + size, _vec[slot]);
+							_allocator.destroy(_vec + slot);
+						}*/
 						--size;
 					}
-					for (size_type nb_count = 0; nb_count < count; nb_count++)
-					{
-						_allocator.construct(&_vec[slot], value);
-						++slot;
-					}
+					max = slot + count;
+					for (size_type nb_count = slot; nb_count < max; nb_count++)
+						_allocator.construct(_vec + nb_count, value);
 				}
 				_size += count;
 			}
@@ -482,7 +496,7 @@ namespace ft
 			//_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
 			iterator	erase(iterator pos)
 			{
-				difference_type	distance = std::distance(this->begin(), pos);
+				/*difference_type	distance = std::distance(this->begin(), pos);
 				iterator	it(pos);
 				iterator	it_end = this->end();
 				while (it != it_end)
@@ -495,40 +509,51 @@ namespace ft
 				}
 				if (pos != this->end())
 					_size--;
+				return (pos);*/
+
+				size_type	offset = pos - this->begin();
+				size_type	offset2 = offset + 1;
+				size_type	max = _size - offset;
+				size_type	i = 0;
+				while (i < max)
+				{
+					_allocator.destroy(&_vec[offset]);
+					++i;
+					if (i != max)
+						_allocator.construct(&_vec[offset], _vec[offset2]);
+					++offset2;
+					++offset;
+				}
+				if (pos != this->end())
+					_size--;
 				return (pos);
 			}
 			iterator	erase(iterator first, iterator last)
 			{
-				if (first == last)
-					return (last);
-				size_type	reduce = 0;
-				size_type	offset = first - this->begin();
-				difference_type	distance = std::distance(this->begin(), first);
-				size_type	cpy_distance = distance;
-				iterator	it(first);
-				iterator	it_end = this->end();
+				size_type	offset_first = first - this->begin();
+				size_type	copy_offset = offset_first;
+				size_type	copy_offset2 = copy_offset;
+				size_type	offset_last = last - this->begin();
+				size_type	max = this->end() - this->begin();
 
 				if (first != last)
 				{
-					while (it != last)
+					while (offset_first != offset_last)
 					{
-						_allocator.destroy(_vec + distance);
-						++distance;
-						++reduce;
-						++it;
+						_allocator.destroy(_vec + offset_first);
+						++offset_first;
+						--_size;
 					}
-					while (it != it_end)
+					while (offset_first != max)
 					{
-						_allocator.construct(_vec + cpy_distance, *it);
-						_allocator.destroy(_vec + distance);
-						++it;
-						++distance;
-						++cpy_distance;
+						_allocator.construct(_vec + copy_offset, _vec[offset_first]);
+						_allocator.destroy(_vec + offset_first);
+						++copy_offset;
+						++offset_first;
 					}
-					_size -= reduce;
 				}
 				if (last == this->end())
-					return (offset + this->begin());
+					return (copy_offset2 + this->begin());
 				return (first);
 			}
 			void	push_back(const T& value)

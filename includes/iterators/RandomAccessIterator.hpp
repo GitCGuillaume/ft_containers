@@ -59,25 +59,25 @@ namespace ft
             /* PREFIX */
             RandomAccessIterator& operator++()
             {
-                _ptr++;
+                ++_ptr;
                 return (*this);
             }
             RandomAccessIterator& operator--()
             {
-                _ptr--;
+                --_ptr;
                 return (*this);
             }
             /* POSTFIX*/
             RandomAccessIterator operator++(int)
             {
                 RandomAccessIterator tmp = *this;
-                _ptr++;
+                ++_ptr;
                 return (tmp);
             }
             RandomAccessIterator   operator--(int)
             {
                 RandomAccessIterator tmp = *this;
-                _ptr--;
+                --_ptr;
                 return (tmp);
             }
             RandomAccessIterator& operator+=(const difference_type n)

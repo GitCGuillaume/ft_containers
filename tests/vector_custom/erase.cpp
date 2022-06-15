@@ -30,11 +30,8 @@ void    erase_30k_custom()
     ft::vector<double>  vec;
     for (double i = 0.000000; i < 30000.000000; i++)
         vec.insert(vec.end(), i);
-    vec.erase(vec.begin() + 2);
-    vec.erase(vec.begin() + 10000);
-    vec.erase(vec.end() - 1);
-    for (double i = 0.000000; i < 28000.000000; i++)
-        vec.insert(vec.begin(), i);
+    for (double i = 0.000000; i < 30000.000000; i++)
+        vec.erase(vec.begin());
     std::cout << "capacity : " << vec.capacity() << std::endl;
 }
 
