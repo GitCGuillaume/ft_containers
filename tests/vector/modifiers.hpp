@@ -16,5 +16,4 @@ void    pop_back_vector();
 void    resize();
 void    swap_vector();
 void    swap_vector_non_member();
-
 #endif

@@ -307,68 +307,78 @@ namespace ft
 					_allocator.destroy(_vec + i);
 				_size = 0;
 			}
-			/*
-				Memory capacity is _capacity_allocator * 2 if new_size is greater than old capacity
-				Put value at the iterator address
-				Reserve does provock iterator invalidity
-				To resolve this, can do std::distance or iterator - .begin();
-				_allocator.construct(_vec + cpy_size, *(_vec + (cpy_size - 1)));
-				_allocator.destroy(_vec + (cpy_size - 1));
-				_vec[cpy_size] = _vec[cpy_size - 1];
-			*/
 			iterator	insert(iterator pos, const T& value)
 			{
-				//iterator	new_it;
-				//iterator	it_end;
 				size_type	offset = pos - this->begin();
-				size_type	slot = _size;
-				//size_type	cpy_size = _size;
+				size_type	offset_cpy = offset;
 				size_type	new_size = _size + 1;
 
 				if (new_size > _capacity_allocator)
 				{
+					pointer	ptr = pointer();
+
 					size_type multiple_two = _size << 1;
 					if (_capacity_allocator == 0)
-						this->reserve(new_size);
-					else if (multiple_two > new_size)
-						this->reserve(multiple_two);
-					else
-						this->reserve(new_size);
-				}
-				if (this->size() == 0)
-					_allocator.construct(_vec, value);
-				else if (pos == this->end())
-				{
-					_allocator.construct(_vec + _size, value);
-				}
-				else
-				{
-					size_type	size = _size;
-					size_type i = 0;
-					size_type	max = _size - offset;
-					while (i < max)
 					{
-						--slot;
-						_allocator.construct(&_vec[size], _vec[slot]);
-						_allocator.destroy(&_vec[slot]);
-						++i;
-						--size;
+						ptr = _allocator.allocate(new_size);
+						_capacity_allocator = new_size;
 					}
-					_allocator.construct(&_vec[slot], value);
+					else if (multiple_two > new_size)
+					{
+						ptr = _allocator.allocate(multiple_two);
+						_capacity_allocator = multiple_two;
+					}
+					else
+					{
+						ptr = _allocator.allocate(new_size);
+						_capacity_allocator = new_size;
+					}
+					for (size_type i = 0; i < offset; i++)
+					{
+						_allocator.construct(ptr + i, _vec[i]);
+						_allocator.destroy(_vec + i);
+					}
+					size_type	nb_count = offset + 1;
+					_allocator.construct(ptr + offset, value);
+					while (offset < _size)
+					{
+						_allocator.construct(ptr + nb_count, _vec[offset]);
+						_allocator.destroy(_vec + offset);
+						++nb_count;
+						++offset;
+					}
+					_allocator.deallocate(_vec, _capacity_allocator);
+					_vec = ptr;
+					++_size;
+					return (&_vec[offset_cpy]);
 				}
-				_size++;
+				size_type	slot = _size;
+				size_type       size = _size;
+				size_type       max = _size - offset;
+				for (size_type i = 0; i < max; i++)
+				{
+						--slot;
+						new (_vec + size) value_type(_vec[slot]);
+						_vec[slot].~value_type();
+						--size;
+				}
+				_allocator.construct(&_vec[slot], value);
+				++_size;
 				return (&_vec[slot]);
 			}
 			/*
-				00
-				0111110 (2 - 1) + 5
-				0122211110 (7 - 1) + 3
 				Inserting element at a position other than end() cause element to relocate
 				from pos to end
+				THIS IS FROM LIBSTDC++
+				Calling directly content is much faster than calling the functions.
+				/ _GLIBCXX_RESOLVE_LIB_DEFECTS
+				// 402. wrong new expression in [some_] allocator::construct
+				void
+				construct(pointer __p, const _Tp& __val)
+				{ ::new((void *)__p) _Tp(__val); }
+				void
+				destroy(pointer __p) { __p->~_Tp(); }
 			*/
-			//_vec[cpy + count] = _vec[cpy_size - 1];
-			//_allocator.construct(_vec + (cpy + count), *(_vec + cpy));
-			//_allocator.destroy(_vec + cpy);
 			void	insert(iterator pos, size_type count, const T& value)
 			{
 				if (count == 0)
@@ -378,49 +388,58 @@ namespace ft
 
 				if (new_size > _capacity_allocator)
 				{
+					pointer	ptr = pointer();
+
 					size_type multiple_two = _size << 1;
 					if (_capacity_allocator == 0)
-						this->reserve(new_size);
+					{
+						ptr = _allocator.allocate(new_size);
+						_capacity_allocator = new_size;
+					}
 					else if (multiple_two > new_size)
-						this->reserve(multiple_two);
+					{
+						ptr = _allocator.allocate(multiple_two);
+						_capacity_allocator = multiple_two;
+					}
 					else
-						this->reserve(new_size);
-				}
-				if (this->size() == 0)
-				{
-					for (size_type nb_count = 0; nb_count < count; nb_count++)
-						_allocator.construct(&_vec[nb_count], value);
-				}
-				else if (pos == this->end())
-				{
-					size_type	cpy = _size;
-					for (size_type nb_count = 0; nb_count < count; nb_count++)
 					{
-						_allocator.construct(_vec + cpy, value);
-						++cpy;
+						ptr = _allocator.allocate(new_size);
+						_capacity_allocator = new_size;
 					}
-				}
-				else
-				{
-					size_type	size = _size + count - 1;
-					size_type	slot = _size;
-					size_type	max = _size - offset;
-					for (size_type i = 0; i < max; i++)
+					for (size_type i = 0; i < offset; i++)
 					{
+						_allocator.construct(ptr + i, _vec[i]);
+						_allocator.destroy(_vec + i);
+					}
+					size_type	nb_count = offset;
+					size_type	max = offset + count;
+					for (; nb_count < max; nb_count++)
+						_allocator.construct(ptr + nb_count, value);
+					while (offset < _size)
+					{
+						_allocator.construct(ptr + nb_count, _vec[offset]);
+						_allocator.destroy(_vec + offset);
+						++nb_count;
+						++offset;
+					}
+					_allocator.deallocate(_vec, _capacity_allocator);
+					_vec = ptr;
+					_size += count;
+					return ;
+				}
+				size_type       size = _size + count - 1;
+				size_type       slot = _size;
+				size_type       max = _size - offset;
+				for (size_type i = 0; i < max; i++)
+				{
 						--slot;
-						//if (size < max)
-							_vec[size] = _vec[slot];
-						/*else
-						{
-							_allocator.construct(_vec + size, _vec[slot]);
-							_allocator.destroy(_vec + slot);
-						}*/
+						new (_vec + size) value_type(_vec[slot]);
+						_vec[slot].~value_type();
 						--size;
-					}
-					max = slot + count;
-					for (size_type nb_count = slot; nb_count < max; nb_count++)
-						_allocator.construct(_vec + nb_count, value);
 				}
+				max = offset + count;
+				for (size_type nb_count = offset; nb_count < max; nb_count++)
+					_allocator.construct(_vec + nb_count, value);
 				_size += count;
 			}
 
@@ -428,104 +447,98 @@ namespace ft
 			void	insert(iterator pos, InputIt first, InputIt last,
 				typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 			{
-				difference_type	distance = std::distance(first, last);
-				size_type	offset = pos - this->begin();
-				size_type	nb_count = 0;
-				size_type	new_size = _size + distance;
-
-				if (distance == 0)
+				if (first == last)
 					return ;
+				/*difference_type distance = std::distance(first, last);
+				size_type	offset = pos - this->begin();
+				size_type	offset_first = first - this->begin();
+				size_type	offset_last = last - this->begin();
+				size_type	new_size = _size + (last - first);
 				if (new_size > _capacity_allocator)
 				{
-					size_type	multiple_two = _size << 1;
+					pointer	ptr = pointer();
+					size_type multiple_two = _size << 1;
 					if (_capacity_allocator == 0)
-						this->reserve(new_size);
+					{
+						ptr = _allocator.allocate(new_size);
+						_capacity_allocator = new_size;
+					}
 					else if (multiple_two > new_size)
-						this->reserve(multiple_two);
+					{
+						ptr = _allocator.allocate(multiple_two);
+						_capacity_allocator = multiple_two;
+					}
 					else
-						this->reserve(new_size);
-				}
-				if (this->size() == 0)
-				{
-					while (first != last)
-						_allocator.construct(_vec + nb_count++, *(first)++);
-				}
-				else
-				{
-					size_type	size = _size + distance - 1;
-					size_type	slot = _size;
-					size_type i = 0;
-					size_type	max = _size - offset;
-					while (i < max)
 					{
-						--slot;
-						_allocator.construct(&_vec[size], _vec[slot]);
-						_allocator.destroy(&_vec[slot]);
-						++i;
-						--size;
+						ptr = _allocator.allocate(new_size);
+						_capacity_allocator = new_size;
 					}
-					while (first != last)
+					for (size_type i = 0; i < offset; i++)
 					{
-						_allocator.construct(&_vec[slot], *(first)++);
-						++slot;
+						_allocator.construct(ptr + i, _vec[i]);
+						_allocator.destroy(_vec + i);
 					}
-					/*size_type	cpy_size = _size;
-					iterator	new_it = (offset + this->begin()) + distance;
-					iterator	it_end = this->end() + distance;
-					size_type	cpy = cpy_size - 1;
-					size_type	cpy_count = cpy + distance;
-					while (it_end != new_it)
+					size_type	nb_count = offset;
+					size_type	max = offset_last;
+					for (; nb_count < max; nb_count++)
 					{
-						_allocator.construct(&_vec[cpy_count], _vec[cpy]);
-						_allocator.destroy(&_vec[cpy]);
-						--cpy_size;
-						--it_end;
-						--cpy;
-						--cpy_count;
-					}*/
-					/*while (first != last)
+						_allocator.construct(ptr + nb_count, _vec[offset_first]);
+						++offset_first;
+					}
+					//size_type	count = nb_count;
+					while (offset_first < _size)
 					{
-						_allocator.construct(&_vec[cpy_size + nb_count], *(first)++);
+						_allocator.construct(ptr + nb_count, _vec[offset_first]);
+						_allocator.destroy(_vec + offset_first);
 						++nb_count;
-					}*/
+						++offset_first;
+					}
+					_allocator.deallocate(_vec, _capacity_allocator);
+					_vec = ptr;
+					_size += distance;
+					return ;
 				}
-				_size += distance;
+				size_type       size = _size + distance - 1;
+				size_type       slot = _size;
+				size_type       max = _size - offset;
+				for (size_type i = 0; i < max; i++)
+				{
+						--slot;
+						new (_vec + size) value_type(_vec[slot]);
+						_vec[slot].~value_type();
+						--size;
+				}
+				max = offset_last;
+				size_type	count = 0;
+				for (size_type nb_count = offset_first; nb_count < max; nb_count++)
+				{
+					_allocator.construct(_vec + slot, _vec[nb_count]);
+					++count;
+				}
+				_size += distance;*/
 			}
 			/* pointer ptr for last element because STL return an iterator with the deleted value */
 			//_allocator.destroy(_vec + distance);
 			//_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
 			iterator	erase(iterator pos)
 			{
-				/*difference_type	distance = std::distance(this->begin(), pos);
-				iterator	it(pos);
-				iterator	it_end = this->end();
-				while (it != it_end)
+				if (pos != end())
 				{
-					_allocator.destroy(_vec + distance);
-					if (it + 1 != it_end)
-						_allocator.construct(_vec + distance, _vec[distance + 1]);
-					++distance;
-					++it;
-				}
-				if (pos != this->end())
-					_size--;
-				return (pos);*/
-
-				size_type	offset = pos - this->begin();
-				size_type	offset2 = offset + 1;
-				size_type	max = _size - offset;
-				size_type	i = 0;
-				while (i < max)
-				{
-					_allocator.destroy(&_vec[offset]);
-					++i;
-					if (i != max)
+					size_type	offset = pos - this->begin();
+					size_type	offset2 = offset + 1;
+					size_type	max = (_size - offset) - 1;
+					size_type	i = 0;
+					while (i < max)
+					{
+						_vec[offset].~value_type();
+						++i;
 						_allocator.construct(&_vec[offset], _vec[offset2]);
-					++offset2;
-					++offset;
-				}
-				if (pos != this->end())
+						++offset2;
+						++offset;
+					}
+					_allocator.destroy(&_vec[offset]);
 					_size--;
+				}
 				return (pos);
 			}
 			iterator	erase(iterator first, iterator last)

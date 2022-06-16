@@ -70,13 +70,13 @@ namespace ft
             /* POSTFIX*/
             RandomAccessIterator operator++(int)
             {
-                RandomAccessIterator tmp = *this;
+                RandomAccessIterator tmp(*this);
                 ++_ptr;
                 return (tmp);
             }
             RandomAccessIterator   operator--(int)
             {
-                RandomAccessIterator tmp = *this;
+                RandomAccessIterator tmp(*this);
                 --_ptr;
                 return (tmp);
             }
