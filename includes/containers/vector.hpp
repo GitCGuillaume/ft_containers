@@ -342,8 +342,8 @@ namespace ft
 					_allocator.construct(ptr + offset, value);
 					while (offset < _size)
 					{
-						_allocator.construct(ptr + nb_count, _vec[offset]);
-						_allocator.destroy(_vec + offset);
+						new (ptr + nb_count) value_type(_vec[offset]);
+						_vec[offset].~value_type();
 						++nb_count;
 						++offset;
 					}
@@ -417,8 +417,8 @@ namespace ft
 						_allocator.construct(ptr + nb_count, value);
 					while (offset < _size)
 					{
-						_allocator.construct(ptr + nb_count, _vec[offset]);
-						_allocator.destroy(_vec + offset);
+						new (ptr + nb_count) value_type(_vec[offset]);
+						_vec[offset].~value_type();
 						++nb_count;
 						++offset;
 					}
@@ -449,14 +449,13 @@ namespace ft
 			{
 				if (first == last)
 					return ;
-				/*difference_type distance = std::distance(first, last);
-				size_type	offset = pos - this->begin();
-				size_type	offset_first = first - this->begin();
-				size_type	offset_last = last - this->begin();
+				size_type	offset = pos - begin();
 				size_type	new_size = _size + (last - first);
+				size_type	count = last - first;
 				if (new_size > _capacity_allocator)
 				{
 					pointer	ptr = pointer();
+
 					size_type multiple_two = _size << 1;
 					if (_capacity_allocator == 0)
 					{
@@ -475,30 +474,29 @@ namespace ft
 					}
 					for (size_type i = 0; i < offset; i++)
 					{
-						_allocator.construct(ptr + i, _vec[i]);
-						_allocator.destroy(_vec + i);
+						new (ptr + i) value_type(_vec[i]);
+						_vec[i].~value_type();
 					}
 					size_type	nb_count = offset;
-					size_type	max = offset_last;
+					size_type	max = offset + count;
 					for (; nb_count < max; nb_count++)
 					{
-						_allocator.construct(ptr + nb_count, _vec[offset_first]);
-						++offset_first;
+						_allocator.construct(ptr + nb_count, *first);
+						++first;
 					}
-					//size_type	count = nb_count;
-					while (offset_first < _size)
+					while (offset < _size)
 					{
-						_allocator.construct(ptr + nb_count, _vec[offset_first]);
-						_allocator.destroy(_vec + offset_first);
+						new (ptr + nb_count) value_type(_vec[offset]);
+						_vec[offset].~value_type();
 						++nb_count;
-						++offset_first;
+						++offset;
 					}
 					_allocator.deallocate(_vec, _capacity_allocator);
 					_vec = ptr;
-					_size += distance;
+					_size += count;
 					return ;
 				}
-				size_type       size = _size + distance - 1;
+				size_type       size = _size + count - 1;
 				size_type       slot = _size;
 				size_type       max = _size - offset;
 				for (size_type i = 0; i < max; i++)
@@ -508,18 +506,15 @@ namespace ft
 						_vec[slot].~value_type();
 						--size;
 				}
-				max = offset_last;
-				size_type	count = 0;
-				for (size_type nb_count = offset_first; nb_count < max; nb_count++)
+				max = offset + count;
+				for (size_type nb_count = offset; nb_count < max; nb_count++)
 				{
-					_allocator.construct(_vec + slot, _vec[nb_count]);
-					++count;
+					new (_vec + nb_count) value_type(*first);
+					++first;
 				}
-				_size += distance;*/
+				_size += count;
 			}
 			/* pointer ptr for last element because STL return an iterator with the deleted value */
-			//_allocator.destroy(_vec + distance);
-			//_allocator.construct(_vec + distance, *(_vec + (distance + 1)));
 			iterator	erase(iterator pos)
 			{
 				if (pos != end())
@@ -532,7 +527,7 @@ namespace ft
 					{
 						_vec[offset].~value_type();
 						++i;
-						_allocator.construct(&_vec[offset], _vec[offset2]);
+						new (_vec + offset) value_type(_vec[offset2]);
 						++offset2;
 						++offset;
 					}
@@ -553,14 +548,14 @@ namespace ft
 				{
 					while (offset_first != offset_last)
 					{
-						_allocator.destroy(_vec + offset_first);
+						_vec[offset_first].~value_type();
 						++offset_first;
 						--_size;
 					}
 					while (offset_first != max)
 					{
-						_allocator.construct(_vec + copy_offset, _vec[offset_first]);
-						_allocator.destroy(_vec + offset_first);
+						new (_vec + copy_offset) value_type(_vec[offset_first]);
+						_vec[offset_first].~value_type();
 						++copy_offset;
 						++offset_first;
 					}
@@ -578,14 +573,14 @@ namespace ft
 					else
 						this->reserve(_size << 1);
 				}
-				_allocator.construct(_vec + _size, value);
+				new (_vec + _size) value_type(value);
 				_size++;
 			}
 			void	pop_back()
 			{
 				if (_size > 0)
 				{
-					_allocator.destroy(_vec + (_size - 1));
+					_vec[_size - 1].~value_type();
 					_size--;
 				}
 			}
