@@ -450,8 +450,8 @@ namespace ft
 				if (first == last)
 					return ;
 				size_type	offset = pos - begin();
-				size_type	new_size = _size + (last - first);
-				size_type	count = last - first;
+				size_type	count = static_cast<size_type>(std::distance(first, last));
+				size_type	new_size = _size + count;
 				if (new_size > _capacity_allocator)
 				{
 					pointer	ptr = pointer();

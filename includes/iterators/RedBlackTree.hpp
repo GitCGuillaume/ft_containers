@@ -23,11 +23,14 @@
 template<class T>
 struct s_node
 {
-        struct s_node*  parent;
-        struct s_node*  left;
-        struct s_node*  right;
-        T      pair;
-        int    colour;
+        private:
+                struct s_node*   sim_fake;
+        public:
+                struct s_node*  parent;
+                struct s_node*  left;
+                struct s_node*  right;
+                T      pair;
+                int    colour;
 };
 
 /*
@@ -370,7 +373,8 @@ namespace ft
                         }
                         std::size_t   max_size() const
                         {
-                                return (std::numeric_limits<std::size_t>::max() / sizeof(rebind_node));
+                                //return (std::numeric_limits<std::size_t>::max() / sizeof(rebind_node));
+                                return (_rebind_node.max_size());
                         }
                         node*  _iterator;
 
