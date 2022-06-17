@@ -165,9 +165,9 @@ int	main(void)
 	execute_function(&iterator_empty_custom, 1);
 	//MAP PART
 */
-/*	execute_function(default_constructor_map, 0);
+	execute_function(default_constructor_map, 0);
 	execute_function(default_constructor_map_custom, 1);
-	execute_function(constructor_range_map, 0);
+	/*execute_function(constructor_range_map, 0);
 	execute_function(constructor_range_map_custom, 1);
 	execute_function(copy_constructor_map, 0);
 	execute_function(copy_constructor_map_custom, 1);

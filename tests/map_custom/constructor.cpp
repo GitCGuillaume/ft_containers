@@ -10,6 +10,7 @@ void    default_constructor_map_custom()
  // std::cout << "it TEST : " << map.begin()->first << std::endl;
   std::cout << "Size default constructor : " << map.size() << std::endl;
   std::cout << "Size default const constructor : " << const_map.size() << std::endl;
+  std::cout << "max_size : " << const_map.max_size() << std::endl;
   //ft::map<std::string, int> map_alloc(map.key_comp(), map.get_allocator());
 }
 

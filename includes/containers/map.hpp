@@ -49,13 +49,13 @@ namespace ft
                     }
             };
             explicit    map(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
-                : _comp(comp), _allocator(alloc), _capacity_allocator(1)
+                : _tree(), _comp(comp), _allocator(alloc)
             {
                 _tree._iterator = NULL;
             }
             template<class InputIt>
             map(InputIt first, InputIt second, const Compare& comp = Compare(),
-                const Allocator& alloc = Allocator()) : _comp(comp), _allocator(alloc), _capacity_allocator(1)
+                const Allocator& alloc = Allocator()) : _tree(), _comp(comp), _allocator(alloc)
             {
                 _tree._iterator = NULL;
                 this->insert(first, second);
@@ -64,7 +64,6 @@ namespace ft
             {
                 _comp = other._comp;
                 _allocator = other._allocator;
-                _capacity_allocator = other._capacity_allocator;
                 this->insert(other.begin(), other.end());
             }
             map&    operator=(const map& other)
@@ -74,7 +73,6 @@ namespace ft
                     this->clear();
                     _comp = other._comp;
                     _allocator = other._allocator;
-                    _capacity_allocator = other._capacity_allocator;
                     this->insert(other.begin(), other.end());
                 }
                 return (*this);
@@ -105,8 +103,8 @@ namespace ft
 
                 while (it != ite)
                 {
-                    i++;
-                    it++;
+                    ++i;
+                    ++it;
                 }
                 return (i);
             }
@@ -123,7 +121,7 @@ namespace ft
                 new_node = _tree.search(key);
                 if (!new_node)
                     throw std::out_of_range("map::at");
-                return (new_node->pair->second);
+                return (new_node->pair.second);
             }
             T&  operator[](const Key& key)
             {
@@ -131,17 +129,17 @@ namespace ft
                 typename _RB_tree::node*   ret = _tree.normalInsert(new_pair);
                 while (_tree._iterator->parent)
                         _tree._iterator = _tree._iterator->parent;
-                return (ret->pair->second);
+                return (ret->pair.second);
             }
             iterator    begin()
             {
-                if (!_tree._iterator || !_tree._iterator->pair)
+                if (!_tree._iterator)// || !_tree._iterator->pair)
                     return (iterator(_tree.end(), _tree._iterator));
                 return (iterator(_tree.begin(), _tree._iterator));
             }
             const_iterator    begin() const
             {
-                if (!_tree._iterator || !_tree._iterator->pair)
+                if (!_tree._iterator)// || !_tree._iterator->pair)
                     return (const_iterator(_tree.end(), _tree._iterator));
                 return (const_iterator(_tree.begin(), _tree._iterator));
             }
@@ -200,7 +198,7 @@ namespace ft
                 iterator    it = this->begin();
 
                 while (it != hint)
-                    it++;
+                    ++it;
                 typename _RB_tree::node*    new_node = _tree.insert(value);
                 if (!new_node)
                 {
@@ -246,16 +244,13 @@ namespace ft
                 _RB_tree    tmp_tree = other._tree;
                 key_compare tmp_comp = other._comp;
 				allocator_type	tmp_alc = other._allocator;
-				size_type	tmp_cap = other._capacity_allocator;
 
                 other._tree = _tree;
                 other._comp = _comp;
 				other._allocator = _allocator;
-				other._capacity_allocator = _capacity_allocator;
                 _tree = tmp_tree;
                 _comp = tmp_comp;
 				_allocator = tmp_alc;
-				_capacity_allocator = tmp_cap;
             }
             /* Lookup */
             size_type   count(const Key& key) const
@@ -295,7 +290,7 @@ namespace ft
                     }
                     else if (_comp(key, it->first))
                         return (ft::make_pair(first, it));
-                    it++;
+                    ++it;
                 }
                 if (it == ite && first_found == true)
                     return (ft::make_pair(first, ite));
@@ -321,7 +316,7 @@ namespace ft
                     }
                     else if (_comp(key, it->first))
                         return (ft::make_pair(first, it));
-                    it++;
+                    ++it;
                 }
                 if (it == ite && first_found == true)
                     return (ft::make_pair(first, ite));
@@ -336,7 +331,7 @@ namespace ft
                 {
                     if (!(_comp(it->first, key)))
                         return (it);
-                    it++;
+                    ++it;
                 }
                 return (ite);
             }
@@ -350,7 +345,7 @@ namespace ft
                 {
                     if (!(_comp(it->first, key)))
                         return (it);
-                    it++;
+                    ++it;
                 }
                 return (ite);
             }
@@ -363,7 +358,7 @@ namespace ft
                 {
                     if (_comp(key, it->first))
                         return (it);
-                    it++;
+                    ++it;
                 }
                 return (ite);
             }
@@ -377,7 +372,7 @@ namespace ft
                 {
                     if (_comp(key, it->first))
                         return (it);
-                    it++;
+                    ++it;
                 }
                 return (ite);
             }
@@ -395,7 +390,6 @@ namespace ft
             _RB_tree    _tree;
             key_compare  _comp;
             allocator_type	_allocator;
-			size_type		_capacity_allocator;
     };
     template<class Key, class T, class Compare, class Alloc>
     bool    operator==(const ft::map<Key, T, Compare, Alloc>& lhs,
