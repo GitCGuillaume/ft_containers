@@ -6,7 +6,6 @@ void    default_constructor_map()
   std::map<std::string, int> map;
   const std::map<std::string, int> const_map;
 
-  //std::cout << "it TEST : " << map.begin()->first << std::endl;
   std::cout << "Size default constructor : " << map.size() << std::endl;
   std::cout << "Size default const constructor : " << const_map.size() << std::endl;
   std::cout << "max_size : " << const_map.max_size() << std::endl;
@@ -111,7 +110,7 @@ void  constructor_range_speed()
   std::map<double, double> map;
 
   for (double i = 0; i < 100000; i++)
-    map[i] = i;
+    map.insert(std::make_pair(i - 1, i));
   map.insert(map.find(1), std::make_pair(30000000, 123));
   map.insert(map.find(50000), std::make_pair(10000000, 123));
   map.insert(map.find(98000), std::make_pair(20000000, 123));

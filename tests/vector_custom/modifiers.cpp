@@ -157,6 +157,12 @@ void    iterator_insert_custom()
     for  (ft::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
     vec.insert(vec.begin() + 5, old_vec.begin(), old_vec.end());
+    std::cout << "big pos first last insert CUSTOM" << std::endl;
+    ft::vector<int>    vec2;
+    for (unsigned int i = 0; i < 20000; i++)
+        vec2.insert(vec2.end(), i);
+    ft::vector<int>    vec3;
+    vec3.insert(vec3.begin(), vec2.begin(), vec2.end());
 }
 
 void    push_back_vector_custom()

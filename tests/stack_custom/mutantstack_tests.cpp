@@ -36,12 +36,42 @@ static void	ft_vector()
 	vec.push_back(30000);
 	it = vec.begin();
 	ite = vec.end();
-	std::cout << std::endl << "List display" << std::endl;
+	std::cout << std::endl << "Vector display" << std::endl;
 	++it;
 	--it;
 	while (it != ite)
 	{
 		std::cout << *it << std::endl;
+		++it;
+	}
+}
+
+static void	ft_map()
+{
+	ft::map<int, int>	vec;
+	ft::map<int, int>::const_iterator it;
+	ft::map<int, int>::const_iterator ite;
+
+	vec.insert(ft::make_pair(5, 5));
+	vec.insert(ft::make_pair(17, 17));
+	vec.erase(17);
+	vec.insert(ft::make_pair(3, 3));
+	vec.insert(ft::make_pair(5, 5));
+	vec.insert(ft::make_pair(737, 737));
+	for (int i = 0; i < 10; i++)
+		vec.insert(ft::make_pair(i, i));
+	vec.insert(ft::make_pair(0, 0));
+	vec.insert(ft::make_pair(10, 10));
+	vec.insert(ft::make_pair(20000, 20000));
+	vec.insert(ft::make_pair(30000, 30000));
+	it = vec.begin();
+	ite = vec.end();
+	std::cout << std::endl << "Map display" << std::endl;
+	++it;
+	--it;
+	while (it != ite)
+	{
+		std::cout << it->first << it->second << std::endl;
 		++it;
 	}
 }
@@ -100,4 +130,5 @@ void	ft_mustant_stack_custom()
 	ft_reverse_iterate(mstack);
 	ft_cpy(mstack);
 	ft_vector();
+	ft_map();
 }

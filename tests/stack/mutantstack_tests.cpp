@@ -36,12 +36,42 @@ static void	std_vector()
 	vec.push_back(30000);
 	it = vec.begin();
 	ite = vec.end();
-	std::cout << std::endl << "List display" << std::endl;
+	std::cout << std::endl << "Vector display" << std::endl;
 	++it;
 	--it;
 	while (it != ite)
 	{
 		std::cout << *it << std::endl;
+		++it;
+	}
+}
+
+static void	std_map()
+{
+	std::map<int, int>	vec;
+	std::map<int, int>::const_iterator it;
+	std::map<int, int>::const_iterator ite;
+
+	vec.insert(std::make_pair(5, 5));
+	vec.insert(std::make_pair(17, 17));
+	vec.erase(17);
+	vec.insert(std::make_pair(3, 3));
+	vec.insert(std::make_pair(5, 5));
+	vec.insert(std::make_pair(737, 737));
+	for (int i = 0; i < 10; i++)
+		vec.insert(std::make_pair(i, i));
+	vec.insert(std::make_pair(0, 0));
+	vec.insert(std::make_pair(10, 10));
+	vec.insert(std::make_pair(20000, 20000));
+	vec.insert(std::make_pair(30000, 30000));
+	it = vec.begin();
+	ite = vec.end();
+	std::cout << std::endl << "Map display" << std::endl;
+	++it;
+	--it;
+	while (it != ite)
+	{
+		std::cout << it->first << it->second << std::endl;
 		++it;
 	}
 }
@@ -100,4 +130,5 @@ void	std_mustant_stack()
 	std_reverse_iterate(mstack);
 	std_cpy(mstack);
 	std_vector();
+	std_map();
 }

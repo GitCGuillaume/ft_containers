@@ -51,6 +51,10 @@ void    allocator_iterator()
 void    copy_constructor()
 {
     std::cout << "Copy constructor" << std::endl;
+    std::vector<float>  vec_speed(30000, 1.000000);
+    std::vector<float>  vec_2_speed(vec_speed.begin(), vec_speed.end());
+    std::vector<float>  vec_cpy_speed(vec_2_speed);
+
     std::vector<float>  vec(3, 1.000000);
     std::vector<float>  vec_2(vec.begin(), vec.end());
     std::vector<float>  vec_cpy(vec_2);

@@ -13,7 +13,7 @@
 /*
     struct s_node* _node is a pointer because std::allocator allocate return pointer.
 */
-#include <iostream>
+
 namespace ft
 {
     template<class Key, class T, class Compare = ft::less<Key>, class Allocator = std::allocator<ft::pair<const Key, T> > >
@@ -51,13 +51,13 @@ namespace ft
             explicit    map(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
                 : _tree(), _comp(comp), _allocator(alloc)
             {
-                _tree._iterator = NULL;
+                _tree.iterator = NULL;
             }
             template<class InputIt>
             map(InputIt first, InputIt second, const Compare& comp = Compare(),
                 const Allocator& alloc = Allocator()) : _tree(), _comp(comp), _allocator(alloc)
             {
-                _tree._iterator = NULL;
+                _tree.iterator = NULL;
                 this->insert(first, second);
             }
             map(const map& other)
@@ -127,21 +127,21 @@ namespace ft
             {
                 ft::pair<key_type, mapped_type> new_pair(key, T());
                 typename _RB_tree::node*   ret = _tree.normalInsert(new_pair);
-                while (_tree._iterator->parent)
-                        _tree._iterator = _tree._iterator->parent;
+                while (_tree.iterator->parent)
+                        _tree.iterator = _tree.iterator->parent;
                 return (ret->pair.second);
             }
             iterator    begin()
             {
-                if (!_tree._iterator)// || !_tree._iterator->pair)
-                    return (iterator(_tree.end(), _tree._iterator));
-                return (iterator(_tree.begin(), _tree._iterator));
+                if (!_tree.iterator)
+                    return (iterator(_tree.end(), _tree.iterator));
+                return (iterator(_tree.begin(), _tree.iterator));
             }
             const_iterator    begin() const
             {
-                if (!_tree._iterator)// || !_tree._iterator->pair)
-                    return (const_iterator(_tree.end(), _tree._iterator));
-                return (const_iterator(_tree.begin(), _tree._iterator));
+                if (!_tree.iterator)
+                    return (const_iterator(_tree.end(), _tree.iterator));
+                return (const_iterator(_tree.begin(), _tree.iterator));
             }
             reverse_iterator	rbegin()
 			{
@@ -153,11 +153,11 @@ namespace ft
 			}
             iterator    end()
             {
-                return (iterator(_tree.end(), _tree._iterator));
+                return (iterator(_tree.end(), _tree.iterator));
             }
             const_iterator    end() const
             {
-                return (const_iterator(_tree.end(), _tree._iterator));
+                return (const_iterator(_tree.end(), _tree.iterator));
             }
             reverse_iterator	rend()
 			{
@@ -182,12 +182,12 @@ namespace ft
                 typename _RB_tree::node*    new_node = _tree.insert(value);
 
                 if (new_node)
-                    it = iterator(new_node, _tree._iterator);
+                    it = iterator(new_node, _tree.iterator);
                 else
                 {
-                    it = iterator(_tree._iterator, _tree._iterator);
-                    while (_tree._iterator->parent)
-                        _tree._iterator = _tree._iterator->parent;
+                    it = iterator(_tree.iterator, _tree.iterator);
+                    while (_tree.iterator->parent)
+                        _tree.iterator = _tree.iterator->parent;
                     return (ft::make_pair(it, 0));
                 }
                 return (ft::make_pair(it, 1));
@@ -202,12 +202,12 @@ namespace ft
                 typename _RB_tree::node*    new_node = _tree.insert(value);
                 if (!new_node)
                 {
-                    it = iterator(_tree._iterator, _tree._iterator);
-                    while (_tree._iterator->parent)
-                        _tree._iterator = _tree._iterator->parent;
+                    it = iterator(_tree.iterator, _tree.iterator);
+                    while (_tree.iterator->parent)
+                        _tree.iterator = _tree.iterator->parent;
                     return (it);
                 }
-                it = iterator(new_node, _tree._iterator);
+                it = iterator(new_node, _tree.iterator);
                 return (it);
             }
             template<class InputIt>
@@ -216,24 +216,19 @@ namespace ft
                 while (first != last)
                 {
                     _tree.insert(*(first)++);
-                    while (_tree._iterator->parent)
-                        _tree._iterator = _tree._iterator->parent;
+                    while (_tree.iterator->parent)
+                        _tree.iterator = _tree.iterator->parent;
                 }
-
             }
             void    erase(iterator pos)
             {
                 if (pos != this->end())
-                {
                     _tree.deleteNode(pos->first);
-                }
             }
             void    erase(iterator first, iterator last)
             {
                 while (first != last)
-                {
                     _tree.deleteNode((first++)->first);
-                }
             }
             size_type    erase(const Key& key)
             {
@@ -264,11 +259,11 @@ namespace ft
                 search_node = _tree.search(key);
                 if (!search_node)
                     return (this->end());
-                return (iterator(search_node, _tree._iterator));
+                return (iterator(search_node, _tree.iterator));
             }
             const_iterator  find(const Key& key) const
             {
-                return (const_iterator(_tree.find(key), _tree._iterator));
+                return (const_iterator(_tree.find(key), _tree.iterator));
             }
             ft::pair<iterator, iterator>   equal_range(const Key& key)
             {
@@ -438,8 +433,8 @@ namespace ft
                 return (true);
             if (*it_rhs > *it_lhs)
                 return (false);
-			it_lhs++;
-			it_rhs++;
+			++it_lhs;
+			++it_rhs;
         }
 		//less bigger than right container, so lexicographical less
         if (it_lhs != lhs.end() && it_rhs == rhs.end())

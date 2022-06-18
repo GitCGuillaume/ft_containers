@@ -13,8 +13,8 @@ namespace ft
                 return (true);
             if (*first2 < *first1)
                 return (false);
-            first1++;
-            first2++;
+            ++first1;
+            ++first2;
         }
         //less bigger than left container, so lexicographical less
         if (first2 != last2 && first1 == last1)
@@ -31,8 +31,8 @@ namespace ft
                 return (true);
             if (comp(*first2, *first1))
                 return (false);
-            first1++;
-            first2++;
+            ++first1;
+            ++first2;
         }
         if (first2 != last2)
             return (true);

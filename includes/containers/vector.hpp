@@ -56,7 +56,7 @@ namespace ft
 				for (size_type i = 0; i < count; i++)
 				{
 						_allocator.construct(_vec + i, *first);
-						first++;
+						++first;
 				}
 				_size = count;
 			}
@@ -371,9 +371,6 @@ namespace ft
 				from pos to end
 				THIS IS FROM LIBSTDC++
 				Calling directly content is much faster than calling the functions.
-				/ _GLIBCXX_RESOLVE_LIB_DEFECTS
-				// 402. wrong new expression in [some_] allocator::construct
-				void
 				construct(pointer __p, const _Tp& __val)
 				{ ::new((void *)__p) _Tp(__val); }
 				void

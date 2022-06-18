@@ -6,12 +6,9 @@ void    default_constructor_map_custom()
   ft::map<std::string, int> map;
   const ft::map<std::string, int> const_map;
 
-  //std::cout << "CRASH SI JE it->first" << std::endl;
- // std::cout << "it TEST : " << map.begin()->first << std::endl;
   std::cout << "Size default constructor : " << map.size() << std::endl;
   std::cout << "Size default const constructor : " << const_map.size() << std::endl;
   std::cout << "max_size : " << const_map.max_size() << std::endl;
-  //ft::map<std::string, int> map_alloc(map.key_comp(), map.get_allocator());
 }
 
 void    constructor_range_map_custom()
@@ -118,7 +115,7 @@ void  constructor_range_speed_custom()
   ft::map<double, double> map;
 
   for (double i = 0; i < 100000; i++)
-    map[i] = i;
+    map.insert(ft::make_pair(i - 1, i));
   map.insert(map.find(1), ft::make_pair(30000000, 123));
   map.insert(map.find(50000), ft::make_pair(10000000, 123));
   map.insert(map.find(98000), ft::make_pair(20000000, 123));

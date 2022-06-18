@@ -52,6 +52,10 @@ void    allocator_custom_iterator()
 void    copy_custom_constructor()
 {
     std::cout << "Copy custom constructor CUSTOM" << std::endl;
+    ft::vector<float>  vec_speed(30000, 1.000000);
+    ft::vector<float>  vec_2_speed(vec_speed.begin(), vec_speed.end());
+    ft::vector<float>  vec_cpy_speed(vec_2_speed);
+
     ft::vector<float>  vec(3, 1.000000);
     ft::vector<float>  vec_2(vec.begin(), vec.end());
     ft::vector<float>  vec_cpy(vec_2);

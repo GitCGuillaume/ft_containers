@@ -5,8 +5,12 @@ void    iterator_map_default()
     std::cout << "MAP ITERATOR DEFAULT" << std::endl;
     std::map<int, int>  map;
     std::map<int, int>::iterator  it = map.begin();
-    std::cout << "first : " << it->first << std::endl;
-    std::cout << "second : " << it->second << std::endl;
+    std::map<int, int>::iterator  ite = map.end();
+    if (it != ite)
+    {
+        std::cout << "first : " << it->first << std::endl;
+        std::cout << "second : " << it->second << std::endl;
+    }
 }
 
 void    iterator_assignation_map()

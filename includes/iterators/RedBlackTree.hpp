@@ -3,7 +3,6 @@
 
 # define RED 0
 # define BLACK 1
-//# define DOUBLE 3
 
 #include "iterator_traits.hpp"
 #include "iterator.hpp"
@@ -17,21 +16,22 @@
 
 /*
         The iterator receive a ft::pair<>, but alone it won't do anything
-        So need to create nodes for rotation + branches / leaves / whatever
+        So need to create nodes for rotation / whatever
 */
 
 template<class T>
 struct s_node
 {
+        T      pair;
         struct s_node*  parent;
         struct s_node*  left;
         struct s_node*  right;
-        T      pair;
         bool    colour;
-        s_node():parent(NULL), left(NULL), right(NULL), pair(T()){}
-        s_node(const T & new_pair):parent(NULL), left(NULL), right(NULL), pair(new_pair){}
-        s_node(const T & old_pair, s_node* node) : parent(node->parent), left(node->left)
-                , right(node->right), pair(T(old_pair.first, old_pair.second)), colour(node->colour){}
+
+        s_node(): pair(T()), parent(NULL), left(NULL), right(NULL), colour(RED){}
+        s_node(const T & new_pair): pair(new_pair), parent(NULL), left(NULL), right(NULL), colour(RED){}
+        s_node(const T & old_pair, s_node* node) : pair(T(old_pair.first, old_pair.second)), parent(node->parent), left(node->left)
+                , right(node->right), colour(node->colour){}
         s_node & operator=(const T & rhs)
         {
                 if (this != &rhs)
@@ -45,12 +45,6 @@ struct s_node
         ~s_node(){}
 };
 
-/*
-        RB tree
-        0 = none
-        1 = red
-        2 = 2 black
-*/
 namespace ft
 {
         template<class It, class Container, class Key, class T, class Compare, class Allocator>
@@ -66,16 +60,29 @@ namespace ft
                         typedef T   mapped_type;
                         typedef Compare key_compare;
                         typedef Allocator   allocator_type;
-                        typedef s_node<value_type>       node;
-                        typedef typename Allocator::template rebind<s_node<value_type> >::other      rebind_node;
+                        typedef s_node<It>       node;
+                        typedef typename Allocator::template rebind<s_node<It> >::other      rebind_node;
 
-                        RedBlackTree() : _iterator(NULL){}
+                        RedBlackTree() : iterator(NULL){}
+                        RedBlackTree(const RedBlackTree & rhs) : iterator(rhs.iterator)
+                                        , _rebind_node(rhs._rebind_node), _comp(rhs._comp), _allocator(rhs._allocator){}
+                        RedBlackTree & operator=(const RedBlackTree & rhs)
+                        {
+                                if (this != &rhs)
+                                {
+                                        iterator = rhs.iterator;
+                                        _rebind_node = rhs._rebind_node;
+                                        _comp = rhs._comp;
+                                        _allocator = rhs._allocator;
+                                }
+                                return (*this);
+                        }
                         ~RedBlackTree(){}
-                        RedBlackTree(node* iterator) : _iterator(iterator){}
+                        RedBlackTree(node* iterator) : iterator(iterator){}
                         node*    search(Key const &key) const
                         {
-                                node    *subRoot = _iterator;
-                                if (!subRoot)// || !subRoot->pair)
+                                node    *subRoot = iterator;
+                                if (!subRoot)
                                         return (NULL);
                                 Key     firstSubRoot = subRoot->pair.first;
                                 Key     firstNewNode = key;
@@ -84,13 +91,13 @@ namespace ft
                                         if (_comp(firstSubRoot, firstNewNode))
                                         {
                                                 subRoot = subRoot->right;
-                                                if (subRoot)// && subRoot->pair)
+                                                if (subRoot)
                                                         firstSubRoot = subRoot->pair.first;
                                         }
                                         else if (_comp(firstNewNode, firstSubRoot))
                                         {
                                                 subRoot = subRoot->left;
-                                                if (subRoot)// && subRoot->pair)
+                                                if (subRoot)
                                                         firstSubRoot = subRoot->pair.first;
                                         }
                                         else if (firstNewNode == firstSubRoot)
@@ -100,8 +107,8 @@ namespace ft
                         }
                         node*           find(Key const& key) const
                         {
-                                node    *subRoot = _iterator;
-                                if (!subRoot)// || !subRoot->pair)
+                                node    *subRoot = iterator;
+                                if (!subRoot)
                                         return (NULL);
                                 Key     firstSubRoot = subRoot->pair.first;
                                 Key     firstNewNode = key;
@@ -111,13 +118,13 @@ namespace ft
                                         if (_comp(firstSubRoot, firstNewNode))
                                         {
                                                 subRoot = subRoot->right;
-                                                if (subRoot)// && subRoot->pair)
+                                                if (subRoot)
                                                         firstSubRoot = subRoot->pair.first;
                                         }
                                         else if (_comp(firstNewNode, firstSubRoot))
                                         {
                                                 subRoot = subRoot->left;
-                                                if (subRoot)// && subRoot->pair)
+                                                if (subRoot)
                                                         firstSubRoot = subRoot->pair.first;
                                         }
                                         else if (firstNewNode == firstSubRoot)
@@ -128,8 +135,8 @@ namespace ft
                         std::size_t     count(Key const &key) const
                         {
                                 std::size_t n = 0;
-                                node    *subRoot = _iterator;
-                                if (!subRoot)// || !subRoot->pair)
+                                node    *subRoot = iterator;
+                                if (!subRoot)
                                         return (0);
                                 Key     firstSubRoot = subRoot->pair.first;
                                 Key     firstNewNode = key;
@@ -139,20 +146,20 @@ namespace ft
                                         if (_comp(firstSubRoot, firstNewNode))
                                         {
                                                 subRoot = subRoot->right;
-                                                if (subRoot)// && subRoot->pair)
+                                                if (subRoot)
                                                         firstSubRoot = subRoot->pair.first;
                                         }
                                         else if (_comp(firstNewNode, firstSubRoot))
                                         {
                                                 subRoot = subRoot->left;
-                                                if (subRoot)// && subRoot->pair)
+                                                if (subRoot)
                                                         firstSubRoot = subRoot->pair.first;
                                         }
                                         else if (firstNewNode == firstSubRoot)
                                         {
                                                 n++;
                                                 subRoot = subRoot->left;
-                                                if (subRoot)// && subRoot->pair)
+                                                if (subRoot)
                                                         firstSubRoot = subRoot->pair.first;
                                         }
                                 }
@@ -163,45 +170,43 @@ namespace ft
                         {
                                 node    *new_node = NULL;
 
-                                if (!_iterator)// || !_iterator->colour || !_iterator->pair) //no root
+                                if (!iterator)
                                 {
-                                        _iterator = _rebind_node.allocate(1);
-                                        _rebind_node.construct(_iterator, node(pair));
-                                        _newNode(_iterator);
-                                        //_iterator->pair = _rebind_pair.allocate(1);
-                                        //_rebind_pair.construct(_iterator->pair, pair);
-                                        _iterator->colour = BLACK;
-                                        return (_iterator);
+                                        iterator = _rebind_node.allocate(1);
+                                        _rebind_node.construct(iterator, node(pair));
+                                        _newNode(iterator);
+                                        iterator->colour = BLACK;
+                                        return (iterator);
                                 }
-                                Key     firstSubRoot = _iterator->pair.first;
+                                Key     firstSubRoot = iterator->pair.first;
                                 Key     firstNewNode = pair.first;
                                 new_node = _rebind_node.allocate(1);
                                 _rebind_node.construct(new_node, node(pair));
                                 _newNode(new_node);
                                 //Search
-                               while (_iterator)
+                               while (iterator)
                                 {
                                         if (_comp(firstSubRoot, firstNewNode))
                                         {
-                                                 if (!_iterator->right)
+                                                 if (!iterator->right)
                                                  {
-                                                        new_node->parent = _iterator;
-                                                        _iterator->right = new_node;
+                                                        new_node->parent = iterator;
+                                                        iterator->right = new_node;
                                                         break ;
                                                  }
-                                                _iterator = _iterator->right;
-                                                firstSubRoot = _iterator->pair.first;
+                                                iterator = iterator->right;
+                                                firstSubRoot = iterator->pair.first;
                                         }
                                         else if (_comp(firstNewNode, firstSubRoot))
                                         {
-                                                if (!_iterator->left)
+                                                if (!iterator->left)
                                                 {
-                                                        new_node->parent = _iterator;
-                                                        _iterator->left = new_node;
+                                                        new_node->parent = iterator;
+                                                        iterator->left = new_node;
                                                         break ;
                                                 }
-                                                _iterator = _iterator->left;
-                                                firstSubRoot = _iterator->pair.first;
+                                                iterator = iterator->left;
+                                                firstSubRoot = iterator->pair.first;
                                         }
                                         else if (firstNewNode == firstSubRoot)
                                         {
@@ -209,70 +214,64 @@ namespace ft
                                                 return (NULL);
                                         }
                                 }
-                                //new_node->pair = _rebind_pair.allocate(1);
-                                //_rebind_pair.construct(new_node->pair, pair);
                                 new_node->colour = RED;
                                 _repearTreeInsert(new_node);
-                                while (_getParent(_iterator))
-                                        _iterator = _iterator->parent;
+                                while (_getParent(iterator))
+                                        iterator = iterator->parent;
                                 return (new_node);
                         }
                         node*    normalInsert(const value_type& pair)
                         {
                                 node    *new_node = NULL;
 
-                                if (!_iterator)// || !_iterator->colour || !_iterator->pair) //no root
+                                if (!iterator)
                                 {
-                                        _iterator = _rebind_node.allocate(1);
-                                        _rebind_node.construct(_iterator, node(pair));
-                                        _newNode(_iterator);
-                                        //_iterator->pair = _rebind_pair.allocate(1);
-                                        //_rebind_pair.construct(_iterator->pair, pair);
-                                        _iterator->colour = BLACK;
-                                        return (_iterator);
+                                        iterator = _rebind_node.allocate(1);
+                                        _rebind_node.construct(iterator, node(pair));
+                                        _newNode(iterator);
+                                        iterator->colour = BLACK;
+                                        return (iterator);
                                 }
-                                Key     firstSubRoot = _iterator->pair.first;
+                                Key     firstSubRoot = iterator->pair.first;
                                 Key     firstNewNode = pair.first;
                                 new_node = _rebind_node.allocate(1);
                                 _rebind_node.construct(new_node, node(pair));
                                 _newNode(new_node);
                                 //Search
-                               while (_iterator)
+                               while (iterator)
                                 {
                                         if (_comp(firstSubRoot, firstNewNode))
                                         {
-                                                 if (!_iterator->right)
+                                                 if (!iterator->right)
                                                  {
-                                                        new_node->parent = _iterator;
-                                                        _iterator->right = new_node;
+                                                        new_node->parent = iterator;
+                                                        iterator->right = new_node;
                                                         break ;
                                                  }
-                                                _iterator = _iterator->right;
-                                                firstSubRoot = _iterator->pair.first;
+                                                iterator = iterator->right;
+                                                firstSubRoot = iterator->pair.first;
                                         }
                                         else if (_comp(firstNewNode, firstSubRoot))
                                         {
-                                                if (!_iterator->left)
+                                                if (!iterator->left)
                                                 {
-                                                        new_node->parent = _iterator;
-                                                        _iterator->left = new_node;
+                                                        new_node->parent = iterator;
+                                                        iterator->left = new_node;
                                                         break ;
                                                 }
-                                                _iterator = _iterator->left;
-                                                firstSubRoot = _iterator->pair.first;
+                                                iterator = iterator->left;
+                                                firstSubRoot = iterator->pair.first;
                                         }
                                         else if (firstNewNode == firstSubRoot)
                                         {
                                                 _destroyNode(new_node);
-                                                return (_iterator);
+                                                return (iterator);
                                         }
                                 }
-                                //new_node->pair = _rebind_pair.allocate(1);
-                                //_rebind_pair.construct(new_node->pair, pair);
                                 new_node->colour = RED;
                                 _repearTreeInsert(new_node);
-                                while (_getParent(_iterator))
-                                        _iterator = _iterator->parent;
+                                while (_getParent(iterator))
+                                        iterator = iterator->parent;
                                 return (new_node);
                         }
                         std::size_t    deleteNode(Key const & key)
@@ -291,12 +290,12 @@ namespace ft
                                 memory_colour = current->colour;
                                 if (current->left)
                                 {
-                                        nb_child++;
+                                        ++nb_child;
                                         left_child = current->left;
                                 }
                                 if (current->right)
                                 {
-                                        nb_child++;
+                                        ++nb_child;
                                         right_child = current->right;
                                 }
                                 if (nb_child < 2)
@@ -308,7 +307,7 @@ namespace ft
                                         {
                                                 current->colour = BLACK;
                                                 if (!current->parent)
-                                                        _iterator = current;
+                                                        iterator = current;
                                         }
                                         else if (current && current->colour == BLACK && memory_colour == BLACK)
                                                 _repearDoubleBlack(current);
@@ -319,14 +318,11 @@ namespace ft
                                         smallest_key = _getInorder(current);
                                         if (!current)
                                                 return (0);
-                                        //_destroyPair(current);
                                         //deleted node become smallest key node
-
-
                                         node*   cpy = _rebind_node.allocate(1);
                                         _rebind_node.construct(cpy, node(smallest_key->pair, current));
                                         if (!cpy->parent)
-                                                _iterator = cpy;
+                                                iterator = cpy;
                                         else if (cpy->parent->left == current)
                                                 cpy->parent->left = cpy;
                                         else if (cpy->parent->right == current)
@@ -336,7 +332,6 @@ namespace ft
                                         if (cpy->right->parent == current)
                                                 cpy->right->parent = cpy;
                                         _destroyNode(current);
-                                        //_destroyNode(smallest_key);
                                         //delete node from subtree
                                         memory_colour = smallest_key->colour;
                                         left_child = smallest_key->left;
@@ -347,13 +342,13 @@ namespace ft
                                         {
                                                 smallest_key->colour = BLACK;
                                                 if (!smallest_key->parent)
-                                                        _iterator = smallest_key;
+                                                        iterator = smallest_key;
                                         }
                                         else if (smallest_key && smallest_key->colour == BLACK && memory_colour == BLACK)
                                                 _repearDoubleBlack(smallest_key);
                                 }
-                                if (null_node == _iterator)
-                                        _iterator = NULL;
+                                if (null_node == iterator)
+                                        iterator = NULL;
                                 if (null_node)
                                 {
                                         _destroyNode(null_node->left);
@@ -364,11 +359,11 @@ namespace ft
                         }
                         node*   getIterator() const
                         {
-                                return (_iterator);
+                                return (iterator);
                         }
                         node*   begin() const
                         {
-                                node    *start = _iterator;
+                                node    *start = iterator;
 
                                 if (!start)
                                         return (NULL);
@@ -380,9 +375,9 @@ namespace ft
                         }
                         node*   end() const
                         {
-                                node    *start = _iterator;
+                                node    *start = iterator;
 
-                                if (!_iterator)
+                                if (!iterator)
                                         return (NULL);
                                 while (start->parent)
                                         start = start->parent;
@@ -394,7 +389,7 @@ namespace ft
                         {
                                 return (_rebind_node.max_size());
                         }
-                        node*  _iterator;
+                        node*  iterator;
 
                         private:
                                 /* Seek previous value of current
@@ -435,7 +430,6 @@ namespace ft
                                                 else if (*right_child)
                                                         parent->right = *right_child;
                                         }
-                                        //_destroyPair(*current);
                                         _destroyNode(*current);
                                         *current = NULL;
                                         if (*left_child)
@@ -473,7 +467,7 @@ namespace ft
 
                                         if (!current->parent)
                                         {
-                                                _iterator = current;
+                                                iterator = current;
                                                 current->colour = BLACK;
                                                 return ;
                                         }
@@ -516,9 +510,9 @@ namespace ft
                                                                 }
                                                         }
                                                         if (!sibling->parent)
-                                                                _iterator = sibling;
+                                                                iterator = sibling;
                                                         else if (!sibling->parent->parent)
-                                                                _iterator = sibling->parent;
+                                                                iterator = sibling->parent;
                                                         
                                                 }
                                                 else if (sibling->colour == RED)
@@ -549,7 +543,7 @@ namespace ft
                                         else if (sibling == sibling->parent->right)
                                                 _rotateLeft(current->parent);
                                         if (!_getGrandParent(current)->parent)
-                                                _iterator = _getGrandParent(current);
+                                                iterator = _getGrandParent(current);
                                         _repearDoubleBlack(current);
                                 }
                                 void    _destroyNode(node *current)
@@ -559,14 +553,6 @@ namespace ft
                                         _rebind_node.destroy(current);
                                         _rebind_node.deallocate(current, 1);
                                 }
-                                /*void    _destroyPair(node *current)
-                                {
-                                        if (!current || !current->pair)
-                                                return ;
-                                        _rebind_pair.destroy(current->pair);
-                                        _rebind_pair.deallocate(current->pair, 1);
-                                        current->pair = NULL;
-                                }*/
                                 void    _rotateRight(node *current)
                                 {
                                         if (!current)
@@ -698,18 +684,15 @@ namespace ft
                                         current->parent = NULL;
                                         current->left = NULL;
                                         current->right = NULL;
-                                        //current->pair = NULL;
                                         current->colour = 0;
                                 }
-                                //rebind_pair     _rebind_pair;
                                 rebind_node     _rebind_node;
                                 key_compare     _comp;
                                 allocator_type	_allocator;
         };
         template<typename It, class Container, typename Node>
-        struct   BiDirectionnalIterator //nested class
+        struct   BiDirectionnalIterator
         {
-                //public:
                         /* FOR STD DISTANCE */
                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::value_type    value_type;
                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::difference_type    difference_type;
