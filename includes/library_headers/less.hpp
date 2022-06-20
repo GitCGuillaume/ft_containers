@@ -5,6 +5,7 @@
     https://en.cppreference.com/w/cpp/utility/functional/less
     compare less
 */
+
 namespace ft
 {
     /*
@@ -27,4 +28,5 @@ namespace ft
         }
     };
 }
+
 #endif

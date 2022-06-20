@@ -3,7 +3,15 @@
 void    at_ok()
 {
     std::cout << "AT" << std::endl;
-    TYPECONT::vector<int>vec;
+    TYPECONT::vector<int>   vec;
+
+    vec.assign(2, 1);
+    std::cout << "at(1) " << vec.at(1) << std::endl;
+    std::cout << "at(0) " << vec.at(0) << std::endl;
+    std::cout << "[1] " << vec[1] << std::endl;
+    std::cout << "[0] " << vec[0] << std::endl;
+    std::cout << "Const AT" << std::endl;
+    const TYPECONT::vector<int> vec_2(vec.begin(), vec.end());
 
     vec.assign(2, 1);
     std::cout << "at(1) " << vec.at(1) << std::endl;

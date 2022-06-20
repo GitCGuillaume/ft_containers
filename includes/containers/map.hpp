@@ -8,7 +8,6 @@
 #include "../library_headers/lexicographical_compare.hpp"
 #include "../iterators/reverse_iterator.hpp"
 #include <stdexcept>
-
 /*
     struct s_node* _node is a pointer because std::allocator allocate return pointer.
 */
@@ -30,9 +29,9 @@ namespace ft
             typedef const value_type& const_reference;
             typedef typename Allocator::pointer  pointer;
             typedef typename Allocator::const_pointer    const_pointer;
-            typedef typename ft::BiDirectionnalIterator<value_type, map
+            typedef typename ft::bidirectionnal_iterator<value_type, map
                 , typename ft::red_black_tree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > iterator;
-            typedef typename ft::BiDirectionnalIterator<value_type const, map
+            typedef typename ft::bidirectionnal_iterator<value_type const, map
                 , const typename ft::red_black_tree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > const_iterator;
             typedef ft::reverse_iterator<iterator>  reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
@@ -84,7 +83,6 @@ namespace ft
             {
                 const_iterator    it = this->begin();
                 const_iterator    ite = this->end();
-
                 while (it != ite)
                     _tree.delete_node((it++)->first);
             }
@@ -115,6 +113,14 @@ namespace ft
             Elements Access
             */
             T&  at(const Key& key)
+            {
+                typename _RB_tree::node* new_node;
+                new_node = _tree.search(key);
+                if (!new_node)
+                    throw std::out_of_range("map::at");
+                return (new_node->pair.second);
+            }
+            const T&  at(const Key& key) const
             {
                 typename _RB_tree::node* new_node;
                 new_node = _tree.search(key);
@@ -224,10 +230,13 @@ namespace ft
                 if (pos != this->end())
                     _tree.delete_node(pos->first);
             }
+            
             void    erase(iterator first, iterator last)
             {
                 while (first != last)
+                {
                     _tree.delete_node((first++)->first);
+                }
             }
             size_type    erase(const Key& key)
             {
@@ -423,22 +432,7 @@ namespace ft
     bool    operator>(const ft::map<Key, T, Compare, Alloc>& lhs,
         const ft::map<Key, T, Compare, Alloc>& rhs)
     {
-        typename ft::map<Key, T, Compare, Alloc>::const_iterator	it_lhs = lhs.begin();
-		typename ft::map<Key, T, Compare, Alloc>::const_iterator	it_rhs = rhs.begin();
-
-		while (it_lhs != lhs.end() && it_rhs != rhs.end())
-        {
-            if (*it_lhs > *it_rhs)
-                return (true);
-            if (*it_rhs > *it_lhs)
-                return (false);
-			++it_lhs;
-			++it_rhs;
-        }
-		//less bigger than right container, so lexicographical less
-        if (it_lhs != lhs.end() && it_rhs == rhs.end())
-            return (true);
-        return (false);
+        return (rhs < lhs);
     }
     template<class Key, class T, class Compare, class Alloc>
     bool    operator>=(const ft::map<Key, T, Compare, Alloc>& lhs,

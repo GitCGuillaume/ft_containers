@@ -9,6 +9,7 @@
 #include "../library_headers/lexicographical_compare.hpp"
 #include <sstream>
 #include <algorithm>
+#include <stdexcept>
 
 namespace ft
 {
@@ -102,7 +103,7 @@ namespace ft
 
 				for (; i < _size; i++)
 					_allocator.destroy(_vec + i);
-				if (this->capacity() < count)
+				if (_capacity_allocator < count)
 				{
 					_allocator.deallocate(_vec, _capacity_allocator);
 					_capacity_allocator = count;
@@ -121,7 +122,7 @@ namespace ft
 				size_type	i = 0;
 				for (; i < _size; i++)
 					_allocator.destroy(_vec + i);
-				if (this->capacity() < static_cast<unsigned>(count))
+				if (_capacity_allocator < static_cast<unsigned>(count))
 				{
 					_allocator.deallocate(_vec, _capacity_allocator);
 					_capacity_allocator = count;
@@ -663,22 +664,7 @@ namespace ft
 	template<class T, class Alloc>
     bool	operator>(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
-		typename ft::vector<T>::const_iterator	it_lhs = lhs.begin();
-		typename ft::vector<T>::const_iterator	it_rhs = rhs.begin();
-
-		while (it_lhs != lhs.end() && it_rhs != rhs.end())
-        {
-            if (*it_lhs > *it_rhs)
-                return (true);
-            if (*it_rhs > *it_lhs)
-                return (false);
-			it_lhs++;
-			it_rhs++;
-        }
-		//less bigger than right container, so lexicographical less
-        if (it_lhs != lhs.end() && it_rhs == rhs.end())
-            return (true);
-        return (false);
+        return (rhs < lhs);
 	}
 	template<class T, class Alloc>
     bool	operator>=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)

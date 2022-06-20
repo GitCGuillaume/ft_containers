@@ -74,7 +74,7 @@ namespace ft
                                 }
                                 return (*this);
                         }
-                        ~red_black_tree(){}
+                        virtual ~red_black_tree(){}
                         red_black_tree(node* iterator) : iterator(iterator){}
                         node*    search(Key const &key) const
                         {
@@ -281,6 +281,8 @@ namespace ft
                                 int             memory_colour = 0;
                                 short int       nb_child = 0;
 
+                                if (!iterator)
+                                        return (0);
                                 current = search(key);
                                 if (!current)
                                         return (0);
@@ -358,7 +360,7 @@ namespace ft
                         {
                                 node    *start = iterator;
 
-                                if (!start)
+                                if (!iterator)
                                         return (NULL);
                                 while (start->parent)
                                         start = start->parent;
@@ -456,6 +458,8 @@ namespace ft
                                 }
                                 void    _repear_double_black(node *current)
                                 {
+                                        if (!iterator || !current)
+                                                return ;
                                         node    *sibling = _get_sibling(current);
 
                                         if (!current->parent)
@@ -464,9 +468,9 @@ namespace ft
                                                 current->colour = BLACK;
                                                 return ;
                                         }
-                                        if (!sibling)
+                                        else if (!sibling)
                                                 _repear_double_black(current->parent);
-                                        if (current && current->parent && sibling)
+                                        else if (current && current->parent && sibling)
                                         {
                                                 if (sibling->colour == BLACK
                                                         && ((sibling->left && sibling->left->colour == RED)
@@ -512,8 +516,8 @@ namespace ft
                                                         _repear_double_blackTwo(current);
                                                 else if (sibling->colour == BLACK
                                                         && (((sibling->left && sibling->left->colour == BLACK)
-                                                        && (sibling && sibling->right->colour == BLACK))
-                                                        || (sibling->colour == BLACK && !sibling->left && !sibling->right)))
+                                                        && (sibling->right && sibling->right->colour == BLACK))
+                                                        || (sibling && sibling->colour == BLACK && !sibling->left && !sibling->right)))
                                                 {
                                                         sibling->colour = RED;
                                                         if (current->parent && current->parent->colour == BLACK)
@@ -684,7 +688,7 @@ namespace ft
                                 allocator_type	_allocator;
         };
         template<typename It, class Container, typename Node>
-        struct   BiDirectionnalIterator
+        struct   bidirectionnal_iterator
         {
                         /* FOR STD DISTANCE */
                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::value_type    value_type;
@@ -694,13 +698,13 @@ namespace ft
                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::iterator_category    iterator_category;
                         typedef  Node       node;
 
-                        BiDirectionnalIterator() : _ptr(NULL), _old(NULL), _root(NULL){}
-                        BiDirectionnalIterator(node* ptr, node* iterator) : _ptr(ptr), _old(iterator), _root(iterator){}
+                        bidirectionnal_iterator() : _ptr(NULL), _old(NULL), _root(NULL){}
+                        bidirectionnal_iterator(node* ptr, node* iterator) : _ptr(ptr), _old(iterator), _root(iterator){}
                         template<typename U, typename V>
-                        BiDirectionnalIterator(const BiDirectionnalIterator<U
+                        bidirectionnal_iterator(const bidirectionnal_iterator<U
                                 , typename ft::enable_if<ft::is_same<U, typename Container::value_type>::value, Container>::type
                                 , V>& rhs) : _ptr(rhs._ptr), _old(rhs._old), _root(rhs._root){}
-                        BiDirectionnalIterator &        operator=(const BiDirectionnalIterator& rhs)
+                        bidirectionnal_iterator &        operator=(const bidirectionnal_iterator& rhs)
                         {
                                 if (this != &rhs)
                                 {
@@ -710,7 +714,7 @@ namespace ft
                                 }
                                 return (*this);
                         }
-                        virtual ~BiDirectionnalIterator(){}
+                        virtual ~bidirectionnal_iterator(){}
                         reference operator*() const
                         {
                                 if (!_ptr)
@@ -734,7 +738,7 @@ namespace ft
                                 _old->right == _ptr will loop until parent root(NULL)
                                 or until _ptr->right is not old anymore
                         */
-                        BiDirectionnalIterator& operator++()
+                        bidirectionnal_iterator& operator++()
                         {
                                 if (!_ptr)
                                 {
@@ -762,7 +766,7 @@ namespace ft
                                 }
                                 return (*this);
                         }
-                        BiDirectionnalIterator& operator--()
+                        bidirectionnal_iterator& operator--()
                         {
                                 if (!_ptr)
                                 {
@@ -793,30 +797,53 @@ namespace ft
                                 return (*this);
                         }
                         /* POSTFIX*/
-                        BiDirectionnalIterator operator++(int)
+                        bidirectionnal_iterator operator++(int)
                         {
-                                BiDirectionnalIterator tmp = *this;
+                                bidirectionnal_iterator tmp = *this;
                                 this->operator++();
                                 return (tmp);
                         }
-                        BiDirectionnalIterator   operator--(int)
+                        bidirectionnal_iterator   operator--(int)
                         {
-                                BiDirectionnalIterator tmp = *this;
+                                bidirectionnal_iterator tmp = *this;
                                 this->operator--();
                                 return (tmp);
                         }
-                        bool    operator==(BiDirectionnalIterator const & rhs)
-                        {
-                                return (_ptr == rhs._ptr);
-                        }
-                        bool    operator!=(BiDirectionnalIterator const & rhs)
-                        {
-                                return (_ptr != rhs._ptr);
-                        }
+                        
                         node*   _ptr;    //pointer of pair
                         node*   _old;
                         node*   _root; //look like we need to keep root in memory to keep begin and last value
         };
+        /* NON CONST */
+        template<typename It, class Container, typename Node>
+        bool    operator==(const ft::bidirectionnal_iterator<It, Container, Node>& lhs, const ft::bidirectionnal_iterator<It, Container, Node>& rhs)
+        {
+                if (lhs.operator->() == rhs.operator->())
+                        return true;
+                return (false);
+        }
+        template<typename It, class Container, typename Node>
+        bool    operator!=(const ft::bidirectionnal_iterator<It, Container, Node>& lhs, const ft::bidirectionnal_iterator<It, Container, Node>& rhs)
+        {
+                if (lhs.operator->() != rhs.operator->())
+                        return true;
+                return (false);
+        }
+        /* CONST */
+        template<typename It, typename It2, class Container, typename Node, typename Node2>
+        bool    operator==(const ft::bidirectionnal_iterator<It, Container, Node>& lhs, const ft::bidirectionnal_iterator<It2, Container, Node2>& rhs)
+        {
+                if (lhs.operator->() == rhs.operator->())
+                        return true;
+                return (false);
+        }
+        template<typename It, typename It2, class Container, typename Node, typename Node2>
+        bool    operator!=(const ft::bidirectionnal_iterator<It, Container, Node>& lhs, const ft::bidirectionnal_iterator<It2, Container, Node2>& rhs)
+        {
+                if (lhs.operator->() != rhs.operator->())
+                        return true;
+                return (false);
+        }
 }
 
 #endif

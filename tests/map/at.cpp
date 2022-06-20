@@ -6,6 +6,8 @@ void    at_map()
 
     map["un"] = "value_un";
     std::cout << "at : " << map.at("un") << std::endl;
+    const TYPECONT::map<std::string, std::string>   map2(map.begin(), map.end());
+    std::cout << "at : " << map.at("un") << std::endl;
     try{
         map.at("");
     }
