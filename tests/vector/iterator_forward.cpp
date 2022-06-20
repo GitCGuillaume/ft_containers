@@ -1,35 +1,32 @@
 #include "iterator_forward.hpp"
 
-void	test_std_assign1_forward()
+void	iterator_assign_forward()
 {
-	std::vector<int>	vec;
+	TYPECONT::vector<int>	vec;
 
-	std::cout << "TEST_STD_ASSIGN1_FORWARD" << std::endl;
+	std::cout << "Iterator assign FORWARD" << std::endl;
 	vec.assign(3, 'b');
 	vec.assign(3, 'b');
-	std::vector<int>::iterator	it_1 = vec.begin();
+	TYPECONT::vector<int>::iterator	it_1 = vec.begin();
 	std::cout << *it_1 << std::endl;
-	//undefined behavior
-	//std::vector<int>::iterator	it_2 = vec.end();
-	//std::cout << *it_2 << std::endl;
 	std::cout << "POSTFIX" << std::endl;
-	for (std::vector<int>::iterator	it_1 = vec.begin(); it_1 != vec.end(); it_1++)
+	for (TYPECONT::vector<int>::iterator	it_1 = vec.begin(); it_1 != vec.end(); it_1++)
 	{
 		std::cout << "base : " << it_1.base();
 		std::cout << *it_1 << std::endl;
 	}
 	std::cout << "PREFIX" << std::endl;
-	for (std::vector<int>::iterator	it_1 = vec.begin(); it_1 != vec.end(); ++it_1)
+	for (TYPECONT::vector<int>::iterator	it_1 = vec.begin(); it_1 != vec.end(); ++it_1)
 		std::cout << *it_1 << std::endl;
-	std::cout << "Capacity std::vector " << vec.capacity() << std::endl;
+	std::cout << "Capacity TYPECONT::vector " << vec.capacity() << std::endl;
 }
 
-void	test_std_assign_it_forward()
+void	iterator_assign_first_last_forward()
 {
-	std::cout << "TEST_STD_ASSIGN_IT_FORWARD" << std::endl;
-	std::vector<int>	vec_1;
-	std::vector<int> vec_2;
-	std::vector<int>::iterator	it_1;
+	std::cout << "Iterator assign FIRST LAST FORWARD" << std::endl;
+	TYPECONT::vector<int>	vec_1;
+	TYPECONT::vector<int>	vec_2;
+	TYPECONT::vector<int>::iterator	it_1;
 	char	a = 'a';
 
 	vec_1.assign(3, a++);
@@ -41,5 +38,5 @@ void	test_std_assign_it_forward()
 	std::cout << "PREFIX" << std::endl;
 	for (it_1 = vec_2.begin(); it_1 != vec_2.end(); ++it_1)
 		std::cout << *it_1 << std::endl;
-	std::cout << "Capacity std::vector " << vec_2.capacity() << std::endl;
+	std::cout << "Capacity TYPECONT::vector " << vec_2.capacity() << std::endl;
 }

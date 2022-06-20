@@ -2,6 +2,7 @@
 # define CAPACITIES_HPP
 
 #include <vector>
+#include "../../includes/containers/vector.hpp"
 #include <iostream>
 
 void    empty();

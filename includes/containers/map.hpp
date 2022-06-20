@@ -1,14 +1,13 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
-#include "../iterators/RedBlackTree.hpp"
+#include "../iterators/red_black_tree.hpp"
 #include "../library_headers/less.hpp"
 #include "../library_headers/pair.hpp"
 #include "../library_headers/equal.hpp"
 #include "../library_headers/lexicographical_compare.hpp"
 #include "../iterators/reverse_iterator.hpp"
 #include <stdexcept>
-#include <limits>
 
 /*
     struct s_node* _node is a pointer because std::allocator allocate return pointer.
@@ -32,9 +31,9 @@ namespace ft
             typedef typename Allocator::pointer  pointer;
             typedef typename Allocator::const_pointer    const_pointer;
             typedef typename ft::BiDirectionnalIterator<value_type, map
-                , typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > iterator;
+                , typename ft::red_black_tree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > iterator;
             typedef typename ft::BiDirectionnalIterator<value_type const, map
-                , const typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > const_iterator;
+                , const typename ft::red_black_tree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > const_iterator;
             typedef ft::reverse_iterator<iterator>  reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
             class   value_compare : public ft::binary_function<value_type, value_type, bool>
@@ -87,7 +86,7 @@ namespace ft
                 const_iterator    ite = this->end();
 
                 while (it != ite)
-                    _tree.deleteNode((it++)->first);
+                    _tree.delete_node((it++)->first);
             }
             bool    empty() const
             {
@@ -126,7 +125,7 @@ namespace ft
             T&  operator[](const Key& key)
             {
                 ft::pair<key_type, mapped_type> new_pair(key, T());
-                typename _RB_tree::node*   ret = _tree.normalInsert(new_pair);
+                typename _RB_tree::node*   ret = _tree.normal_insert(new_pair);
                 while (_tree.iterator->parent)
                         _tree.iterator = _tree.iterator->parent;
                 return (ret->pair.second);
@@ -174,7 +173,7 @@ namespace ft
                 const_iterator    ite = this->end();
 
                 while (it != ite)
-                    _tree.deleteNode((it++)->first);
+                    _tree.delete_node((it++)->first);
             }
             ft::pair<iterator, bool>   insert(const value_type& value)
             {
@@ -223,16 +222,16 @@ namespace ft
             void    erase(iterator pos)
             {
                 if (pos != this->end())
-                    _tree.deleteNode(pos->first);
+                    _tree.delete_node(pos->first);
             }
             void    erase(iterator first, iterator last)
             {
                 while (first != last)
-                    _tree.deleteNode((first++)->first);
+                    _tree.delete_node((first++)->first);
             }
             size_type    erase(const Key& key)
             {
-                return (_tree.deleteNode(key));
+                return (_tree.delete_node(key));
             }
             void    swap(map & other)
             {
@@ -381,7 +380,7 @@ namespace ft
             }
 
         private:
-            typedef typename ft::RedBlackTree<value_type, map, key_type, mapped_type, key_compare, Allocator>   _RB_tree;
+            typedef typename ft::red_black_tree<value_type, map, key_type, mapped_type, key_compare, Allocator>   _RB_tree;
             _RB_tree    _tree;
             key_compare  _comp;
             allocator_type	_allocator;

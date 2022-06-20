@@ -3,10 +3,10 @@
 void    equal_vector()
 {
     std::cout << "Operator" << std::endl;
-    std::vector<int>    vec_1;
-    std::vector<int>    vec_2;
-    std::vector<int>    vec_3;
-    std::vector<int>    vec_4;
+    TYPECONT::vector<int>    vec_1;
+    TYPECONT::vector<int>    vec_2;
+    TYPECONT::vector<int>    vec_3;
+    TYPECONT::vector<int>    vec_4;
 
     vec_1.push_back(1);
     vec_1.push_back(2);

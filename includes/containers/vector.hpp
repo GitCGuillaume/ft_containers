@@ -1,18 +1,14 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-#include "../iterators/RandomAccessIterator.hpp"
+#include "../iterators/random_access_iterator.hpp"
 #include "../iterators/reverse_iterator.hpp"
 #include "../library_headers/is_integral.hpp"
 #include "../library_headers/enable_if.hpp"
 #include "../library_headers/equal.hpp"
 #include "../library_headers/lexicographical_compare.hpp"
-#include <iterator>
-#include <exception>
 #include <sstream>
-#include <limits>
 #include <algorithm>
-#include <memory>
 
 namespace ft
 {
@@ -26,8 +22,8 @@ namespace ft
 			typedef typename Allocator::const_reference	const_reference;
 			typedef typename Allocator::pointer	pointer;
 			typedef typename Allocator::const_pointer	const_pointer;
-			typedef ft::RandomAccessIterator<value_type, vector>		iterator;
-			typedef ft::RandomAccessIterator<const value_type, vector>	const_iterator;
+			typedef ft::random_access_iterator<value_type, vector>		iterator;
+			typedef ft::random_access_iterator<const value_type, vector>	const_iterator;
 			typedef ft::reverse_iterator<iterator>	reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 			typedef std::ptrdiff_t	difference_type;

@@ -2,7 +2,9 @@
 # define MODIFIER_ONE_HPP
 
 #include <map>
+#include "../../includes/containers/map.hpp"
 #include <iostream>
+#include "../../includes/library_headers/pair.hpp"
 
 void    simple_clear();
 void    simple_erase();

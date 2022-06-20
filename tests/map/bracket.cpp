@@ -3,12 +3,8 @@
 void    empty_bracket()
 {
     std::cout << "Empty bracket MAP" << std::endl;
-    std::map<int, int> map;
-    //std::map<std::string, int>::iterator  it = map.begin();
-   // std::cout << "first : " << it->first << std::endl;
-   // std::cout << "size : " << map.size() << std::endl;
+    TYPECONT::map<int, int> map;
     std::cout << map[0] << std::endl;
-   // std::cout << "size : " << map.size() << std::endl;
     std::cout << map[1] << std::endl;
     std::cout << map[2] << std::endl;
     std::cout << map[9] << std::endl;
@@ -24,20 +20,14 @@ void    empty_bracket()
     std::cout << map[5] << std::endl;
     std::cout << map[12] << std::endl;
     std::cout << "size : " << map.size() << std::endl;
-    //std::cout << map["tes"] << std::endl;
-   // std::cout << "size : " << map.size() << std::endl;
 }
 
 void    bracket_map()
 {
     std::cout << "Bracket MAP" << std::endl;
-    std::map<int, int> map;
-    //std::map<std::string, int>::iterator  it = map.begin();
-    // std::cout << "first : " << it->first << std::endl;
-    // std::cout << "size : " << map.size() << std::endl;
+    TYPECONT::map<int, int> map;
     map[0] = 1;
     std::cout << map[0] << std::endl;
-    // "size : " << map.size();
     map[1] = 2;
     std::cout << map[1] << std::endl;
     map[2] = 3;
@@ -64,6 +54,4 @@ void    bracket_map()
     std::cout << map[5] << std::endl;
     map[12] = 14;
     std::cout << map[12] << std::endl;
-    //std::cout << map["tes"] << std::endl;
-   // std::cout << "size : " << map.size() << std::endl;
 }

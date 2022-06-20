@@ -3,7 +3,7 @@
 void    empty()
 {
     std::cout << "Empty" << std::endl;
-    std::vector<int>    vec;
+    TYPECONT::vector<int>    vec;
 
     std::cout << "Is empty : " << vec.empty() << std::endl;
     vec.assign(1, 2);
@@ -13,7 +13,7 @@ void    empty()
 void    max_size()
 {
     std::cout << "Max size" << std::endl;
-    std::vector<int>    vec;
+    TYPECONT::vector<int>    vec;
 
     std::cout << vec.max_size() << std::endl;
 }
@@ -21,7 +21,7 @@ void    max_size()
 void    reserve_error()
 {
      std::cout << "Reserve error" << std::endl;
-    std::vector<int>    vec;
+    TYPECONT::vector<int>    vec;
 
     try
     {
@@ -36,13 +36,13 @@ void    reserve_error()
 void    reserve_test()
 {
     std::cout << "Reserve" << std::endl;
-    std::vector<int>    vec(1,1);
-    for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+    TYPECONT::vector<int>    vec(1,1);
+    for (TYPECONT::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
     std::cout << vec.capacity();
     vec.assign(5, 1);
     std::cout << vec.capacity();
-    for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+    for (TYPECONT::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
     vec.assign(150000, 1);
     std::cout << vec.capacity() << std::endl;

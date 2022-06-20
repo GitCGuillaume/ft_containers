@@ -6,17 +6,17 @@
 void    clear()
 {
     std::cout << "Clear, no values to be displayed below." << std::endl;
-    std::vector<std::string>    vec(5, "test");
+    TYPECONT::vector<std::string>    vec(5, "test");
 
     vec.clear();
-    for (std::vector<std::string>::iterator it = vec.begin(); it != vec.end(); it++)
+    for (TYPECONT::vector<std::string>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
 }
 
 void    insert()
 {
     std::cout << "Insert tests" << std::endl;
-    std::vector<std::string>    vec;
+    TYPECONT::vector<std::string>    vec;
     vec.insert(vec.begin(), "Insert first element");
     std::cout << "capacity vector = " << vec.capacity() << std::endl;
     std::cout << "vec.begin() = " << vec[0] << std::endl;
@@ -37,7 +37,7 @@ void    insert()
 void    insert_100k()
 {
     std::cout << "Insert 100k" << std::endl;
-    std::vector<double>  vec;
+    TYPECONT::vector<double>  vec;
 
     vec.insert(vec.begin() + 0, 0.000000);
     std::cout << "capacity vector begin() + 0 : " << vec.capacity() << std::endl;
@@ -59,7 +59,7 @@ void    insert_100k()
 void    insert_reserve_100k()
 {
     std::cout << "Insert reserve 100k" << std::endl;
-    std::vector<double> vec;
+    TYPECONT::vector<double> vec;
 
     vec.reserve(100000);
     std::cout << "capacity vector capacity 100k : " << vec.capacity() << std::endl;
@@ -71,8 +71,8 @@ void    insert_reserve_100k()
 void    insert_return()
 {
     std::cout << "Insert return" << std::endl;
-    std::vector<std::string>    vec;
-    std::vector<std::string>::iterator  it;
+    TYPECONT::vector<std::string>    vec;
+    TYPECONT::vector<std::string>::iterator  it;
     it = vec.insert(vec.begin(), "one");
     std::cout << *it << std::endl;
 }
@@ -80,7 +80,7 @@ void    insert_return()
 void    count_insert_100()
 {
     std::cout << "count_insert_100" << std::endl;
-    std::vector<double>  vec;
+    TYPECONT::vector<double>  vec;
     struct timeval	start, end;
 	double		sum_time;
 	long int	mem_seconds;
@@ -95,7 +95,7 @@ void    count_insert_100()
     std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
 	std::cout << std::setprecision(0);
     std::cout << "capacity vector begin() + 0 : " << vec.capacity() << std::endl;
-    for  (std::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
+    for  (TYPECONT::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
     gettimeofday(&start, NULL);
     vec.insert(vec.begin() + 1, 5, 1.000000);
@@ -106,7 +106,7 @@ void    count_insert_100()
     std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
 	std::cout << std::setprecision(0);
     std::cout << "capacity vector begin() + 1 : " << vec.capacity() << std::endl;
-    for  (std::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
+    for  (TYPECONT::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
     gettimeofday(&start, NULL);
     vec.insert(vec.begin() + 2, 3, 2.000000);
@@ -117,7 +117,7 @@ void    count_insert_100()
     std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
 	std::cout << std::setprecision(0);
     std::cout << "capacity vector begin() + 2 : " << vec.capacity() << std::endl;
-    for  (std::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
+    for  (TYPECONT::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
     gettimeofday(&start, NULL);
     for (double i = 3.000000; i < 10000.000000; i++)
@@ -145,71 +145,69 @@ void    count_insert_100()
 void    iterator_insert()
 {
     std::cout << "iterator insert" << std::endl;
-    std::vector<double> old_vec;
-    std::vector<double> vec;
+    TYPECONT::vector<double> old_vec;
+    TYPECONT::vector<double> vec;
     double arr[5] = {0.000000,1.000000,2.000000,3.000000,4.000000};
     for (int i = 0; i < 5; i++)
         old_vec.insert(old_vec.end(), *(arr + i));
     vec.insert(vec.begin(), old_vec.begin(), old_vec.end());
-    for  (std::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
+    for  (TYPECONT::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
     vec.insert(vec.begin() + 3, old_vec.begin(), old_vec.end());
-    for  (std::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
+    for  (TYPECONT::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
     vec.insert(vec.begin() + 5, old_vec.begin(), old_vec.end());
     std::cout << "big pos first last insert" << std::endl;
-    std::vector<int>    vec2;
+    TYPECONT::vector<int>    vec_2;
     for (unsigned int i = 0; i < 20000; i++)
-        vec2.insert(vec2.end(), i);
-    std::vector<int>    vec3;
-    vec3.insert(vec3.begin(), vec2.begin(), vec2.end());
+        vec_2.insert(vec_2.end(), i);
+    TYPECONT::vector<int>    vec_3;
+    vec_3.insert(vec_3.begin(), vec_2.begin(), vec_2.end());
 }
 
 void    push_back_vector()
 {
     std::cout << "push back vector" << std::endl;
-    std::vector<double> vec;
+    TYPECONT::vector<double> vec;
 
     for (double i = 0; i < 50000; i++)
         vec.push_back(i);
-    //for (std::vector<double>::iterator it = vec.begin(); it != vec.end(); it++)
-      // std::cout << *it << std::endl;
 }
 
 void    pop_back_vector()
 {
     std::cout << "pop back vector" << std::endl;
 
-    std::vector<int>    vec;
+    TYPECONT::vector<int>    vec;
 
     vec.push_back(1);
     vec.push_back(2);
     vec.push_back(3);
     vec.pop_back();
-    for  (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+    for  (TYPECONT::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
     vec.pop_back();
-    for  (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+    for  (TYPECONT::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
     vec.pop_back();
-    for  (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+    for  (TYPECONT::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
 }
 
 void    resize()
 {
     std::cout << "Resize vector" << std::endl;
-    std::vector<int>    vec;
+    TYPECONT::vector<int>    vec;
 
     vec.resize(5);
-    for  (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+    for  (TYPECONT::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
             std::cout << "e1 : " << *it << std::endl;
     std::cout << "capacity : " << vec.capacity() << std::endl;
     for (int i = 1; i < 6; i++)
         vec.push_back(i);
     vec.resize(15, 42);
     std::cout << "capacity : " << vec.capacity() << std::endl;
-    for  (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+    for  (TYPECONT::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
             std::cout << "e2 : " << *it << std::endl;
      std::cout << "size : " << vec.size() << std::endl;
     for (int i = 4; 0 < i; i --)
@@ -217,7 +215,7 @@ void    resize()
         vec.resize(i);
         std::cout << "size : " << vec.size() << std::endl;
         std::cout << "capacity : " << vec.capacity() << std::endl;
-        for  (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+        for  (TYPECONT::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
             std::cout << "elem : " << *it << std::endl;
     }
     vec.resize(5);
@@ -227,19 +225,19 @@ void    resize()
     vec.resize(0);
     vec.resize(0);
     vec.resize(5);
-    for  (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+    for  (TYPECONT::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
             std::cout << *it << std::endl;
     vec.resize(0);
     std::cout << "resize(0)" << std::endl;
-    for  (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+    for  (TYPECONT::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << std::endl;
 }
 
 void    swap_vector()
 {
     std::cout << "SWAP" << std::endl;
-    std::vector<int>    vec_1;
-    std::vector<int>    vec_2;
+    TYPECONT::vector<int>    vec_1;
+    TYPECONT::vector<int>    vec_2;
 
     vec_1.swap(vec_2);
     vec_1.push_back(1);
@@ -250,8 +248,8 @@ void    swap_vector()
     vec_1.reserve(5);
     vec_2.push_back(5);
     vec_2.push_back(6);
-    std::vector<int>::iterator it1 = vec_1.begin();
-    std::vector<int>::iterator it2 = vec_2.begin();
+    TYPECONT::vector<int>::iterator it1 = vec_1.begin();
+    TYPECONT::vector<int>::iterator it2 = vec_2.begin();
     std::cout << "BEFORE" << std::endl;
     std::cout << "vec_1 size : " << vec_1.size() << std::endl
         << "vec_1 capacity : " << vec_1.capacity() << std::endl;
@@ -264,10 +262,10 @@ void    swap_vector()
     std::cout << "vec_2 size : " << vec_2.size() << std::endl
         << "vec_2 capacity : " << vec_2.capacity() << std::endl;
     std::cout << "vec_1" << std::endl;
-    for  (std::vector<int>::iterator it = vec_1.begin(); it != vec_1.end(); it++)
+    for  (TYPECONT::vector<int>::iterator it = vec_1.begin(); it != vec_1.end(); it++)
         std::cout << *it << std::endl;    
     std::cout << "vec_2" << std::endl;
-    for  (std::vector<int>::iterator it = vec_2.begin(); it != vec_2.end(); it++)
+    for  (TYPECONT::vector<int>::iterator it = vec_2.begin(); it != vec_2.end(); it++)
         std::cout << *it << std::endl;
     std::cout << "it_1 validity : " << (it1 == vec_1.begin()) << std::endl;
     std::cout << "it_2 validity : " << (it2 == vec_2.begin()) << std::endl;
@@ -277,8 +275,8 @@ void    swap_vector()
 void    swap_vector_non_member()
 {
     std::cout << "Non-Member SWAP" << std::endl;
-    std::vector<int>    vec_1;
-    std::vector<int>    vec_2;
+    TYPECONT::vector<int>    vec_1;
+    TYPECONT::vector<int>    vec_2;
 
     std::swap(vec_1, vec_2);
     vec_1.push_back(1);
@@ -289,8 +287,8 @@ void    swap_vector_non_member()
     vec_1.reserve(5);
     vec_2.push_back(5);
     vec_2.push_back(6);
-    std::vector<int>::iterator it1 = vec_1.begin();
-    std::vector<int>::iterator it2 = vec_2.begin();
+    TYPECONT::vector<int>::iterator it1 = vec_1.begin();
+    TYPECONT::vector<int>::iterator it2 = vec_2.begin();
     std::cout << "BEFORE" << std::endl;
     std::cout << "vec_1 size : " << vec_1.size() << std::endl
         << "vec_1 capacity : " << vec_1.capacity() << std::endl;
@@ -303,10 +301,10 @@ void    swap_vector_non_member()
     std::cout << "vec_2 size : " << vec_2.size() << std::endl
         << "vec_2 capacity : " << vec_2.capacity() << std::endl;
     std::cout << "vec_1" << std::endl;
-    for  (std::vector<int>::iterator it = vec_1.begin(); it != vec_1.end(); it++)
+    for  (TYPECONT::vector<int>::iterator it = vec_1.begin(); it != vec_1.end(); it++)
         std::cout << *it << std::endl;    
     std::cout << "vec_2" << std::endl;
-    for  (std::vector<int>::iterator it = vec_2.begin(); it != vec_2.end(); it++)
+    for  (TYPECONT::vector<int>::iterator it = vec_2.begin(); it != vec_2.end(); it++)
         std::cout << *it << std::endl;
     std::cout << "it_1 validity : " << (it1 == vec_1.begin()) << std::endl;
     std::cout << "it_2 validity : " << (it2 == vec_2.begin()) << std::endl;

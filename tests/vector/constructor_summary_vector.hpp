@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include "../../includes/containers/vector.hpp"
 
 #include "at.hpp"
 #include "capacities.hpp"

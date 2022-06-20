@@ -3,11 +3,12 @@
 
 #include <utility>
 #include <iostream>
+#include "../../includes/library_headers/pair.hpp"
 
 void    pair_default();
-void    pair_equal_custom();
-void    pair_not_equal_custom();
-void    pair_left_custom();
+void    pair_equal();
+void    pair_not_equal();
+void    pair_left();
 void    pair_left_equal();
 void    pair_right();
 void    pair_right_equal();

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include "../../includes/containers/vector.hpp"
 
 void    equal_vector();
 

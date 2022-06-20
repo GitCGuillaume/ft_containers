@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <stack>
+#include <vector>
+#include "../../includes/containers/stack.hpp"
+#include "../../includes/containers/vector.hpp"
 
 void    stack_empty();
 void    stack_size();

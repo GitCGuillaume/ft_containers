@@ -3,10 +3,10 @@
 void    equal_map()
 {
     std::cout << "Operator MAP" << std::endl;
-    std::map<std::string, int>    map_1;
-    std::map<std::string, int>    map_2;
-    std::map<std::string, int>    map_3;
-    std::map<std::string, int>    map_4;
+    TYPECONT::map<std::string, int>    map_1;
+    TYPECONT::map<std::string, int>    map_2;
+    TYPECONT::map<std::string, int>    map_3;
+    TYPECONT::map<std::string, int>    map_4;
 
     map_1["one"] = 1;
     map_1["two"] = 2;
@@ -71,22 +71,22 @@ void    equal_map()
 void    non_member_operator_map()
 {
     std::cout << "Non Member Operator MAP" << std::endl;
-    std::map<int, int>    map_1;
-    std::map<int, int>    map_2;
-    std::map<int, int>    map_3;
-    std::map<int, int>    map_4;
+    TYPECONT::map<int, int>    map_1;
+    TYPECONT::map<int, int>    map_2;
+    TYPECONT::map<int, int>    map_3;
+    TYPECONT::map<int, int>    map_4;
 
-    map_1.insert(std::make_pair(1, 2));
-    map_1.insert(std::make_pair(2, 3));
-    map_1.insert(std::make_pair(3, 4));
-    map_2.insert(std::make_pair(4, 5));
-    map_2.insert(std::make_pair(5, 6));
-    map_3.insert(std::make_pair(1, 2));
-    map_3.insert(std::make_pair(2, 3));
-    map_3.insert(std::make_pair(3, 4));
-    map_4.insert(std::make_pair(4, 5));
-    map_4.insert(std::make_pair(5, 6));
-    map_4.insert(std::make_pair(3, 1));
+    map_1.insert(TYPECONT::make_pair(1, 2));
+    map_1.insert(TYPECONT::make_pair(2, 3));
+    map_1.insert(TYPECONT::make_pair(3, 4));
+    map_2.insert(TYPECONT::make_pair(4, 5));
+    map_2.insert(TYPECONT::make_pair(5, 6));
+    map_3.insert(TYPECONT::make_pair(1, 2));
+    map_3.insert(TYPECONT::make_pair(2, 3));
+    map_3.insert(TYPECONT::make_pair(3, 4));
+    map_4.insert(TYPECONT::make_pair(4, 5));
+    map_4.insert(TYPECONT::make_pair(5, 6));
+    map_4.insert(TYPECONT::make_pair(3, 1));
     std::cout << "==" << std::endl;
     std::cout << (map_1 == map_2) << std::endl;
     std::cout << (map_2 == map_1) << std::endl;

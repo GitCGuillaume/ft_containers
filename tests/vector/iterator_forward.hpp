@@ -4,8 +4,9 @@
 #include <vector>
 #include <iterator>
 #include <iostream>
+#include "../../includes/containers/vector.hpp"
 
-void	test_std_assign1_forward();
-void	test_std_assign_it_forward();
+void	iterator_assign_forward();
+void	iterator_assign_first_last_forward();
 
 #endif

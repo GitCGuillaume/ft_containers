@@ -3,7 +3,7 @@
 void    at_ok()
 {
     std::cout << "AT" << std::endl;
-    std::vector<int>vec;
+    TYPECONT::vector<int>vec;
 
     vec.assign(2, 1);
     std::cout << "at(1) " << vec.at(1) << std::endl;
@@ -23,9 +23,9 @@ void    at_ok()
 void    at_const_ok()
 {
     std::cout << "AT_CONST" << std::endl;
-    std::vector<int>vec;
+    TYPECONT::vector<int>vec;
     vec.assign(2, 1);
-    const std::vector<int>vec_const(vec);
+    const TYPECONT::vector<int>vec_const(vec);
     std::cout << "at(1) " << vec_const.at(1) << std::endl;
     std::cout << "at(0) " << vec_const.at(0) << std::endl;
     std::cout << "[1] " << vec_const[1] << std::endl;
@@ -35,7 +35,7 @@ void    at_const_ok()
 void    at_out_of_range()
 {
     std::cout << "AT_OUT_OF_RANGE" << std::endl;
-    std::vector<int>vec;
+    TYPECONT::vector<int>vec;
 
     try
     {
