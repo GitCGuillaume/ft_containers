@@ -502,9 +502,9 @@ namespace ft
 						--size;
 				}
 				max = offset + count;
-				for (size_type nb_count = offset; nb_count < max; nb_count++)
+				for (; nb_count < max; nb_count++)
 				{
-					new (_vec + nb_count) value_type(*first);
+					new (_vec + offset) value_type(*first);
 					++first;
 				}
 				_size += count;

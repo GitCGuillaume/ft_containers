@@ -15,7 +15,6 @@
         The iterator receive a ft::pair<>, but alone it won't do anything
         So need to create nodes for rotation / whatever
 */
-
 #include <iostream>
 template<class T>
 struct s_node
@@ -361,7 +360,7 @@ namespace ft
                         {
                                 node    *start = iterator;
 
-                                if (!iterator)
+                                if (!start)
                                         return (NULL);
                                 while (start->parent)
                                         start = start->parent;
@@ -373,7 +372,7 @@ namespace ft
                         {
                                 node    *start = iterator;
 
-                                if (!iterator)
+                                if (!start)
                                         return (NULL);
                                 while (start->parent)
                                         start = start->parent;
@@ -385,6 +384,14 @@ namespace ft
                         {
                                 return (_rebind_node.max_size());
                         }
+			/*ft::pair<iterator, iterator>	equal_range(Key const & key)
+			{
+
+			}
+			ft::pair<const_iterator, const_iterator>	equal_range(Key const & key) const
+			{
+
+			}*/
                         node*  iterator;
 
                         private:
@@ -678,7 +685,9 @@ namespace ft
                                                         _rotate_left(g_parent_node);
                                                 parent_node->colour = BLACK;
                                                 g_parent_node->colour = RED;
-                                        }
+						if (!parent_node->parent)
+							iterator = parent_node;
+					}
                                 }
                                 void    _new_node(node* current)
                                 {
@@ -721,21 +730,21 @@ namespace ft
                         virtual ~bidirectionnal_iterator(){}
                         reference operator*() const
                         {
-                                if (!_ptr)
+                                /*if (!_ptr)
                                 {
                                         value_type      pair = value_type();
                                         pointer ptr = &pair;
                                         return (*ptr);
-                                }
+                                }*/
                                 return (*(&_ptr->pair));
                         }
                         pointer operator->() const
                         {
-                                if (_ptr)
+                                //if (_ptr)
                                         return (&_ptr->pair);
-                                value_type      pair = value_type();
-                                pointer ptr = &pair;
-                                return (ptr);
+                                //value_type      pair = value_type();
+                               // pointer ptr = &pair;
+                               // return (ptr);
                         }
                         /* PREFIX */
                         /*

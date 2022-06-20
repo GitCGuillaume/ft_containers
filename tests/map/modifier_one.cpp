@@ -21,7 +21,6 @@ void    simple_erase()
     std::cout << "simple erase" << std::endl;
     TYPECONT::map<int, int>  map;
 
-    map.erase(map.end());
     for (int i = 0; i < 3; i++)
         map[i] = i;
     for (int i = 0; i < 3; i++)
@@ -38,8 +37,6 @@ void    range_erase()
     std::cout << "RANGE erase" << std::endl;
     TYPECONT::map<int, int>  map;
 
-    map.erase(map.begin(), map.end());
-    std::cout  << "first before erase(pos) : " << map.begin()->first << std::endl;
     for (int i = 1; i < 5; i++)
         map[i] = i;
     TYPECONT::map<int, int>::iterator    it = map.begin();
@@ -61,7 +58,6 @@ void    erase_key()
 {
     TYPECONT::map<std::string, int>  map;
 
-    std::cout << map.erase("seventy") << std::endl;
     map["one"] = 1;
     map["two"] = 2;
     map["ten"] = 10;

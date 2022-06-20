@@ -12,7 +12,7 @@
 /*
     struct s_node* _node is a pointer because std::allocator allocate return pointer.
 */
-#include <iostream>
+
 namespace ft
 {
     template<class Key, class T, class Compare = ft::less<Key>, class Allocator = std::allocator<ft::pair<const Key, T> > >
@@ -70,9 +70,11 @@ namespace ft
                 if (this != &other)
                 {
                     this->clear();
+		    std::cout << "past clear"<<std::endl;
 		    _comp = other._comp;
                     _allocator = other._allocator;
                     this->insert(other.begin(), other.end());
+		    std::cout<<"past insert"<<std::endl;
                 }
                 return (*this);
             }
@@ -179,12 +181,8 @@ namespace ft
                 const_iterator    it = this->begin();
                 const_iterator    ite = this->end();
 
-		if (!_tree.iterator)
-			return ;
-                while (it != ite)
-		{
+		while (it != ite)
                 	 _tree.delete_node((it++)->first);
-		}
 	}
             ft::pair<iterator, bool>   insert(const value_type& value)
             {
@@ -285,8 +283,8 @@ namespace ft
                 iterator    first;
                 bool        first_found = false;
 
-                if (key < it->first)
-                    return (ft::make_pair(it, it));
+                //if (it != ite && key < it->first)
+                 //   return (ft::make_pair(it, it));
                 while (it != ite)
                 {
                     if (!(_comp(it->first, key)) && first_found == false)
@@ -303,7 +301,8 @@ namespace ft
                 if (it == ite && first_found == true)
                     return (ft::make_pair(first, ite));
                 return (ft::make_pair(ite, ite));
-            }
+		    //return (ft::make_pair(lower_bound(key), upper_bound(key)));
+	    }
             ft::pair<const_iterator, const_iterator>   equal_range(const Key& key) const
             {
                 const_iterator    it = this->begin();
@@ -311,8 +310,8 @@ namespace ft
                 const_iterator    first;
                 bool        first_found = false;
 
-                if (key < it->first)
-                    return (ft::make_pair(it, it));
+                //if (it != ite && key < it->first)
+                   // return (ft::make_pair(it, it));
                 while (it != ite)
                 {
                     if (!(_comp(it->first, key)) && first_found == false)
@@ -320,7 +319,7 @@ namespace ft
                         first = it;
                         first_found = true;
                         if (it->first != key)
-                            return (ft::make_pair(it, it));
+				return (ft::make_pair(it, it));
                     }
                     else if (_comp(key, it->first))
                         return (ft::make_pair(first, it));
@@ -329,6 +328,7 @@ namespace ft
                 if (it == ite && first_found == true)
                     return (ft::make_pair(first, ite));
                 return (ft::make_pair(ite, ite));
+		   // return (ft::make_pair(lower_bound(key), upper_bound(key)));
             }
             iterator    lower_bound(const Key& key)
             {
