@@ -16,6 +16,7 @@
         So need to create nodes for rotation / whatever
 */
 
+#include <iostream>
 template<class T>
 struct s_node
 {
@@ -458,8 +459,8 @@ namespace ft
                                 }
                                 void    _repear_double_black(node *current)
                                 {
-                                        if (!iterator || !current)
-                                                return ;
+                                        //if (!iterator || !current)
+                                          //      return ;
                                         node    *sibling = _get_sibling(current);
 
                                         if (!current->parent)
@@ -514,10 +515,10 @@ namespace ft
                                                 }
                                                 else if (sibling->colour == RED)
                                                         _repear_double_blackTwo(current);
-                                                else if (sibling->colour == BLACK
-                                                        && (((sibling->left && sibling->left->colour == BLACK)
-                                                        && (sibling->right && sibling->right->colour == BLACK))
-                                                        || (sibling && sibling->colour == BLACK && !sibling->left && !sibling->right)))
+                                                else if (sibling->colour == BLACK)
+                                                        //&& (((sibling->left && sibling->left->colour == BLACK)
+                                                        //&& (sibling->right && sibling->right->colour == BLACK))
+                                                        //|| (sibling && sibling->colour == BLACK && !sibling->left && !sibling->right)))
                                                 {
                                                         sibling->colour = RED;
                                                         if (current->parent && current->parent->colour == BLACK)
@@ -648,9 +649,12 @@ namespace ft
                                         parent_node = _get_parent(current);
                                         g_parent_node = _get_grand_parent(current);
 
-                                        if (!current->parent)
+					if (!current->parent)
+					{
                                                 current->colour = BLACK;
-                                        else if (parent_node->colour == BLACK)
+						iterator = current;
+					}
+					else if (parent_node->colour == BLACK)
                                                 return ;
                                         else if (uncle && uncle->colour == RED) //oncle and parent must be black
                                                 _repear_case_one(current);

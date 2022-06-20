@@ -8,10 +8,11 @@
 #include "../library_headers/lexicographical_compare.hpp"
 #include "../iterators/reverse_iterator.hpp"
 #include <stdexcept>
+
 /*
     struct s_node* _node is a pointer because std::allocator allocate return pointer.
 */
-
+#include <iostream>
 namespace ft
 {
     template<class Key, class T, class Compare = ft::less<Key>, class Allocator = std::allocator<ft::pair<const Key, T> > >
@@ -69,7 +70,7 @@ namespace ft
                 if (this != &other)
                 {
                     this->clear();
-                    _comp = other._comp;
+		    _comp = other._comp;
                     _allocator = other._allocator;
                     this->insert(other.begin(), other.end());
                 }
@@ -178,9 +179,13 @@ namespace ft
                 const_iterator    it = this->begin();
                 const_iterator    ite = this->end();
 
+		if (!_tree.iterator)
+			return ;
                 while (it != ite)
-                    _tree.delete_node((it++)->first);
-            }
+		{
+                	 _tree.delete_node((it++)->first);
+		}
+	}
             ft::pair<iterator, bool>   insert(const value_type& value)
             {
                 iterator  it;
