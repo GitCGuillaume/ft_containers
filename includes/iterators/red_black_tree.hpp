@@ -102,6 +102,47 @@ namespace ft
                                 }
                                 return (NULL);
                         }
+			node*	search_hint(Key const& key, node* new_node, value_type const& pair)
+			{
+				Key     first_sub_root = iterator->pair.first;
+
+				new_node = _rebind_node.allocate(1);
+                                _rebind_node.construct(new_node, node(pair));
+                                _new_node(new_node);
+                                //Search
+                               while (iterator)
+                                {
+                                        if (_comp(first_sub_root, key))
+                                        {
+                                                 if (!iterator->right)
+                                                 {
+                                                        new_node->parent = iterator;
+                                                        iterator->right = new_node;
+                                                        break ;
+                                                 }
+                                                iterator = iterator->right;
+                                                first_sub_root = iterator->pair.first;
+                                        }
+                                        else if (_comp(key, first_sub_root))
+                                        {
+                                                if (!iterator->left)
+                                                {
+                                                        new_node->parent = iterator;
+                                                        iterator->left = new_node;
+                                                        break ;
+                                                }
+                                                iterator = iterator->left;
+                                                first_sub_root = iterator->pair.first;
+                                        }
+                                        else if (key == first_sub_root)
+                                        {
+                                                _destroy_node(new_node);
+                                                return (NULL);
+                                        }
+                                }
+			       return (new_node);
+			}
+
                         node*           find(Key const& key) const
                         {
                                 node    *sub_root = iterator;
@@ -162,8 +203,7 @@ namespace ft
                                 }
                                 return (n);
                         }
-
-                        node*    insert(const value_type& pair)
+			node*    insert(const value_type& pair)
                         {
                                 node    *new_node = NULL;
 
@@ -213,11 +253,11 @@ namespace ft
                                 }
                                 new_node->colour = RED;
                                 _repear_tree_insert(new_node);
-                                while (_get_parent(iterator))
+				while (_get_parent(iterator))
                                         iterator = iterator->parent;
                                 return (new_node);
                         }
-                        node*    normal_insert(const value_type& pair)
+			node*    insert_hint(const value_type& pair, Key const& key)
                         {
                                 node    *new_node = NULL;
 
@@ -230,10 +270,64 @@ namespace ft
                                         return (iterator);
                                 }
                                 Key     first_sub_root = iterator->pair.first;
-                                Key     first_new_node = pair.first;
                                 new_node = _rebind_node.allocate(1);
                                 _rebind_node.construct(new_node, node(pair));
                                 _new_node(new_node);
+                                //Search
+                               while (iterator)
+                                {
+                                        if (_comp(first_sub_root, key))
+                                        {
+                                                 if (!iterator->right)
+                                                 {
+                                                        new_node->parent = iterator;
+                                                        iterator->right = new_node;
+                                                        break ;
+                                                 }
+                                                iterator = iterator->right;
+                                                first_sub_root = iterator->pair.first;
+                                        }
+                                        else if (_comp(key, first_sub_root))
+                                        {
+                                                if (!iterator->left)
+                                                {
+                                                        new_node->parent = iterator;
+                                                        iterator->left = new_node;
+                                                        break ;
+                                                }
+                                                iterator = iterator->left;
+                                                first_sub_root = iterator->pair.first;
+                                        }
+                                        else if (key == first_sub_root)
+                                        {
+                                                _destroy_node(new_node);
+                                                return (NULL);
+                                        }
+                                }
+                                new_node->colour = RED;
+                                _repear_tree_insert(new_node);
+				while (_get_parent(iterator))
+                                        iterator = iterator->parent;
+                                return (new_node);
+                        }
+
+                        node*    normal_insert(const value_type& pair)
+                        {
+                                node    *new_node = NULL;
+
+                                if (!iterator)
+                                {
+                                        iterator = _rebind_node.allocate(1);
+                                        _rebind_node.construct(iterator, node(pair));
+                                        _new_node(iterator);
+                                        iterator->colour = BLACK;
+                                        return (iterator);
+                                }
+                                new_node = _rebind_node.allocate(1);
+                                _rebind_node.construct(new_node, node(pair));
+                                _new_node(new_node);
+				Key     first_sub_root = iterator->pair.first;
+                                Key     first_new_node = pair.first;
                                 //Search
                                while (iterator)
                                 {
@@ -265,6 +359,7 @@ namespace ft
                                                 return (iterator);
                                         }
                                 }
+			      	new_node->parent = iterator;
                                 new_node->colour = RED;
                                 _repear_tree_insert(new_node);
                                 while (_get_parent(iterator))
@@ -384,14 +479,42 @@ namespace ft
                         {
                                 return (_rebind_node.max_size());
                         }
-			/*ft::pair<iterator, iterator>	equal_range(Key const & key)
+			node*	lower_bound(Key const & key) const
 			{
+				node*	start = iterator;
+				node*	ret = 0;
 
+				while (start)
+				{
+					if (!_comp(start->pair.first, key))
+					{
+						ret = start;
+						start = start->left;
+					}
+					else
+						start = start->right;
+				}
+				return (ret);
 			}
-			ft::pair<const_iterator, const_iterator>	equal_range(Key const & key) const
+			node*	upper_bound(Key const & key) const
 			{
+				node*	start = iterator;
+				node*	ret = 0;
+				
+				while (start)
+				{
+					if (_comp(key, start->pair.first))
+					{
+						ret = start;
+						start = start->left;
+					}
+					else// if (_comp(start->pair.first, key))
+						start = start->right;
+					//break ;
+				}
+				return (ret);
+			}
 
-			}*/
                         node*  iterator;
 
                         private:

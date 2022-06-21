@@ -31,7 +31,7 @@ void	execute_function(void (*ft)(void))
 
 int	main(void)
 {
-	execute_function(&iterator_assign_forward);
+/*	execute_function(&iterator_assign_forward);
 	execute_function(iterator_assign_first_last_forward);
 	execute_function(iterator_assign_backward);
 	execute_function(iterator_assign_first_last_backward);
@@ -104,17 +104,19 @@ int	main(void)
 	execute_function(range_erase);
 	execute_function(erase_key);
 	execute_function(insert_value_type);
+	*/
 	execute_function(insert_hint);
-	execute_function(insert_range);
+	/*execute_function(insert_range);
 	execute_function(lookup_find);
 	execute_function(map_count);
 	execute_function(map_swap);
 	execute_function(map_swap_non_member);
+	*/
 	execute_function(map_equal_range);
 	execute_function(map_equal_range_const);
 	execute_function(lower_bound_map);
 	execute_function(upper_bound_map);
-	execute_function(test_keycomp);
+	/*execute_function(test_keycomp);
 	execute_function(test_value_comp);
 	execute_function(non_member_operator_map);
 	execute_function(default_constructor_stack);
@@ -123,5 +125,6 @@ int	main(void)
 	execute_function(stack_size);
 	execute_function(stack_equal);
 	execute_function(stack_mutant_stack);
+	*/
 	return (0);
 }

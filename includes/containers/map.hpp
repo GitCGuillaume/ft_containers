@@ -70,11 +70,9 @@ namespace ft
                 if (this != &other)
                 {
                     this->clear();
-		    std::cout << "past clear"<<std::endl;
 		    _comp = other._comp;
                     _allocator = other._allocator;
                     this->insert(other.begin(), other.end());
-		    std::cout<<"past insert"<<std::endl;
                 }
                 return (*this);
             }
@@ -184,7 +182,8 @@ namespace ft
 		while (it != ite)
                 	 _tree.delete_node((it++)->first);
 	}
-            ft::pair<iterator, bool>   insert(const value_type& value)
+            
+	    ft::pair<iterator, bool>   insert(const value_type& value)
             {
                 iterator  it;
                 typename _RB_tree::node*    new_node = _tree.insert(value);
@@ -200,15 +199,16 @@ namespace ft
                 }
                 return (ft::make_pair(it, 1));
             }
-            /* hint is suggestion as to where to start the search */
+		/* hint is suggestion as to where to start the search */
             iterator    insert(iterator hint, const value_type& value)
             {
-                iterator    it = this->begin();
-
-                while (it != hint)
-                    ++it;
-                typename _RB_tree::node*    new_node = _tree.insert(value);
-                if (!new_node)
+		    iterator	it;
+			typename _RB_tree::node*	new_node = NULL;
+		    if (hint == const_iterator(0, 0))
+			new_node = _tree.insert(value);
+		    else
+			new_node = _tree.insert_hint(value, hint->first);
+		if (!new_node)
                 {
                     it = iterator(_tree.iterator, _tree.iterator);
                     while (_tree.iterator->parent)
@@ -218,7 +218,7 @@ namespace ft
                 it = iterator(new_node, _tree.iterator);
                 return (it);
             }
-            template<class InputIt>
+		template<class InputIt>
             void    insert(InputIt first, InputIt last)
             {
                 while (first != last)
@@ -278,88 +278,23 @@ namespace ft
             }
             ft::pair<iterator, iterator>   equal_range(const Key& key)
             {
-                iterator    it = this->begin();
-                iterator    ite = this->end();
-                iterator    first;
-                bool        first_found = false;
-
-                //if (it != ite && key < it->first)
-                 //   return (ft::make_pair(it, it));
-                while (it != ite)
-                {
-                    if (!(_comp(it->first, key)) && first_found == false)
-                    {
-                        first = it;
-                        first_found = true;
-                        if (it->first != key)
-                            return (ft::make_pair(it, it));
-                    }
-                    else if (_comp(key, it->first))
-                        return (ft::make_pair(first, it));
-                    ++it;
-                }
-                if (it == ite && first_found == true)
-                    return (ft::make_pair(first, ite));
-                return (ft::make_pair(ite, ite));
-		    //return (ft::make_pair(lower_bound(key), upper_bound(key)));
-	    }
+       	    	return (ft::make_pair(lower_bound(key), upper_bound(key)));	
+		}
             ft::pair<const_iterator, const_iterator>   equal_range(const Key& key) const
             {
-                const_iterator    it = this->begin();
-                const_iterator    ite = this->end();
-                const_iterator    first;
-                bool        first_found = false;
-
-                //if (it != ite && key < it->first)
-                   // return (ft::make_pair(it, it));
-                while (it != ite)
-                {
-                    if (!(_comp(it->first, key)) && first_found == false)
-                    {
-                        first = it;
-                        first_found = true;
-                        if (it->first != key)
-				return (ft::make_pair(it, it));
-                    }
-                    else if (_comp(key, it->first))
-                        return (ft::make_pair(first, it));
-                    ++it;
-                }
-                if (it == ite && first_found == true)
-                    return (ft::make_pair(first, ite));
-                return (ft::make_pair(ite, ite));
-		   // return (ft::make_pair(lower_bound(key), upper_bound(key)));
+                return (ft::make_pair(lower_bound(key), upper_bound(key)));
             }
             iterator    lower_bound(const Key& key)
             {
-                iterator    it = this->begin();
-                iterator    ite = this->end();
-
-                while (it != ite)
-                {
-                    if (!(_comp(it->first, key)))
-                        return (it);
-                    ++it;
-                }
-                return (ite);
+           	return (iterator(_tree.lower_bound(key), _tree.iterator));
             }
             const_iterator    lower_bound(const Key& key) const
             {
-                const_iterator    it = this->begin();
-                const_iterator    ite = this->end();
-
-    
-                while (it != ite)
-                {
-                    if (!(_comp(it->first, key)))
-                        return (it);
-                    ++it;
-                }
-                return (ite);
+   		return (const_iterator(_tree.lower_bound(key), _tree.iterator));
             }
             iterator    upper_bound(const Key& key)
             {
-                iterator    it = this->begin();
+                /*iterator    it = this->begin();
                 iterator    ite = this->end();
 
                 while (it != ite)
@@ -368,10 +303,11 @@ namespace ft
                         return (it);
                     ++it;
                 }
-                return (ite);
+                return (ite);*/
+		return (iterator(_tree.upper_bound(key), _tree.iterator));
             }
             const_iterator    upper_bound(const Key& key) const
-            {
+            {/*
                 const_iterator    it = this->begin();
                 const_iterator    ite = this->end();
 
@@ -382,7 +318,8 @@ namespace ft
                         return (it);
                     ++it;
                 }
-                return (ite);
+                return (ite);*/
+		return (const_iterator(_tree.upper_bound(key), _tree.iterator));
             }
             key_compare key_comp()  const
             {
