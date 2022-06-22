@@ -60,9 +60,10 @@ namespace ft
                         typedef s_node<It>       node;
                         typedef typename Allocator::template rebind<s_node<It> >::other      rebind_node;
 
-                        red_black_tree() : iterator(NULL){}
+                        red_black_tree() : iterator(NULL), _size(0){}
                         red_black_tree(const red_black_tree & rhs) : iterator(rhs.iterator)
-                                        , _rebind_node(rhs._rebind_node), _comp(rhs._comp), _allocator(rhs._allocator){}
+                                        , _rebind_node(rhs._rebind_node), _comp(rhs._comp), _allocator(rhs._allocator)
+                                        , _size(rhs._size){}
                         red_black_tree & operator=(const red_black_tree & rhs)
                         {
                                 if (this != &rhs)
@@ -71,11 +72,12 @@ namespace ft
                                         _rebind_node = rhs._rebind_node;
                                         _comp = rhs._comp;
                                         _allocator = rhs._allocator;
+                                        _size = rhs._size;
                                 }
                                 return (*this);
                         }
                         virtual ~red_black_tree(){}
-                        red_black_tree(node* iterator) : iterator(iterator){}
+                        //red_black_tree(node* iterator) : iterator(iterator){}
                         node*    search(Key const &key) const
                         {
                                 node    *sub_root = iterator;
@@ -213,6 +215,7 @@ namespace ft
                                         _rebind_node.construct(iterator, node(pair));
                                         _new_node(iterator);
                                         iterator->colour = BLACK;
+                                        ++_size;
                                         return (iterator);
                                 }
                                 Key     first_sub_root = iterator->pair.first;
@@ -221,7 +224,7 @@ namespace ft
                                 _rebind_node.construct(new_node, node(pair));
                                 _new_node(new_node);
                                 //Search
-                               while (iterator)
+                                while (iterator)
                                 {
                                         if (_comp(first_sub_root, first_new_node))
                                         {
@@ -251,6 +254,7 @@ namespace ft
                                                 return (NULL);
                                         }
                                 }
+                                ++_size;
                                 new_node->colour = RED;
                                 _repear_tree_insert(new_node);
 				while (_get_parent(iterator))
@@ -267,48 +271,17 @@ namespace ft
                                         _rebind_node.construct(iterator, node(pair));
                                         _new_node(iterator);
                                         iterator->colour = BLACK;
+                                        ++_size;
                                         return (iterator);
                                 }
                                 Key     first_sub_root = iterator->pair.first;
                                 new_node = _rebind_node.allocate(1);
                                 _rebind_node.construct(new_node, node(pair));
                                 _new_node(new_node);
-                                //Search
-                               while (iterator)
+                                while (iterator)
                                 {
                                         if (_comp(first_sub_root, key))
-                                        {
-                                                 if (!iterator->right)
-                                                 {
-                                                        new_node->parent = iterator;
-                                                        iterator->right = new_node;
-                                                        break ;
-                                                 }
-                                                iterator = iterator->right;
-                                                first_sub_root = iterator->pair.first;
-                                        }
-                                        else if (_comp(key, first_sub_root))
-                                        {
-                                                if (!iterator->left)
-                                                {
-                                                        new_node->parent = iterator;
-                                                        iterator->left = new_node;
-                                                        break ;
-                                                }
-                                                iterator = iterator->left;
-                                                first_sub_root = iterator->pair.first;
-                                        }
-                                        else if (key == first_sub_root)
-                                        {
-                                                _destroy_node(new_node);
-                                                return (NULL);
-                                        }
                                 }
-                                new_node->colour = RED;
-                                _repear_tree_insert(new_node);
-				while (_get_parent(iterator))
-                                        iterator = iterator->parent;
-                                return (new_node);
                         }
 
                         node*    normal_insert(const value_type& pair)
@@ -321,6 +294,7 @@ namespace ft
                                         _rebind_node.construct(iterator, node(pair));
                                         _new_node(iterator);
                                         iterator->colour = BLACK;
+                                        ++_size;
                                         return (iterator);
                                 }
                                 new_node = _rebind_node.allocate(1);
@@ -329,7 +303,7 @@ namespace ft
 				Key     first_sub_root = iterator->pair.first;
                                 Key     first_new_node = pair.first;
                                 //Search
-                               while (iterator)
+                                while (iterator)
                                 {
                                         if (_comp(first_sub_root, first_new_node))
                                         {
@@ -359,6 +333,7 @@ namespace ft
                                                 return (iterator);
                                         }
                                 }
+                                ++_size;
 			      	new_node->parent = iterator;
                                 new_node->colour = RED;
                                 _repear_tree_insert(new_node);
@@ -381,6 +356,7 @@ namespace ft
                                 current = search(key);
                                 if (!current)
                                         return (0);
+                                --_size;
                                 memory_colour = current->colour;
                                 if (current->left)
                                 {
@@ -508,13 +484,15 @@ namespace ft
 						ret = start;
 						start = start->left;
 					}
-					else// if (_comp(start->pair.first, key))
+					else
 						start = start->right;
-					//break ;
 				}
 				return (ret);
 			}
-
+                        std::size_t     getSize() const
+                        {
+                                return (this->_size);
+                        }
                         node*  iterator;
 
                         private:
@@ -822,6 +800,7 @@ namespace ft
                                 rebind_node     _rebind_node;
                                 key_compare     _comp;
                                 allocator_type	_allocator;
+                                std::size_t     _size;
         };
         template<typename It, class Container, typename Node>
         struct   bidirectionnal_iterator

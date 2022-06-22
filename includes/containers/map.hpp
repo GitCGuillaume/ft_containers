@@ -70,7 +70,7 @@ namespace ft
                 if (this != &other)
                 {
                     this->clear();
-		    _comp = other._comp;
+		            _comp = other._comp;
                     _allocator = other._allocator;
                     this->insert(other.begin(), other.end());
                 }
@@ -84,6 +84,7 @@ namespace ft
             {
                 const_iterator    it = this->begin();
                 const_iterator    ite = this->end();
+
                 while (it != ite)
                     _tree.delete_node((it++)->first);
             }
@@ -95,16 +96,7 @@ namespace ft
             }
             size_type   size() const
             {
-                size_type   i = 0;
-                const_iterator    it = this->begin();
-                const_iterator    ite = this->end();
-
-                while (it != ite)
-                {
-                    ++i;
-                    ++it;
-                }
-                return (i);
+                return (_tree.getSize());
             }
             size_type   max_size() const
             {
@@ -163,7 +155,7 @@ namespace ft
             }
             const_iterator    end() const
             {
-                return (const_iterator(_tree.end(), _tree.iterator));
+                return (std map insert hint souce code);
             }
             reverse_iterator	rend()
 			{
@@ -179,11 +171,10 @@ namespace ft
                 const_iterator    it = this->begin();
                 const_iterator    ite = this->end();
 
-		while (it != ite)
-                	 _tree.delete_node((it++)->first);
-	}
-            
-	    ft::pair<iterator, bool>   insert(const value_type& value)
+                while (it != ite)
+                    _tree.delete_node((it++)->first);
+            }
+	        ft::pair<iterator, bool>   insert(const value_type& value)
             {
                 iterator  it;
                 typename _RB_tree::node*    new_node = _tree.insert(value);
@@ -199,16 +190,17 @@ namespace ft
                 }
                 return (ft::make_pair(it, 1));
             }
-		/* hint is suggestion as to where to start the search */
+		    /* hint is suggestion as to where to start the search */
             iterator    insert(iterator hint, const value_type& value)
             {
-		    iterator	it;
-			typename _RB_tree::node*	new_node = NULL;
-		    if (hint == const_iterator(0, 0))
-			new_node = _tree.insert(value);
-		    else
-			new_node = _tree.insert_hint(value, hint->first);
-		if (!new_node)
+                iterator	it;
+                typename _RB_tree::node*	new_node = NULL;
+
+                if (hint == end())
+                    new_node = _tree.insert(value);
+                else
+                    new_node = _tree.insert_hint(value, hint->first);
+                if (!new_node)
                 {
                     it = iterator(_tree.iterator, _tree.iterator);
                     while (_tree.iterator->parent)
@@ -218,7 +210,7 @@ namespace ft
                 it = iterator(new_node, _tree.iterator);
                 return (it);
             }
-		template<class InputIt>
+		    template<class InputIt>
             void    insert(InputIt first, InputIt last)
             {
                 while (first != last)
@@ -233,7 +225,6 @@ namespace ft
                 if (pos != this->end())
                     _tree.delete_node(pos->first);
             }
-            
             void    erase(iterator first, iterator last)
             {
                 while (first != last)
@@ -279,7 +270,7 @@ namespace ft
             ft::pair<iterator, iterator>   equal_range(const Key& key)
             {
        	    	return (ft::make_pair(lower_bound(key), upper_bound(key)));	
-		}
+		    }
             ft::pair<const_iterator, const_iterator>   equal_range(const Key& key) const
             {
                 return (ft::make_pair(lower_bound(key), upper_bound(key)));
@@ -290,36 +281,15 @@ namespace ft
             }
             const_iterator    lower_bound(const Key& key) const
             {
-   		return (const_iterator(_tree.lower_bound(key), _tree.iterator));
+   		        return (const_iterator(_tree.lower_bound(key), _tree.iterator));
             }
             iterator    upper_bound(const Key& key)
             {
-                /*iterator    it = this->begin();
-                iterator    ite = this->end();
-
-                while (it != ite)
-                {
-                    if (_comp(key, it->first))
-                        return (it);
-                    ++it;
-                }
-                return (ite);*/
-		return (iterator(_tree.upper_bound(key), _tree.iterator));
+		        return (iterator(_tree.upper_bound(key), _tree.iterator));
             }
             const_iterator    upper_bound(const Key& key) const
-            {/*
-                const_iterator    it = this->begin();
-                const_iterator    ite = this->end();
-
-    
-                while (it != ite)
-                {
-                    if (_comp(key, it->first))
-                        return (it);
-                    ++it;
-                }
-                return (ite);*/
-		return (const_iterator(_tree.upper_bound(key), _tree.iterator));
+            {
+		        return (const_iterator(_tree.upper_bound(key), _tree.iterator));
             }
             key_compare key_comp()  const
             {

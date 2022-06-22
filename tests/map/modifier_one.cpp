@@ -128,11 +128,19 @@ void    insert_hint()
     map.insert(map.find(0), TYPECONT::pair<int, int>(2147483647, 123));
     map.insert(map.find(21), TYPECONT::pair<int, int>(10, 124));
     map.insert(map.find(21), TYPECONT::pair<int, int>(42, 123));
-    for (int i = 0; i < 50000; i++)
-        map[i] = i;
+    for (int i = 5000; i < 10000; i++)
+        map.insert(map.lower_bound(i), TYPECONT::pair<int, int>(i, i));
+    for (int i = 0; i < 1000; i++)
+        map.insert(map.lower_bound(i), TYPECONT::pair<int, int>(i, i));
+    for (int i = 20000; i < 30000; i++)
+        map.insert(map.lower_bound(i, TYPECONT::pair<int, int>(i, i));
+    for (int i = 0; i < 400000; i++)
+        map.insert(map.lower_bound(i - 1), TYPECONT::pair<int, int>(i, i));
     map.insert(map.end(), TYPECONT::pair<int, int>(-1000, 123));
     map.insert(map.end(), TYPECONT::pair<int, int>(15, 442));
     map.insert(map.begin(), TYPECONT::pair<int, int>(-2147483648, 123));
+    //for (TYPECONT::map<int, int>::iterator it = map.begin(); it != map.end(); it++)
+    //    std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
 }
 
 void    insert_range()
