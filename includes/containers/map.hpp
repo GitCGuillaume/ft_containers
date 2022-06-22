@@ -155,7 +155,7 @@ namespace ft
             }
             const_iterator    end() const
             {
-                return (std map insert hint souce code);
+                return (const_iterator(_tree.end(), _tree.iterator));
             }
             reverse_iterator	rend()
 			{
@@ -196,10 +196,7 @@ namespace ft
                 iterator	it;
                 typename _RB_tree::node*	new_node = NULL;
 
-                if (hint == end())
-                    new_node = _tree.insert(value);
-                else
-                    new_node = _tree.insert_hint(value, hint->first);
+                new_node = _tree.insert_hint(value, hint);
                 if (!new_node)
                 {
                     it = iterator(_tree.iterator, _tree.iterator);

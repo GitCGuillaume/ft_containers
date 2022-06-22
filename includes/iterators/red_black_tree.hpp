@@ -44,6 +44,134 @@ struct s_node
 
 namespace ft
 {
+        template<typename It, class Container, typename Node>
+        struct   bidirectionnal_iterator
+        {
+                        /* FOR STD DISTANCE */
+                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::value_type    value_type;
+                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::difference_type    difference_type;
+                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::reference    reference;
+                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::pointer    pointer;
+                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::iterator_category    iterator_category;
+                        typedef  Node       node;
+
+                        bidirectionnal_iterator() : _ptr(NULL), _old(NULL), _root(NULL){}
+                        bidirectionnal_iterator(node* ptr, node* iterator) : _ptr(ptr), _old(iterator), _root(iterator){}
+                        template<typename U, typename V>
+                        bidirectionnal_iterator(const bidirectionnal_iterator<U
+                                , typename ft::enable_if<ft::is_same<U, typename Container::value_type>::value, Container>::type
+                                , V>& rhs) : _ptr(rhs._ptr), _old(rhs._old), _root(rhs._root){}
+                        template<typename U, typename V>
+                        bidirectionnal_iterator &        operator=(const bidirectionnal_iterator& rhs)
+                        {
+                                if (this != &rhs)
+                                {
+                                        _ptr = rhs._ptr;
+                                        _old = rhs._old;
+                                        _root = rhs._root;
+                                }
+                                return (*this);
+                        }
+                        virtual ~bidirectionnal_iterator(){}
+                        reference operator*() const
+                        {
+                                /*if (!_ptr)
+                                {
+                                        value_type      pair = value_type();
+                                        pointer ptr = &pair;
+                                        return (*ptr);
+                                }*/
+                                return (*(&_ptr->pair));
+                        }
+                        pointer operator->() const
+                        {
+                                //if (_ptr)
+                                        return (&_ptr->pair);
+                                //value_type      pair = value_type();
+                               // pointer ptr = &pair;
+                               // return (ptr);
+                        }
+                        /* PREFIX */
+                        /*
+                                _old->right == _ptr will loop until parent root(NULL)
+                                or until _ptr->right is not old anymore
+                        */
+                        bidirectionnal_iterator& operator++()
+                        {
+                                if (!_ptr)
+                                {
+                                        _ptr = _root;
+                                        if (_ptr)
+                                                while (_ptr->left) //Go to leftest key
+                                                        _ptr = _ptr->left;
+                                        return (*this);
+                                }
+                                if (_ptr->right) //check if struct on right
+                                {
+                                        _ptr = _ptr->right; //go to right
+                                        while (_ptr->left) //then go to leftest key
+                                                _ptr = _ptr->left;
+                                }
+                                else
+                                {
+                                        _old = _ptr->parent;
+                                        while (_old && _old->right == _ptr)
+                                        {
+                                                _ptr = _old;
+                                                _old = _ptr->parent;
+                                        }
+                                        _ptr = _old;
+                                }
+                                return (*this);
+                        }
+                        bidirectionnal_iterator& operator--()
+                        {
+                                if (!_ptr)
+                                {
+                                        _ptr = _root;
+                                        if (_ptr)
+                                        {
+                                                while (_ptr->right)
+                                                        _ptr = _ptr->right;
+                                        }
+                                        return (*this);
+                                }
+                                if (_ptr->left) //check if struct on left
+                                {
+                                        _ptr = _ptr->left; //go to left
+                                        while (_ptr->right) //then go to rightest key
+                                                _ptr = _ptr->right;
+                                }
+                                else
+                                {
+                                        _old = _ptr->parent;
+                                        while (_old && _old->left == _ptr)
+                                        {
+                                                _ptr = _old;
+                                                _old = _ptr->parent;
+                                        }
+                                        _ptr = _old;
+                                }
+                                return (*this);
+                        }
+                        /* POSTFIX*/
+                        bidirectionnal_iterator operator++(int)
+                        {
+                                bidirectionnal_iterator tmp = *this;
+                                this->operator++();
+                                return (tmp);
+                        }
+                        bidirectionnal_iterator   operator--(int)
+                        {
+                                bidirectionnal_iterator tmp = *this;
+                                this->operator--();
+                                return (tmp);
+                        }
+                        
+                        node*   _ptr;    //pointer of pair
+                        node*   _old;
+                        node*   _root; //look like we need to keep root in memory to keep begin and last value
+        };
         template<class It, class Container, class Key, class T, class Compare, class Allocator>
         class   red_black_tree
         {
@@ -59,7 +187,8 @@ namespace ft
                         typedef Allocator   allocator_type;
                         typedef s_node<It>       node;
                         typedef typename Allocator::template rebind<s_node<It> >::other      rebind_node;
-
+                        typedef ft::bidirectionnal_iterator<value_type, Container, node>      bi_iterator;
+                        typedef ft::bidirectionnal_iterator<value_type const, Container, node const>      const_bi_iterator;
                         red_black_tree() : iterator(NULL), _size(0){}
                         red_black_tree(const red_black_tree & rhs) : iterator(rhs.iterator)
                                         , _rebind_node(rhs._rebind_node), _comp(rhs._comp), _allocator(rhs._allocator)
@@ -80,122 +209,79 @@ namespace ft
                         //red_black_tree(node* iterator) : iterator(iterator){}
                         node*    search(Key const &key) const
                         {
-                                node    *sub_root = iterator;
-                                if (!sub_root)
+                                if (!iterator)
                                         return (NULL);
+                                node    *sub_root = iterator;
                                 Key     first_sub_root = sub_root->pair.first;
-                                Key     first_new_node = key;
                                 while (sub_root)
                                 {
-                                        if (_comp(first_sub_root, first_new_node))
+                                        if (_comp(first_sub_root, key))
                                         {
                                                 sub_root = sub_root->right;
                                                 if (sub_root)
                                                         first_sub_root = sub_root->pair.first;
                                         }
-                                        else if (_comp(first_new_node, first_sub_root))
+                                        else if (_comp(key, first_sub_root))
                                         {
                                                 sub_root = sub_root->left;
                                                 if (sub_root)
                                                         first_sub_root = sub_root->pair.first;
                                         }
-                                        else if (first_new_node == first_sub_root)
+                                        else if (key == first_sub_root)
                                                 return (sub_root);
                                 }
                                 return (NULL);
                         }
-			node*	search_hint(Key const& key, node* new_node, value_type const& pair)
-			{
-				Key     first_sub_root = iterator->pair.first;
-
-				new_node = _rebind_node.allocate(1);
-                                _rebind_node.construct(new_node, node(pair));
-                                _new_node(new_node);
-                                //Search
-                               while (iterator)
-                                {
-                                        if (_comp(first_sub_root, key))
-                                        {
-                                                 if (!iterator->right)
-                                                 {
-                                                        new_node->parent = iterator;
-                                                        iterator->right = new_node;
-                                                        break ;
-                                                 }
-                                                iterator = iterator->right;
-                                                first_sub_root = iterator->pair.first;
-                                        }
-                                        else if (_comp(key, first_sub_root))
-                                        {
-                                                if (!iterator->left)
-                                                {
-                                                        new_node->parent = iterator;
-                                                        iterator->left = new_node;
-                                                        break ;
-                                                }
-                                                iterator = iterator->left;
-                                                first_sub_root = iterator->pair.first;
-                                        }
-                                        else if (key == first_sub_root)
-                                        {
-                                                _destroy_node(new_node);
-                                                return (NULL);
-                                        }
-                                }
-			       return (new_node);
-			}
-
                         node*           find(Key const& key) const
                         {
-                                node    *sub_root = iterator;
-                                if (!sub_root)
+                                
+                                if (!iterator)
                                         return (NULL);
+                                node    *sub_root = iterator;
                                 Key     first_sub_root = sub_root->pair.first;
-                                Key     first_new_node = key;
 
                                 while (sub_root)
                                 {
-                                        if (_comp(first_sub_root, first_new_node))
+                                        if (_comp(first_sub_root, key))
                                         {
                                                 sub_root = sub_root->right;
                                                 if (sub_root)
                                                         first_sub_root = sub_root->pair.first;
                                         }
-                                        else if (_comp(first_new_node, first_sub_root))
+                                        else if (_comp(key, first_sub_root))
                                         {
                                                 sub_root = sub_root->left;
                                                 if (sub_root)
                                                         first_sub_root = sub_root->pair.first;
                                         }
-                                        else if (first_new_node == first_sub_root)
+                                        else if (key == first_sub_root)
                                                 return (sub_root);
                                 }
                                 return (this->end());
                         }
                         std::size_t     count(Key const &key) const
                         {
+                                if (!iterator)
+                                        return (0);
                                 std::size_t n = 0;
                                 node    *sub_root = iterator;
-                                if (!sub_root)
-                                        return (0);
                                 Key     first_sub_root = sub_root->pair.first;
-                                Key     first_new_node = key;
 
                                 while (sub_root)
                                 {
-                                        if (_comp(first_sub_root, first_new_node))
+                                        if (_comp(first_sub_root, key))
                                         {
                                                 sub_root = sub_root->right;
                                                 if (sub_root)
                                                         first_sub_root = sub_root->pair.first;
                                         }
-                                        else if (_comp(first_new_node, first_sub_root))
+                                        else if (_comp(key, first_sub_root))
                                         {
                                                 sub_root = sub_root->left;
                                                 if (sub_root)
                                                         first_sub_root = sub_root->pair.first;
                                         }
-                                        else if (first_new_node == first_sub_root)
+                                        else if (key == first_sub_root)
                                         {
                                                 n++;
                                                 sub_root = sub_root->left;
@@ -261,7 +347,7 @@ namespace ft
                                         iterator = iterator->parent;
                                 return (new_node);
                         }
-			node*    insert_hint(const value_type& pair, Key const& key)
+			node*    insert_hint(const value_type& pair, const_bi_iterator hint)
                         {
                                 node    *new_node = NULL;
 
@@ -274,16 +360,16 @@ namespace ft
                                         ++_size;
                                         return (iterator);
                                 }
-                                Key     first_sub_root = iterator->pair.first;
-                                new_node = _rebind_node.allocate(1);
-                                _rebind_node.construct(new_node, node(pair));
-                                _new_node(new_node);
-                                while (iterator)
-                                {
-                                        if (_comp(first_sub_root, key))
-                                }
+                                const_bi_iterator       ite(end(), iterator);
+                                const_bi_iterator       hint_cpy = hint;
+                                
+                                ++_size;
+                                new_node->colour = RED;
+                                _repear_tree_insert(new_node);
+				while (_get_parent(iterator))
+                                        iterator = iterator->parent;
+                                return (new_node);
                         }
-
                         node*    normal_insert(const value_type& pair)
                         {
                                 node    *new_node = NULL;
@@ -802,133 +888,7 @@ namespace ft
                                 allocator_type	_allocator;
                                 std::size_t     _size;
         };
-        template<typename It, class Container, typename Node>
-        struct   bidirectionnal_iterator
-        {
-                        /* FOR STD DISTANCE */
-                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::value_type    value_type;
-                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::difference_type    difference_type;
-                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::reference    reference;
-                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::pointer    pointer;
-                        typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::iterator_category    iterator_category;
-                        typedef  Node       node;
-
-                        bidirectionnal_iterator() : _ptr(NULL), _old(NULL), _root(NULL){}
-                        bidirectionnal_iterator(node* ptr, node* iterator) : _ptr(ptr), _old(iterator), _root(iterator){}
-                        template<typename U, typename V>
-                        bidirectionnal_iterator(const bidirectionnal_iterator<U
-                                , typename ft::enable_if<ft::is_same<U, typename Container::value_type>::value, Container>::type
-                                , V>& rhs) : _ptr(rhs._ptr), _old(rhs._old), _root(rhs._root){}
-                        bidirectionnal_iterator &        operator=(const bidirectionnal_iterator& rhs)
-                        {
-                                if (this != &rhs)
-                                {
-                                        _ptr = rhs._ptr;
-                                        _old = rhs._old;
-                                        _root = rhs._root;
-                                }
-                                return (*this);
-                        }
-                        virtual ~bidirectionnal_iterator(){}
-                        reference operator*() const
-                        {
-                                /*if (!_ptr)
-                                {
-                                        value_type      pair = value_type();
-                                        pointer ptr = &pair;
-                                        return (*ptr);
-                                }*/
-                                return (*(&_ptr->pair));
-                        }
-                        pointer operator->() const
-                        {
-                                //if (_ptr)
-                                        return (&_ptr->pair);
-                                //value_type      pair = value_type();
-                               // pointer ptr = &pair;
-                               // return (ptr);
-                        }
-                        /* PREFIX */
-                        /*
-                                _old->right == _ptr will loop until parent root(NULL)
-                                or until _ptr->right is not old anymore
-                        */
-                        bidirectionnal_iterator& operator++()
-                        {
-                                if (!_ptr)
-                                {
-                                        _ptr = _root;
-                                        if (_ptr)
-                                                while (_ptr->left) //Go to leftest key
-                                                        _ptr = _ptr->left;
-                                        return (*this);
-                                }
-                                if (_ptr->right) //check if struct on right
-                                {
-                                        _ptr = _ptr->right; //go to right
-                                        while (_ptr->left) //then go to leftest key
-                                                _ptr = _ptr->left;
-                                }
-                                else
-                                {
-                                        _old = _ptr->parent;
-                                        while (_old && _old->right == _ptr)
-                                        {
-                                                _ptr = _old;
-                                                _old = _ptr->parent;
-                                        }
-                                        _ptr = _old;
-                                }
-                                return (*this);
-                        }
-                        bidirectionnal_iterator& operator--()
-                        {
-                                if (!_ptr)
-                                {
-                                        _ptr = _root;
-                                        if (_ptr)
-                                        {
-                                                while (_ptr->right)
-                                                        _ptr = _ptr->right;
-                                        }
-                                        return (*this);
-                                }
-                                if (_ptr->left) //check if struct on left
-                                {
-                                        _ptr = _ptr->left; //go to left
-                                        while (_ptr->right) //then go to rightest key
-                                                _ptr = _ptr->right;
-                                }
-                                else
-                                {
-                                        _old = _ptr->parent;
-                                        while (_old && _old->left == _ptr)
-                                        {
-                                                _ptr = _old;
-                                                _old = _ptr->parent;
-                                        }
-                                        _ptr = _old;
-                                }
-                                return (*this);
-                        }
-                        /* POSTFIX*/
-                        bidirectionnal_iterator operator++(int)
-                        {
-                                bidirectionnal_iterator tmp = *this;
-                                this->operator++();
-                                return (tmp);
-                        }
-                        bidirectionnal_iterator   operator--(int)
-                        {
-                                bidirectionnal_iterator tmp = *this;
-                                this->operator--();
-                                return (tmp);
-                        }
-                        
-                        node*   _ptr;    //pointer of pair
-                        node*   _old;
-                        node*   _root; //look like we need to keep root in memory to keep begin and last value
-        };
+        
         /* NON CONST */
         template<typename It, class Container, typename Node>
         bool    operator==(const ft::bidirectionnal_iterator<It, Container, Node>& lhs, const ft::bidirectionnal_iterator<It, Container, Node>& rhs)
