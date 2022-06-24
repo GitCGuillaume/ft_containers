@@ -1,18 +1,8 @@
 #include <iostream>
 #include <string>
 #include <deque>
-#if 1 //CREATE A REAL STL EXAMPLE
-	#include <map>
-	#include <stack>
-	#include <vector>
-	namespace ft = std;
-#else
-	#include "includes/containers/stack.hpp"
-	#include "includes/containers/vector.hpp"
-	#include "includes/containers/map.hpp"
-#endif
-
 #include <stdlib.h>
+#include "main_school.hpp"
 
 #define MAX_RAM 4294967296
 #define BUFFER_SIZE 4096
@@ -26,25 +16,26 @@ struct Buffer
 #define COUNT (MAX_RAM / (int)sizeof(Buffer))
 
 template<typename T>
-class MutantStack : public ft::stack<T>
+class MutantStack2 : public TYPECONT::stack<T>
 {
-public:
-	MutantStack() {}
-	MutantStack(const MutantStack<T>& src) { *this = src; }
-	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
-	{
-		this->c = rhs.c;
-		return *this;
-	}
-	~MutantStack() {}
+	public:
+		MutantStack2() {}
+		MutantStack2(const MutantStack2<T>& src) { *this = src; }
+		MutantStack2<T>& operator=(const MutantStack2<T>& rhs) 
+		{
+			this->c = rhs.c;
+			return *this;
+		}
+		~MutantStack2() {}
 
-	typedef typename ft::stack<T>::container_type::iterator iterator;
+		typedef typename TYPECONT::stack<T>::container_type::iterator iterator;
 
-	iterator begin() { return this->c.begin(); }
-	iterator end() { return this->c.end(); }
+		iterator begin() { return this->c.begin(); }
+		iterator end() { return this->c.end(); }
 };
 
-int main(int argc, char** argv) {
+int main_school(int argc, char** argv)
+{
 	if (argc != 2)
 	{
 		std::cerr << "Usage: ./test seed" << std::endl;
@@ -55,12 +46,12 @@ int main(int argc, char** argv) {
 	const int seed = atoi(argv[1]);
 	srand(seed);
 
-	ft::vector<std::string> vector_str;
-	ft::vector<int> vector_int;
-	ft::stack<int> stack_int;
-	ft::vector<Buffer> vector_buffer;
-	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
-	ft::map<int, int> map_int;
+	TYPECONT::vector<std::string> vector_str;
+	TYPECONT::vector<int> vector_int;
+	TYPECONT::stack<int> stack_int;
+	TYPECONT::vector<Buffer> vector_buffer;
+	TYPECONT::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
+	TYPECONT::map<int, int> map_int;
 
 	for (int i = 0; i < COUNT; i++)
 	{
@@ -72,7 +63,7 @@ int main(int argc, char** argv) {
 		const int idx = rand() % COUNT;
 		vector_buffer[idx].idx = 5;
 	}
-	ft::vector<Buffer>().swap(vector_buffer);
+	TYPECONT::vector<Buffer>().swap(vector_buffer);
 
 	try
 	{
@@ -90,7 +81,7 @@ int main(int argc, char** argv) {
 	
 	for (int i = 0; i < COUNT; ++i)
 	{
-		map_int.insert(ft::make_pair(rand(), rand()));
+		map_int.insert(TYPECONT::make_pair(rand(), rand()));
 	}
 
 	int sum = 0;
@@ -102,12 +93,12 @@ int main(int argc, char** argv) {
 	std::cout << "should be constant with the same seed: " << sum << std::endl;
 
 	{
-		ft::map<int, int> copy = map_int;
+		TYPECONT::map<int, int> copy = map_int;
 	}
-	MutantStack<char> iterable_stack;
+	MutantStack2<char> iterable_stack;
 	for (char letter = 'a'; letter <= 'z'; letter++)
 		iterable_stack.push(letter);
-	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+	for (MutantStack2<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
 	{
 		std::cout << *it;
 	}

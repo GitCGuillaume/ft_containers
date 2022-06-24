@@ -10,8 +10,9 @@
 #include <sstream>
 #include <algorithm>
 #include <stdexcept>
-
 #include <iostream>
+#include <memory>
+
 namespace ft
 {
 	template<class T, class Allocator = std::allocator<T> > class	vector
@@ -40,8 +41,7 @@ namespace ft
 				_allocator(alloc), _capacity_allocator(count), _size(count)
 			{
 				_vec = _allocator.allocate(count);
-				for (size_type i = 0; i < count; i++)
-					_allocator.construct(_vec + i, value);
+				std::uninitialized_fill(_vec, &_vec[count], value);
 			}
 			template<class InputIt>
 			vector(InputIt first, InputIt last,
@@ -51,11 +51,7 @@ namespace ft
 				size_type count = static_cast<size_type>(std::distance(first, last));
 				_capacity_allocator = count;
 				_vec = _allocator.allocate(_capacity_allocator);
-				for (size_type i = 0; i < count; i++)
-				{
-						_allocator.construct(_vec + i, *first);
-						++first;
-				}
+				std::uninitialized_copy(first, last, _vec);
 				_size = count;
 			}
 			vector(const vector& other)
@@ -64,8 +60,7 @@ namespace ft
 				_vec = _allocator.allocate(other.size());
 				_capacity_allocator = other.size();
 				_size = other.size();
-				for (size_type i = 0; i < other.size(); i++)
-					_allocator.construct(_vec + i, other.at(i));
+				std::uninitialized_copy(other._vec, &other._vec[other._size], _vec);
 			}
 			virtual	~vector()
 			{
@@ -80,9 +75,9 @@ namespace ft
 			{
 				if (this != &other)
 				{
-						for (size_type i = 0; i < _size; i++)
-							_allocator.destroy(_vec + i);
-						_size = 0;
+					for (size_type i = 0; i < _size; i++)
+						_allocator.destroy(_vec + i);
+					_size = 0;
 					if (other.empty())
 						return (*this);
 					if (this->capacity() < other.capacity())
@@ -92,17 +87,14 @@ namespace ft
 						_capacity_allocator = other.size();
 					}
 					_size = other.size();
-					for (size_type i = 0; i < other.size(); i++)
-						_allocator.construct(_vec + i, other[i]);
+					std::uninitialized_copy(other._vec, &other._vec[other._size], _vec);
 				}
 				return (*this);
 			}
 			/* Oublie pas de mettre les fonctions dans le bon ordre */
 			void	assign(size_type count, const T& value)
 			{
-				size_type i = 0;
-
-				for (; i < _size; i++)
+				for (size_type i = 0; i < _size; i++)
 					_allocator.destroy(_vec + i);
 				if (_capacity_allocator < count)
 				{
@@ -110,8 +102,7 @@ namespace ft
 					_capacity_allocator = count;
 					_vec = _allocator.allocate(_capacity_allocator);
 				}
-				for (i = 0; i < count; i++)
-					_allocator.construct(&_vec[i], value);
+				std::uninitialized_fill(_vec, &_vec[count], value);
 				_size = count;
 			}
 			/* ::type* = 0 () */
@@ -130,12 +121,7 @@ namespace ft
 					_vec = _allocator.allocate(_capacity_allocator);
 				}
 				i = 0;
-				while (first != last)
-				{
-					_allocator.construct(&_vec[i], *first);
-					++first;
-					++i;
-				}
+				std::uninitialized_copy(first, last, _vec);
 				_size = static_cast<size_type>(count);
 			}
 			allocator_type	get_allocator() const
@@ -287,7 +273,7 @@ namespace ft
 					for (size_type i = 0; i < _size; i++)
 					{
 						_allocator.construct(&ptr[i], _vec[i]);
-						_allocator.destroy(&_vec[i]);
+						_vec[i].~value_type();
 					}
 					_allocator.deallocate(_vec, _capacity_allocator);
 					_vec = ptr;
@@ -302,7 +288,7 @@ namespace ft
 			void	clear()
 			{
 				for (size_type i = 0; i < _size; i++)
-					_allocator.destroy(_vec + i);
+					_vec[i].~value_type();
 				_size = 0;
 			}
 			iterator	insert(iterator pos, const T& value)
@@ -333,8 +319,8 @@ namespace ft
 					}
 					for (size_type i = 0; i < offset; i++)
 					{
-						_allocator.construct(ptr + i, _vec[i]);
-						_allocator.destroy(_vec + i);
+						new (ptr + i) value_type(_vec[i]);
+						_vec[i].~value_type();
 					}
 					size_type	nb_count = offset + 1;
 					_allocator.construct(ptr + offset, value);
@@ -403,8 +389,8 @@ namespace ft
 					}
 					for (size_type i = 0; i < offset; i++)
 					{
-						_allocator.construct(ptr + i, _vec[i]);
-						_allocator.destroy(_vec + i);
+						new (ptr + i) value_type(_vec[i]);
+						_vec[i].~value_type();
 					}
 					size_type	nb_count = offset;
 					size_type	max = offset + count;
@@ -433,11 +419,9 @@ namespace ft
 						--size;
 				}
 				max = offset + count;
-				for (size_type nb_count = offset; nb_count < max; nb_count++)
-					_allocator.construct(_vec + nb_count, value);
+				std::uninitialized_fill(&_vec[offset], &_vec[max], value);
 				_size += count;
 			}
-
 			template<class InputIt>
 			void	insert(iterator pos, InputIt first, InputIt last,
 				typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
@@ -450,7 +434,6 @@ namespace ft
 				if (new_size > _capacity_allocator)
 				{
 					pointer	ptr = pointer();
-
 					size_type multiple_two = _size << 1;
 					if (_capacity_allocator == 0)
 					{
@@ -515,19 +498,9 @@ namespace ft
 				if (pos != end())
 				{
 					size_type	offset = pos - this->begin();
-					size_type	offset2 = offset + 1;
-					size_type	max = (_size - offset) - 1;
-					size_type	i = 0;
-					while (i < max)
-					{
-						_vec[offset].~value_type();
-						++i;
-						new (_vec + offset) value_type(_vec[offset2]);
-						++offset2;
-						++offset;
-					}
-					_allocator.destroy(&_vec[offset]);
+					std::copy(&_vec[offset + 1], &_vec[_size], &_vec[offset]);
 					_size--;
+					_allocator.destroy(&_vec[_size]);
 				}
 				return (pos);
 			}
@@ -547,13 +520,7 @@ namespace ft
 						++offset_first;
 						--_size;
 					}
-					while (offset_first != max)
-					{
-						new (_vec + copy_offset) value_type(_vec[offset_first]);
-						_vec[offset_first].~value_type();
-						++copy_offset;
-						++offset_first;
-					}
+					std::copy(&_vec[offset_first], &_vec[max], &_vec[copy_offset]);
 				}
 				if (last == this->end())
 					return (copy_offset2 + this->begin());
@@ -651,24 +618,24 @@ namespace ft
 		return (!is_equal);
 	}
 	template<class T, class Alloc>
-    bool	operator<(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-    {
-        bool	is_left = ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+    	bool	operator<(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+    	{
+        	bool	is_left = ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	
 		return (is_left);
-    }
+    	}
 	template<class T, class Alloc>
-    bool	operator<=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+   	bool	operator<=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
 		return (!(lhs > rhs));
 	}
 	template<class T, class Alloc>
-    bool	operator>(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+    	bool	operator>(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
-        return (rhs < lhs);
+        	return (rhs < lhs);
 	}
 	template<class T, class Alloc>
-    bool	operator>=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+    	bool	operator>=(const ft::vector<T, Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
 		return (!(lhs < rhs));
 	}

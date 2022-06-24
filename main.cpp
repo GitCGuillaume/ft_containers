@@ -7,11 +7,8 @@
 #include "sys/time.h"
 #include <ios>
 #include <iomanip>
+#include "tests/main_school.hpp"
 
-/*
- *	true == green == std
- *	false == cyan == ft
-*/
 void	execute_function(void (*ft)(void))
 {
 	struct timeval	start, end;
@@ -29,8 +26,26 @@ void	execute_function(void (*ft)(void))
 	std::cout << std::setprecision(0);
 }
 
-int	main(void)
+void	execute_function_2(int argc, char** argv)
 {
+	struct timeval	start, end;
+	double		sum_time;
+	long int	mem_seconds;
+	long int	mem_micro_s;
+
+	gettimeofday(&start, NULL);
+	main_school(argc, argv);
+	gettimeofday(&end, NULL);
+	mem_seconds = end.tv_sec - start.tv_sec;
+	mem_micro_s = end.tv_usec - start.tv_usec;
+	sum_time = mem_seconds + mem_micro_s * 1e-6;
+	std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
+	std::cout << std::setprecision(0);
+}
+
+int main(int argc, char** argv)
+{
+	execute_function_2(argc, argv);
 	execute_function(&iterator_assign_forward);
 	execute_function(iterator_assign_first_last_forward);
 	execute_function(iterator_assign_backward);
@@ -72,9 +87,9 @@ int	main(void)
 	execute_function(reverse_iterator);
 	execute_function(reverse_iterator_empty);
 	execute_function(iterator_test);
-	execute_function(iterator_empty);*/
+	execute_function(iterator_empty);
 	//MAP PART
-	/*execute_function(default_constructor_map);
+	execute_function(default_constructor_map);
 	execute_function(constructor_range_map);
 	execute_function(copy_constructor_map);
 	execute_function(operator_assignation_map);

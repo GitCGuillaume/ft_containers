@@ -49,11 +49,11 @@ namespace ft
             virtual ~random_access_iterator(){};
             reference operator*() const
             {
-                return (*this->_ptr);
+                return (*_ptr);
             }
             pointer operator->() const
             {
-                return (this->_ptr);
+                return (_ptr);
             }
             /* PREFIX */
             random_access_iterator& operator++()
@@ -91,21 +91,21 @@ namespace ft
             }
             random_access_iterator    operator+(const difference_type n) const
             {
-                return (this->_ptr + n);
+                return (_ptr + n);
             }
             /* https://en.cppreference.com/w/cpp/named_req/random_access_iterator
             b - a */
             random_access_iterator  operator-(const difference_type n) const
             {
-                return (this->_ptr - n);
+                return (_ptr - n);
             }
             difference_type operator-(random_access_iterator const & rhs) const
             {
-                return (this->_ptr - rhs._ptr);
+                return (_ptr - rhs._ptr);
             }
             reference   operator[](std::size_t n) const
             {
-                return (*(this->_ptr + n));
+                return (*(_ptr + n));
             }
             /* https://en.cppreference.com/w/cpp/named_req/EqualityComparable */
         protected:

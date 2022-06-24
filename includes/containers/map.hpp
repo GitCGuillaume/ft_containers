@@ -320,11 +320,11 @@ namespace ft
     bool    operator!=(const ft::map<Key, T, Compare, Alloc>& lhs,
         const ft::map<Key, T, Compare, Alloc>& rhs)
     {
-        if (lhs.size() != rhs.size()) // Quicker
-			return (true);
-		bool	is_equal = ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+	if (lhs.size() != rhs.size()) // Quicker
+		return (true);
+	bool	is_equal = ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 
-		return (!is_equal);
+	return (!is_equal);
     }
     template<class Key, class T, class Compare, class Alloc>
     bool    operator<(const ft::map<Key, T, Compare, Alloc>& lhs,
@@ -332,14 +332,14 @@ namespace ft
     {
         bool	is_left = ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	
-		return (is_left);
+	return (is_left);
     }
     template<class Key, class T, class Compare, class Alloc>
     bool    operator<=(const ft::map<Key, T, Compare, Alloc>& lhs,
         const ft::map<Key, T, Compare, Alloc>& rhs)
     {
-		return (!(lhs > rhs));
-	}
+	return (!(lhs > rhs));
+    }
     template<class Key, class T, class Compare, class Alloc>
     bool    operator>(const ft::map<Key, T, Compare, Alloc>& lhs,
         const ft::map<Key, T, Compare, Alloc>& rhs)
