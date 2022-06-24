@@ -124,28 +124,39 @@ void    insert_hint()
     map.insert(TYPECONT::make_pair(42, 0));
     map.insert(TYPECONT::make_pair(21, 0));
     map.insert(map.find(42), TYPECONT::pair<int, int>(5, 123));
-    map.insert(map.find(42), TYPECONT::pair<int, int>(43, 123));
+    map.insert(map.find(42254), TYPECONT::pair<int, int>(43, 123));
     map.insert(map.find(43), TYPECONT::pair<int, int>(43, 123));
     map.insert(map.find(43), TYPECONT::pair<int, int>(43, 123));
     map.insert(map.find(42254), TYPECONT::pair<int, int>(44, 123));
     map.insert(map.begin(), TYPECONT::pair<int, int>(43, 123));
     map.insert(map.begin(), TYPECONT::pair<int, int>(4565, 123));
-    map.insert(map.find(0), TYPECONT::pair<int, int>(2147483647, 123));
+    map.insert(map.end(), TYPECONT::pair<int, int>(50000, 123));
+    map.insert(map.begin(), TYPECONT::pair<int, int>(2147483647, 123));
     map.insert(map.find(21), TYPECONT::pair<int, int>(10, 124));
     map.insert(map.find(21), TYPECONT::pair<int, int>(42, 123));
-    /*for (int i = 5000; i < 10000; i++)
+    map.insert(map.begin(), TYPECONT::pair<int, int>(-15, 123));
+    map.insert(map.find(42), TYPECONT::pair<int, int>(41, 123));
+    map.insert(map.lower_bound(-10), TYPECONT::pair<int, int>(-9, 123));
+    map.insert(map.lower_bound(-11), TYPECONT::pair<int, int>(-9, 123));
+    map.insert(map.lower_bound(-12 - 1), TYPECONT::pair<int, int>(-12, 123));
+    map.insert(map.begin(), TYPECONT::pair<int, int>(-10000, 123));
+    for (int i = 5000; i < 5002; i++)
         map.insert(map.lower_bound(i), TYPECONT::pair<int, int>(i, i));
+    for (int i = 0; i < 100; i++)
+        map.insert(map.begin(), TYPECONT::pair<int, int>(i, i));
     for (int i = 0; i < 1000; i++)
-        map.insert(map.lower_bound(i), TYPECONT::pair<int, int>(i, i));
-    for (int i = 20000; i < 30000; i++)
-        map.insert(map.lower_bound(i), TYPECONT::pair<int, int>(i, i));
+        map.insert(map.lower_bound(i + 1), TYPECONT::pair<int, int>(i, i));
+    for (int i = 20000; i < 2004; i++)
+        map.insert(map.lower_bound(i - 1), TYPECONT::pair<int, int>(i, i));
     for (int i = 0; i < 400000; i++)
         map.insert(map.lower_bound(i - 1), TYPECONT::pair<int, int>(i, i));
-    */map.insert(map.end(), TYPECONT::pair<int, int>(-1000, 123));
+    map.insert(map.end(), TYPECONT::pair<int, int>(-1000, 123));
     map.insert(map.end(), TYPECONT::pair<int, int>(15, 442));
     map.insert(map.begin(), TYPECONT::pair<int, int>(-2147483648, 123));
     for (TYPECONT::map<int, int>::iterator it = map.begin(); it != map.end(); it++)
         std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
+    //for (TYPECONT::map<int, int>::reverse_iterator it = map.rbegin(); it != map.rend(); it++)
+    //    std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
 }
 
 void    insert_range()

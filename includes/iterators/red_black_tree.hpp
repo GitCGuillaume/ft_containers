@@ -188,7 +188,7 @@ namespace ft
                         typedef s_node<It>       node;
                         typedef typename Allocator::template rebind<s_node<It> >::other      rebind_node;
                         typedef ft::bidirectionnal_iterator<value_type, Container, node>      bi_iterator;
-                        typedef ft::bidirectionnal_iterator<value_type const, Container, node const>      const_bi_iterator;
+                        typedef ft::bidirectionnal_iterator<value_type const, Container, node>      const_bi_iterator;
                         red_black_tree() : iterator(NULL), _size(0){}
                         red_black_tree(const red_black_tree & rhs) : iterator(rhs.iterator)
                                         , _rebind_node(rhs._rebind_node), _comp(rhs._comp), _allocator(rhs._allocator)
@@ -347,9 +347,16 @@ namespace ft
                                         iterator = iterator->parent;
                                 return (new_node);
                         }
+                        /*
+                                side = 0 none
+                                side = 1 --
+                                side = 2 ++
+                        */
 			node*    insert_hint(const value_type& pair, const_bi_iterator hint)
                         {
-                                node    *new_node = NULL;
+                                node    *new_node = 0;
+                                node    *mem = 0;
+                                char    side = 0;
 
                                 if (!iterator)
                                 {
@@ -360,9 +367,72 @@ namespace ft
                                         ++_size;
                                         return (iterator);
                                 }
-                                const_bi_iterator       ite(end(), iterator);
-                                const_bi_iterator       hint_cpy = hint;
-                                
+                                if (!hint._ptr || _comp(pair.first, hint->first))
+                                {
+                                        mem = hint._ptr;
+                                        --hint;
+                                        if (hint._ptr && hint->first == pair.first)//ok
+                                                return (NULL);
+                                        else if (hint._ptr && _comp(hint->first, pair.first))
+                                        {
+                                                if (mem && !mem->left)// 3 < 4 < 5
+                                                        side = 2;
+                                                else
+                                                        side = 3;
+                                        }
+                                        else
+                                                return (insert(pair));
+                                }
+                                else if (_comp(hint->first, pair.first))
+                                {
+                                        mem = hint._ptr;
+                                        ++hint;
+                                        if (hint._ptr && hint->first == pair.first)//ok
+                                                return (NULL);
+                                        else if (!hint._ptr || _comp(pair.first, hint->first))
+                                        {
+                                                if (!hint._ptr || (mem && !mem->right)) //30 < 35 < 40
+                                                        side = 1;
+                                                else
+                                                        side = 4;
+                                        }
+                                        else
+                                                return (insert(pair));
+                                }
+                                else if (hint->first == pair.first)//ok
+                                        return (NULL);
+                                new_node = _rebind_node.allocate(1);
+                                _rebind_node.construct(new_node, node(pair));
+                                _new_node(new_node);
+                                switch (side)
+                                {
+                                        case 1:
+                                                new_node->parent = mem;
+                                                if (mem->right)
+                                                        mem->right->parent = new_node;
+                                                mem->right = new_node;
+                                                break ;
+                                        case 2:
+                                                new_node->parent = mem;
+                                                if (mem->left)
+                                                        mem->left->parent = new_node;
+                                                mem->left = new_node;
+                                                break ;
+                                        case 3 :
+                                                new_node->parent = hint._ptr;
+                                                if (hint._ptr->right)
+                                                        hint._ptr->right->parent = new_node;
+                                                hint._ptr->right = new_node;
+                                                break ;
+                                        case 4 :
+                                                new_node->parent = hint._ptr;
+                                                if (hint._ptr->left)
+                                                        hint._ptr->left->parent = new_node;
+                                                hint._ptr->left = new_node;
+                                                break ;
+                                        default:
+                                                break;
+                                }
                                 ++_size;
                                 new_node->colour = RED;
                                 _repear_tree_insert(new_node);

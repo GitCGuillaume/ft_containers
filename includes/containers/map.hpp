@@ -33,7 +33,7 @@ namespace ft
             typedef typename ft::bidirectionnal_iterator<value_type, map
                 , typename ft::red_black_tree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > iterator;
             typedef typename ft::bidirectionnal_iterator<value_type const, map
-                , const typename ft::red_black_tree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > const_iterator;
+                , typename ft::red_black_tree<value_type, map, key_type, mapped_type, key_compare, Allocator>::node > const_iterator;
             typedef ft::reverse_iterator<iterator>  reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
             class   value_compare : public ft::binary_function<value_type, value_type, bool>
