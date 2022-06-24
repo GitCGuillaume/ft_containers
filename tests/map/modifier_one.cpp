@@ -147,7 +147,7 @@ void    insert_hint()
     for (int i = 0; i < 1000; i++)
         map.insert(map.lower_bound(i + 1), TYPECONT::pair<int, int>(i, i));
     for (int i = 20000; i < 2004; i++)
-        map.insert(map.lower_bound(i - 1), TYPECONT::pair<int, int>(i, i));
+        map.insert(map.lower_bound(i), TYPECONT::pair<int, int>(i, i));
     for (int i = 0; i < 400000; i++)
         map.insert(map.lower_bound(i - 1), TYPECONT::pair<int, int>(i, i));
     map.insert(map.end(), TYPECONT::pair<int, int>(-1000, 123));
@@ -155,8 +155,16 @@ void    insert_hint()
     map.insert(map.begin(), TYPECONT::pair<int, int>(-2147483648, 123));
     for (TYPECONT::map<int, int>::iterator it = map.begin(); it != map.end(); it++)
         std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
-    //for (TYPECONT::map<int, int>::reverse_iterator it = map.rbegin(); it != map.rend(); it++)
-    //    std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
+    TYPECONT::map<int, int>  map2;
+    for (int i = 0; i < 20; i++)
+        map2.insert(map2.begin(), TYPECONT::pair<int, int>(i, i));
+    for (TYPECONT::map<int, int>::iterator it = map2.begin(); it != map2.end(); it++)
+        std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
+    TYPECONT::map<int, int>  map3;
+    for (int i = 0; i < 20; i++)
+        map3.insert(map3.end(), TYPECONT::pair<int, int>(i, i));
+    for (TYPECONT::map<int, int>::iterator it = map3.begin(); it != map3.end(); it++)
+        std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;
 }
 
 void    insert_range()
@@ -215,7 +223,7 @@ void    map_swap_non_member()
     TYPECONT::map<std::string, int>    map_1;
     TYPECONT::map<std::string, int>    map_2;
 
-    std::swap(map_1, map_2);
+    TYPECONT::swap(map_1, map_2);
     map_1.insert(TYPECONT::make_pair("one", 1));
     map_1.insert(TYPECONT::make_pair("hjfjhj", 6565));
     map_1.insert(TYPECONT::make_pair("gtgcfgfege", -45654));
@@ -228,7 +236,7 @@ void    map_swap_non_member()
     std::cout << "BEFORE" << std::endl;
     std::cout << "map_1 size : " << map_1.size() << std::endl;
     std::cout << "map_2 size : " << map_2.size() << std::endl;
-    std::swap(map_1, map_2);
+    TYPECONT::swap(map_1, map_2);
     std::cout << "AFTER" << std::endl;
     std::cout << "map_1 size : " << map_1.size() << std::endl;
     std::cout << "map_2 size : " << map_2.size() << std::endl;

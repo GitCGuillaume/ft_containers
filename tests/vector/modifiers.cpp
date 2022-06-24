@@ -278,7 +278,7 @@ void    swap_vector_non_member()
     TYPECONT::vector<int>    vec_1;
     TYPECONT::vector<int>    vec_2;
 
-    std::swap(vec_1, vec_2);
+    TYPECONT::swap(vec_1, vec_2);
     vec_1.push_back(1);
     vec_1.push_back(2);
     vec_1.push_back(3);
@@ -294,7 +294,7 @@ void    swap_vector_non_member()
         << "vec_1 capacity : " << vec_1.capacity() << std::endl;
     std::cout << "vec_2 size : " << vec_2.size() << std::endl
         << "vec_2 capacity : " << vec_2.capacity() << std::endl;
-    std::swap(vec_1, vec_2);
+    TYPECONT::swap(vec_1, vec_2);
     std::cout << "AFTER" << std::endl;
     std::cout << "vec_1 size : " << vec_1.size() << std::endl
         << "vec_1 capacity : " << vec_1.capacity() << std::endl;

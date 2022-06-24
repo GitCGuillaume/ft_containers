@@ -235,16 +235,19 @@ namespace ft
             }
             void    swap(map & other)
             {
-                _RB_tree    tmp_tree = other._tree;
-                key_compare tmp_comp = other._comp;
-				allocator_type	tmp_alc = other._allocator;
+                if (this != &other)
+                {
+                    _RB_tree    tmp_tree = other._tree;
+                    key_compare tmp_comp = other._comp;
+                    allocator_type	tmp_alc = other._allocator;
 
-                other._tree = _tree;
-                other._comp = _comp;
-				other._allocator = _allocator;
-                _tree = tmp_tree;
-                _comp = tmp_comp;
-				_allocator = tmp_alc;
+                    other._tree = _tree;
+                    other._comp = _comp;
+                    other._allocator = _allocator;
+                    _tree = tmp_tree;
+                    _comp = tmp_comp;
+                    _allocator = tmp_alc;
+                }
             }
             /* Lookup */
             size_type   count(const Key& key) const

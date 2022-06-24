@@ -1,9 +1,9 @@
 #ifndef BIDI_ITERATOR_HPP
 # define BIDI_ITERATOR_HPP
 
+#include <iostream>
 #include <map>
 #include "../../includes/containers/map.hpp"
-#include <iostream>
 
 void    iterator_map_default();
 void    iterator_assignation_map();

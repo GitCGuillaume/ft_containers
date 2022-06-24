@@ -604,7 +604,7 @@ namespace ft
 			}
 			void	swap(vector& other)
 			{
-				if (*this != other)
+				if (this != &other)
 				{
 					pointer	tmp_vec = other._vec;
 					allocator_type	tmp_alc = other._allocator;

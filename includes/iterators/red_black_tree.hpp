@@ -15,7 +15,7 @@
         The iterator receive a ft::pair<>, but alone it won't do anything
         So need to create nodes for rotation / whatever
 */
-#include <iostream>
+
 template<class T>
 struct s_node
 {
@@ -75,21 +75,11 @@ namespace ft
                         virtual ~bidirectionnal_iterator(){}
                         reference operator*() const
                         {
-                                /*if (!_ptr)
-                                {
-                                        value_type      pair = value_type();
-                                        pointer ptr = &pair;
-                                        return (*ptr);
-                                }*/
                                 return (*(&_ptr->pair));
                         }
                         pointer operator->() const
                         {
-                                //if (_ptr)
-                                        return (&_ptr->pair);
-                                //value_type      pair = value_type();
-                               // pointer ptr = &pair;
-                               // return (ptr);
+                                return (&_ptr->pair);
                         }
                         /* PREFIX */
                         /*
@@ -206,7 +196,6 @@ namespace ft
                                 return (*this);
                         }
                         virtual ~red_black_tree(){}
-                        //red_black_tree(node* iterator) : iterator(iterator){}
                         node*    search(Key const &key) const
                         {
                                 if (!iterator)
@@ -367,12 +356,14 @@ namespace ft
                                         ++_size;
                                         return (iterator);
                                 }
-                                if (!hint._ptr || _comp(pair.first, hint->first))
+                                if (hint._ptr && hint->first == pair.first)//ok
+                                        return (hint._ptr);
+                                else if (!hint._ptr || _comp(pair.first, hint->first))
                                 {
                                         mem = hint._ptr;
                                         --hint;
                                         if (hint._ptr && hint->first == pair.first)//ok
-                                                return (NULL);
+                                                return (hint._ptr);
                                         else if (hint._ptr && _comp(hint->first, pair.first))
                                         {
                                                 if (mem && !mem->left)// 3 < 4 < 5
@@ -388,7 +379,7 @@ namespace ft
                                         mem = hint._ptr;
                                         ++hint;
                                         if (hint._ptr && hint->first == pair.first)//ok
-                                                return (NULL);
+                                                return (hint._ptr);
                                         else if (!hint._ptr || _comp(pair.first, hint->first))
                                         {
                                                 if (!hint._ptr || (mem && !mem->right)) //30 < 35 < 40
@@ -399,8 +390,6 @@ namespace ft
                                         else
                                                 return (insert(pair));
                                 }
-                                else if (hint->first == pair.first)//ok
-                                        return (NULL);
                                 new_node = _rebind_node.allocate(1);
                                 _rebind_node.construct(new_node, node(pair));
                                 _new_node(new_node);
@@ -723,11 +712,9 @@ namespace ft
                                 }
                                 void    _repear_double_black(node *current)
                                 {
-                                        //if (!iterator || !current)
-                                          //      return ;
                                         node    *sibling = _get_sibling(current);
 
-                                        if (!current->parent)
+                                        if (current && !current->parent)
                                         {
                                                 iterator = current;
                                                 current->colour = BLACK;
@@ -780,9 +767,6 @@ namespace ft
                                                 else if (sibling->colour == RED)
                                                         _repear_double_blackTwo(current);
                                                 else if (sibling->colour == BLACK)
-                                                        //&& (((sibling->left && sibling->left->colour == BLACK)
-                                                        //&& (sibling->right && sibling->right->colour == BLACK))
-                                                        //|| (sibling && sibling->colour == BLACK && !sibling->left && !sibling->right)))
                                                 {
                                                         sibling->colour = RED;
                                                         if (current->parent && current->parent->colour == BLACK)
@@ -853,14 +837,11 @@ namespace ft
                                 }
                                 node    *_get_grand_parent(node* current)
                                 {
-                                        node*    parent;
-
                                         if (!current)
                                                 return (NULL);
-                                        parent = current->parent;
-                                        if (!parent)
+                                        if (!current->parent)
                                                 return (NULL);
-                                        return (parent->parent);
+                                        return (current->parent->parent);
                                 }
                                 node    *_get_parent(node* current)
                                 {

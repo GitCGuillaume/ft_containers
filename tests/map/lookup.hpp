@@ -1,9 +1,9 @@
 #ifndef LOOKUP_HPP
 # define LOOKUP_HPP
 
+#include <iostream>
 #include <map>
 #include "../../includes/containers/map.hpp"
-#include <iostream>
 
 void    lookup_find();
 void    map_count();

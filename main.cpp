@@ -31,7 +31,7 @@ void	execute_function(void (*ft)(void))
 
 int	main(void)
 {
-	/*execute_function(&iterator_assign_forward);
+	execute_function(&iterator_assign_forward);
 	execute_function(iterator_assign_first_last_forward);
 	execute_function(iterator_assign_backward);
 	execute_function(iterator_assign_first_last_backward);
@@ -72,9 +72,9 @@ int	main(void)
 	execute_function(reverse_iterator);
 	execute_function(reverse_iterator_empty);
 	execute_function(iterator_test);
-	execute_function(iterator_empty);
+	execute_function(iterator_empty);*/
 	//MAP PART
-	execute_function(default_constructor_map);
+	/*execute_function(default_constructor_map);
 	execute_function(constructor_range_map);
 	execute_function(copy_constructor_map);
 	execute_function(operator_assignation_map);
@@ -104,9 +104,8 @@ int	main(void)
 	execute_function(range_erase);
 	execute_function(erase_key);
 	execute_function(insert_value_type);
-	*/
 	execute_function(insert_hint);
-	/*execute_function(insert_range);
+	execute_function(insert_range);
 	execute_function(lookup_find);
 	execute_function(map_count);
 	execute_function(map_swap);
@@ -118,12 +117,12 @@ int	main(void)
 	execute_function(test_keycomp);
 	execute_function(test_value_comp);
 	execute_function(non_member_operator_map);
+	//STACK
 	execute_function(default_constructor_stack);
 	execute_function(constructor_stack_copy);
 	execute_function(stack_empty);
 	execute_function(stack_size);
 	execute_function(stack_equal);
 	execute_function(stack_mutant_stack);
-	*/
 	return (0);
 }

@@ -1,9 +1,9 @@
 #ifndef CONSTRUCTOR_MAP_HPP
 # define CONSTRUCTOR_MAP_HPP
 
+#include <iostream>
 #include <map>
 #include "../../includes/containers/map.hpp"
-#include <iostream>
 
 void    default_constructor_map();
 void    constructor_range_map();
