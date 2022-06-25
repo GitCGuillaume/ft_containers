@@ -336,11 +336,6 @@ namespace ft
                                         iterator = iterator->parent;
                                 return (new_node);
                         }
-                        /*
-                                side = 0 none
-                                side = 1 --
-                                side = 2 ++
-                        */
 			node*    insert_hint(const value_type& pair, const_bi_iterator hint)
                         {
                                 node    *new_node = 0;

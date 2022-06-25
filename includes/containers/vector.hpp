@@ -514,13 +514,19 @@ namespace ft
 
 				if (first != last)
 				{
-					while (offset_first != offset_last)
+					if (offset_first != max)
 					{
-						_vec[offset_first].~value_type();
-						++offset_first;
-						--_size;
+						std::copy(&_vec[offset_last], &_vec[_size], &_vec[offset_first]);
+						size_type start = _size - (offset_last - offset_first);
+						size_type end = _size;
+						
+						while (start != end)
+						{
+							_vec[start].~value_type();
+							++start;
+							--_size;
+						}
 					}
-					std::copy(&_vec[offset_first], &_vec[max], &_vec[copy_offset]);
 				}
 				if (last == this->end())
 					return (copy_offset2 + this->begin());

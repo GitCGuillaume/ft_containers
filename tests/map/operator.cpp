@@ -53,7 +53,6 @@ void    equal_map()
     std::cout << (map_2["two"] >= map_1["one"])<< std::endl;
     std::cout << (map_4["four"] >= map_1["one"])<< std::endl;
     std::cout << (map_1["one"] >= map_4["four"])<< std::endl;
-    //map_1["one"].resize(100000);
     std::cout << "<=" << std::endl;
     std::cout << (map_1["one"] <= map_2["two"]) << std::endl;
     std::cout << (map_1["one"] <= map_3["three"]) << std::endl;

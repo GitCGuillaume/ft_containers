@@ -18,7 +18,6 @@ namespace ft
             explicit    reverse_iterator(iterator_type it) : _current(it){}
             template<class U>
             reverse_iterator(const reverse_iterator<U>& rev_it) : _current(rev_it.base()){}
-            /* cplusplus.com n'affiche pas de operator= mais cppreference si */
             template<class U>
             reverse_iterator &  operator=(const reverse_iterator& other)
             {
@@ -28,7 +27,6 @@ namespace ft
                 }
                 return (*this);
             }
-            /* essayer de tester out of range */
             iterator_type   base() const
             {
                 return (this->_current);
@@ -74,10 +72,6 @@ namespace ft
                 ++this->_current;
                 return (tmp);
             }
-            /*
-            *   -1 because a reverse iterator has always an offset of -1
-            *   to it's base iterator
-            */
             reverse_iterator    operator+(difference_type n) const
             {
                 return (reverse_iterator(this->base() - n));
@@ -134,7 +128,6 @@ namespace ft
     {
         return (!(lhs < rhs));
     }
-    /* rit = rit + ? */
     template<class Iter>
     reverse_iterator<Iter>  operator+(typename reverse_iterator<Iter>::difference_type n, const reverse_iterator<Iter>& it)
     {
