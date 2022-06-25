@@ -2,6 +2,7 @@
 #include <string>
 #include <stdlib.h>
 #include "main_school_ft.hpp"
+#include <deque>
 
 #define MAX_RAM 4294967296
 #define BUFFER_SIZE 4096

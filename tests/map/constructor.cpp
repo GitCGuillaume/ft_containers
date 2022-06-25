@@ -57,7 +57,6 @@ void    copy_constructor_map()
   map["mno"] = 54644587.0;
    map["m"] = 54644587.0;
   std::map<std::string, float>  map_cpy(map);
-  //std::cout << "Capacity count COPY constructor : " << map_cpy.capacity() << std::endl;
   std::cout << "Size count COPY constructor : " << map_cpy.size() << std::endl;
   for (std::map<std::string, float>::iterator	it = map_cpy.begin(); it != map_cpy.end(); it++)
     std::cout << "it->first : " << it->first << " it->second : " << it->second << std::endl;

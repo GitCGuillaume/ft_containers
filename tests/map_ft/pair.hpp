@@ -1,7 +1,6 @@
 #ifndef TEST_PAIR_CUSTOM_HPP
 # define TEST_PAIR_CUSTOM_HPP
 
-#include <utility>
 #include <iostream>
 #include "../../includes/library_headers/pair.hpp"
 

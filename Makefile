@@ -8,7 +8,7 @@ TESTS_VECTOR_FT	=	./tests/vector_ft
 
 TESTS_MAP_FT	=	./tests/map_ft
 
-TESTS_STACK_Ft	=	./tests/stack_ft
+TESTS_STACK_FT	=	./tests/stack_ft
 
 SRCS_VEC	=	$(TESTS_VECTOR)/at.cpp $(TESTS_VECTOR)/capacities.cpp $(TESTS_VECTOR)/constructor.cpp $(TESTS_VECTOR)/data.cpp \
 	$(TESTS_VECTOR)/erase.cpp $(TESTS_VECTOR)/front_back.cpp $(TESTS_VECTOR)/iterator_backward.cpp $(TESTS_VECTOR)/iterator_forward.cpp \
@@ -17,7 +17,6 @@ SRCS_VEC	=	$(TESTS_VECTOR)/at.cpp $(TESTS_VECTOR)/capacities.cpp $(TESTS_VECTOR)
 SRCS_VEC_FT	=	$(TESTS_VECTOR_FT)/at.cpp $(TESTS_VECTOR_FT)/capacities.cpp $(TESTS_VECTOR_FT)/constructor.cpp $(TESTS_VECTOR_FT)/data.cpp \
 	$(TESTS_VECTOR_FT)/erase.cpp $(TESTS_VECTOR_FT)/front_back.cpp $(TESTS_VECTOR_FT)/iterator_backward.cpp $(TESTS_VECTOR_FT)/iterator_forward.cpp \
 	$(TESTS_VECTOR_FT)/iterator.cpp $(TESTS_VECTOR_FT)/modifiers.cpp $(TESTS_VECTOR_FT)/operator.cpp $(TESTS_VECTOR_FT)/reverse_iterator.cpp
-
 
 SRCS_MAP	=	$(TESTS_MAP)/at.cpp $(TESTS_MAP)/bracket.cpp $(TESTS_MAP)/constructor.cpp $(TESTS_MAP)/iterator.cpp \
 			$(TESTS_MAP)/lookup.cpp $(TESTS_MAP)/modifier_one.cpp $(TESTS_MAP)/observer.cpp $(TESTS_MAP)/operator.cpp \

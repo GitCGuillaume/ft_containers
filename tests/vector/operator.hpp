@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+
 void    equal_vector();
 
 #endif
