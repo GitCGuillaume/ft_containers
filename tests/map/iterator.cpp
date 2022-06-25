@@ -3,9 +3,9 @@
 void    iterator_map_default()
 {
     std::cout << "MAP ITERATOR DEFAULT" << std::endl;
-    TYPECONT::map<int, int>  map;
-    TYPECONT::map<int, int>::iterator  it = map.begin();
-    TYPECONT::map<int, int>::iterator  ite = map.end();
+    std::map<int, int>  map;
+    std::map<int, int>::iterator  it = map.begin();
+    std::map<int, int>::iterator  ite = map.end();
     if (it != ite)
     {
         std::cout << "first : " << it->first << std::endl;
@@ -16,10 +16,10 @@ void    iterator_map_default()
 void    iterator_assignation_map()
 {
     std::cout << "Iterator assignation MAP" << std::endl;
-    TYPECONT::map<std::string, std::string>  map;
+    std::map<std::string, std::string>  map;
     map["un"] = "value un";
-    TYPECONT::map<std::string, std::string>::iterator it = map.begin();
-    TYPECONT::map<std::string, std::string>::iterator it_cpy = it;
+    std::map<std::string, std::string>::iterator it = map.begin();
+    std::map<std::string, std::string>::iterator it_cpy = it;
     std::cout << "it->first : " << it->first << std::endl;
     std::cout << "it_cpy->first : " << it_cpy->first << std::endl;
     std::cout << "it->second : " << it->second << std::endl;
@@ -29,12 +29,12 @@ void    iterator_assignation_map()
 void    iterator_forward_map()
 {
     std::cout << "Iterator forward map" << std::endl;
-    TYPECONT::map<int, int>  map;
+    std::map<int, int>  map;
     map[3] = 1;
     map[4] = 2;
     map[0] = 3;
     map[1] = 4;
-    TYPECONT::map<int, int>::iterator    it = map.begin();
+    std::map<int, int>::iterator    it = map.begin();
     std::cout << "it->first : " << it->first << std::endl;
     std::cout << "it->second : " << it->second << std::endl;
     std::cout << "(it++)->first : " << (it++)->first << std::endl;
@@ -59,12 +59,12 @@ void    iterator_forward_map()
 void    iterator_backward_map()
 {
     std::cout << "Iterator backward map" << std::endl;
-    TYPECONT::map<int, int>  map;
+    std::map<int, int>  map;
     map[3] = 1;
     map[4] = 2;
     map[0] = 3;
     map[1] = 4;
-    TYPECONT::map<int, int>::const_iterator    it = map.end();
+    std::map<int, int>::const_iterator    it = map.end();
     it--;
     std::cout << "it->first : " << it->first << std::endl;
     std::cout << "it->second : " << it->second << std::endl;
@@ -93,29 +93,29 @@ void    iterator_backward_map()
 void    reverse_iterator_map()
 {
     std::cout << "Reverse iterator MAP" << std::endl;
-    TYPECONT::map<int, int>    map;
-	TYPECONT::map<int, int>::reverse_iterator it(map.rbegin());
-	TYPECONT::map<int, int>::const_reverse_iterator ite(map.rend());
+    std::map<int, int>    map;
+	std::map<int, int>::reverse_iterator it(map.rbegin());
+	std::map<int, int>::const_reverse_iterator ite(map.rend());
 
 	it = map.rbegin();
 	ite = map.rbegin();
     static_cast<void>(it);
     static_cast<void>(ite);
     for (int i = 1; i < 6; i++)
-        map.insert(TYPECONT::make_pair(i, i));
-    for (TYPECONT::map<int, int>::reverse_iterator rit = map.rbegin(); rit != map.rend(); rit++)
+        map.insert(std::make_pair(i, i));
+    for (std::map<int, int>::reverse_iterator rit = map.rbegin(); rit != map.rend(); rit++)
         std::cout << (*rit).first << std::endl;
-    for (TYPECONT::map<int, int>::reverse_iterator rit = --map.rend(); rit != map.rbegin(); rit--)
+    for (std::map<int, int>::reverse_iterator rit = --map.rend(); rit != map.rbegin(); rit--)
        std::cout << (*rit).first << std::endl;
-    for (TYPECONT::map<int, int>::reverse_iterator rit = --map.rend(); rit != map.rbegin(); rit--)
+    for (std::map<int, int>::reverse_iterator rit = --map.rend(); rit != map.rbegin(); rit--)
         std::cout << (*rit).first << std::endl;
 }
 
 void    reverse_iterator_empty_map()
 {
     std::cout << "Reverse iterator empty MAP" << std::endl;
-    TYPECONT::map<int, int>    map;
+    std::map<int, int>    map;
 
-    for (TYPECONT::map<int, int>::reverse_iterator rit = map.rbegin(); rit != map.rend(); rit++)
+    for (std::map<int, int>::reverse_iterator rit = map.rbegin(); rit != map.rend(); rit++)
         std::cout << (*rit).first << std::endl;
 }

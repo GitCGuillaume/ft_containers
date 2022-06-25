@@ -12,9 +12,6 @@ struct  s_cmp
 
 #include <iostream>
 #include <map>
-#include "../../includes/containers/map.hpp"
-#include "../../includes/library_headers/less.hpp"
-#include "../../includes/library_headers/pair.hpp"
 
 void    test_keycomp();
 void    test_keycomp();

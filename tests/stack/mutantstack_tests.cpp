@@ -18,9 +18,9 @@ static void	type_cpy(MutantStack<int>& mstack)
 
 static void	type_vector()
 {
-	TYPECONT::vector<int>	vec;
-	TYPECONT::vector<int>::const_iterator it;
-	TYPECONT::vector<int>::const_iterator ite;
+	std::vector<int>	vec;
+	std::vector<int>::const_iterator it;
+	std::vector<int>::const_iterator ite;
 
 	vec.push_back(5);
 	vec.push_back(17);

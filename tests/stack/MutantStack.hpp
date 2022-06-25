@@ -6,9 +6,6 @@
 #include <map>
 #include <algorithm>
 #include "constructor.hpp"
-#include "../../includes/containers/map.hpp"
-#include "../../includes/containers/stack.hpp"
-#include "../../includes/containers/vector.hpp"
 
 /*
  * iterators are used for random access or sequential access, 

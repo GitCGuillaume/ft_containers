@@ -3,8 +3,6 @@
 
 #include <iostream>
 #include <map>
-#include "../../includes/containers/map.hpp"
-//#include "../../includes/library_headers/pair.hpp"
 
 void    simple_clear();
 void    simple_erase();
