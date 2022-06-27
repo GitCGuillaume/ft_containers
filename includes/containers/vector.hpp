@@ -37,15 +37,15 @@ namespace ft
 			{
 				_vec = _allocator.allocate(0);
 			}
-			explicit	vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator()) :
-				_allocator(alloc), _capacity_allocator(count), _size(count)
+			explicit	vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) :
+				_allocator(alloc), _capacity_allocator(n), _size(n)
 			{
-				_vec = _allocator.allocate(count);
-				std::uninitialized_fill(_vec, &_vec[count], value);
+				_vec = _allocator.allocate(n);
+				std::uninitialized_fill(_vec, &_vec[n], val);
 			}
-			template<class InputIt>
-			vector(InputIt first, InputIt last,
-				const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0) :
+			template <class InputIterator>
+			vector(InputIterator first, InputIterator last,
+				const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0) :
 				_allocator(alloc)
 			{
 				size_type count = static_cast<size_type>(std::distance(first, last));

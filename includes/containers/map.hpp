@@ -47,17 +47,17 @@ namespace ft
                         return (comp(lhs.first, rhs.first));
                     }
             };
-            explicit    map(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
+            explicit    map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
                 : _tree(), _comp(comp), _allocator(alloc)
             {
                 _tree.iterator = NULL;
             }
-            template<class InputIt>
-            map(InputIt first, InputIt second, const Compare& comp = Compare(),
-                const Allocator& alloc = Allocator()) : _tree(), _comp(comp), _allocator(alloc)
+            template <class InputIterator>
+            map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
+                const allocator_type& alloc = allocator_type()) : _tree(), _comp(comp), _allocator(alloc)
             {
                 _tree.iterator = NULL;
-                this->insert(first, second);
+                this->insert(first, last);
             }
             map(const map& other)
             {
