@@ -873,12 +873,19 @@ namespace ft
                                         node    *parent = _get_parent(current);
                                         node    *uncle = _get_uncle(current);
                                         node    *g_parent_node = _get_grand_parent(current);
-                                        if (parent)
-                                                parent->colour = BLACK;
-                                        if (uncle)
-                                                uncle->colour = BLACK;
-                                        if (g_parent_node)
-                                                g_parent_node->colour = RED;
+
+                                        while (g_parent_node && g_parent_node->colour == BLACK)
+                                        {
+                                                parent = _get_parent(current);
+                                                uncle = _get_uncle(current);
+                                                g_parent_node = _get_grand_parent(current);
+                                                if (parent)
+                                                        parent->colour = BLACK;
+                                                if (uncle)
+                                                        uncle->colour = BLACK;
+                                                if (g_parent_node)
+                                                        g_parent_node->colour = RED;
+                                        }
                                         _repear_tree_insert(g_parent_node);
                                 }
                                 void    _repear_tree_insert(node *current)
@@ -898,7 +905,7 @@ namespace ft
                                                 return ;
                                         else if (uncle && uncle->colour == RED) //oncle and parent must be black
                                                 _repear_case_one(current);
-                                        else
+                                        else //parent red uncle black
                                         {
                                                 if (g_parent_node->left && current == g_parent_node->left->right)
                                                 {

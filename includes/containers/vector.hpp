@@ -297,6 +297,8 @@ namespace ft
 				size_type	offset_cpy = offset;
 				size_type	new_size = _size + 1;
 
+				if (new_size > this->max_size())
+					throw std::length_error("vector::reserve");
 				if (new_size > _capacity_allocator)
 				{
 					pointer	ptr = pointer();
@@ -309,6 +311,8 @@ namespace ft
 					}
 					else if (multiple_two > new_size)
 					{
+						if (multiple_two > this->max_size())
+							throw std::length_error("vector::reserve");
 						ptr = _allocator.allocate(multiple_two);
 						_capacity_allocator = multiple_two;
 					}
@@ -367,6 +371,8 @@ namespace ft
 				size_type	offset = pos - this->begin();
 				size_type	new_size = _size + count;
 
+				if (new_size > this->max_size())
+						throw std::length_error("vector::reserve");
 				if (new_size > _capacity_allocator)
 				{
 					pointer	ptr = pointer();
@@ -379,6 +385,8 @@ namespace ft
 					}
 					else if (multiple_two > new_size)
 					{
+						if (multiple_two > this->max_size())
+							throw std::length_error("vector::reserve");
 						ptr = _allocator.allocate(multiple_two);
 						_capacity_allocator = multiple_two;
 					}
@@ -431,6 +439,8 @@ namespace ft
 				size_type	offset = pos - begin();
 				size_type	count = static_cast<size_type>(std::distance(first, last));
 				size_type	new_size = _size + count;
+				if (new_size > this->max_size())
+						throw std::length_error("vector::reserve");
 				if (new_size > _capacity_allocator)
 				{
 					pointer	ptr = pointer();
@@ -442,6 +452,8 @@ namespace ft
 					}
 					else if (multiple_two > new_size)
 					{
+						if (multiple_two > this->max_size())
+							throw std::length_error("vector::reserve");
 						ptr = _allocator.allocate(multiple_two);
 						_capacity_allocator = multiple_two;
 					}

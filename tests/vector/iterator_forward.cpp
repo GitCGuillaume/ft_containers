@@ -12,7 +12,7 @@ void	iterator_assign_forward()
 	std::cout << "POSTFIX" << std::endl;
 	for (std::vector<int>::iterator	it_1 = vec.begin(); it_1 != vec.end(); it_1++)
 	{
-		std::cout << "base : " << it_1.base();
+		std::cout << "base : " << *it_1.base();
 		std::cout << *it_1 << std::endl;
 	}
 	std::cout << "PREFIX" << std::endl;
