@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <map>
+#include <sstream>
+#include "../../includes/containers/map.hpp"
 
 void    default_constructor_map();
 void    constructor_range_map();

@@ -2,6 +2,7 @@
 # define OPERATOR_MAP_HPP
 
 #include <iostream>
+#include <map>
 #include "../../includes/containers/map.hpp"
 
 void    equal_map();

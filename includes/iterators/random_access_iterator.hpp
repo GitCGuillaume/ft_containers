@@ -12,26 +12,27 @@ namespace ft
     template<class It, class Container>
     class random_access_iterator
     {
-        /*Oublie pas de test les const */
         /*
             https://en.cppreference.com/w/cpp/named_req/random_access_iterator
             value_type, the type denoted by std::iterator_traits<It>::value_type
             [...]
         */
-        /* Use ft::iterator into iterator_traits to use iterator_traits types (is this dispatch tag?) correctly */
+        /* Use ft::iterator into iterator_traits to use iterator_traits types correctly */
         public:
-            //typedef It    iterator_type;
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::value_type    value_type;
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::difference_type    difference_type;
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::reference    reference;
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::pointer    pointer;
             typedef typename ft::iterator_traits<ft::iterator<std::random_access_iterator_tag, It> >::iterator_category    iterator_category;
 
-            random_access_iterator() : _ptr(){};
+            random_access_iterator() : _ptr(NULL){};
             random_access_iterator(pointer ptr) : _ptr(ptr) {}
             /*
              *  Convert iterator to const_iterator
              *  iterator will choose non const function if container is not const
+             *  is_same will compare both value then return true/false
+             *  U = int example
+             *  Container::value_type = int example
             */
             template<typename U>
             random_access_iterator(const random_access_iterator<U
@@ -107,7 +108,6 @@ namespace ft
             {
                 return (*(_ptr + n));
             }
-            /* https://en.cppreference.com/w/cpp/named_req/EqualityComparable */
         protected:
             pointer _ptr;
     };

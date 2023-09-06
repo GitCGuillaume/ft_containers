@@ -3,19 +3,19 @@
 void    default_constructor_stack()
 {
     std::cout << "Default constructor stack" << std::endl;
-    std::stack<int> stack;
+    NAMESPACE::stack<int> stack;
     std::cout << "Default constructor stack with map container" << std::endl;
-    std::stack<int, std::map<int, int> >    stack_2;
+    NAMESPACE::stack<int, NAMESPACE::map<int, int> >    stack_2;
 }
 
 void    constructor_stack_copy()
 {
     std::cout << "Stack constructor copy" << std::endl;
-    std::stack<int> stack;
+    NAMESPACE::stack<int> stack;
 
     for (int i = 0; i < 5; i++)
         stack.push(i);
-    std::stack<int> stack_cpy(stack);
+    NAMESPACE::stack<int> stack_cpy(stack);
     for (int i = 0; i < 5; i++)
     {
         std::cout << "stack_cpy.pop() : " << stack_cpy.top() << std::endl;

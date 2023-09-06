@@ -2,6 +2,7 @@
 # define MODIFIER_ONE_HPP
 
 #include <iostream>
+#include <map>
 #include "../../includes/containers/map.hpp"
 
 void    simple_clear();

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <map>
+#include "../../includes/containers/map.hpp"
 
 void    simple_clear();
 void    simple_erase();

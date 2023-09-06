@@ -2,6 +2,7 @@
 # define BIDI_ITERATOR_HPP
 
 #include <iostream>
+#include <map>
 #include "../../includes/containers/map.hpp"
 
 void    iterator_map_default();

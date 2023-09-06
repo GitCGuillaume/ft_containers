@@ -26,19 +26,15 @@ SRCS_MAP_FT	=	$(TESTS_MAP_FT)/at.cpp $(TESTS_MAP_FT)/bracket.cpp $(TESTS_MAP_FT)
 			$(TESTS_MAP_FT)/lookup.cpp $(TESTS_MAP_FT)/modifier_one.cpp $(TESTS_MAP_FT)/observer.cpp $(TESTS_MAP_FT)/operator.cpp \
 			$(TESTS_MAP_FT)/pair.cpp
 
-SRCS_STACK	=	$(TESTS_STACK)/constructor.cpp $(TESTS_STACK)/mutantstack_tests.cpp $(TESTS_STACK)/tests.cpp
+SRCS_STACK	=	$(TESTS_STACK)/constructor.cpp $(TESTS_STACK)/mutantstack_tests.cpp $(TESTS_STACK)/tests.cpp \
+			$(TESTS_STACK)/stack_standard_stl.cpp
 
-SRCS_STACK_FT	=	$(TESTS_STACK_FT)/constructor.cpp $(TESTS_STACK_FT)/mutantstack_tests.cpp $(TESTS_STACK_FT)/tests.cpp
-
-SRCS_MAIN_SCHOOL = ./tests/main_school.cpp
-
-SRCS_MAIN_SCHOOL_FT = ./tests/main_school_ft.cpp
+SRCS_STACK_FT	=	$(TESTS_STACK_FT)/constructor.cpp $(TESTS_STACK_FT)/mutantstack_tests.cpp $(TESTS_STACK_FT)/tests.cpp \
+			$(TESTS_STACK)/stack_standard_stl.cpp
 
 SRCS_MAIN	=	./main.cpp
 
-SRCS_MAIN_FT	=	./main_ft.cpp
-
-OBJS_MS	=	$(SRCS_MAIN_SCHOOL:.cpp=.o)
+SRCS_MAIN_FT	=	./main.cpp
 
 OBJS_VEC	=	$(SRCS_VEC:.cpp=.o)
 
@@ -48,8 +44,6 @@ OBJS_STACK	=	$(SRCS_STACK:.cpp=.o)
 
 OBJS_MAIN	=	$(SRCS_MAIN:.cpp=.o)
 
-OBJS_MS_FT	=	$(SRCS_MAIN_SCHOOL_FT:.cpp=.o)
-
 OBJS_VEC_FT	=	$(SRCS_VEC_FT:.cpp=.o)
 
 OBJS_MAP_FT	=	$(SRCS_MAP_FT:.cpp=.o)
@@ -58,7 +52,7 @@ OBJS_STACK_FT	=	$(SRCS_STACK_FT:.cpp=.o)
 
 OBJS_MAIN_FT	=	$(SRCS_MAIN_FT:.cpp=.o)
 
-NAME_STD	=	std
+NAME	=	std
 
 NAME_FT	=	ft
 
@@ -68,31 +62,31 @@ COMPILER	=	c++
 
 CFLAGS	=	-Wall -Wextra -Werror -std=c++98 -Iincludes/containers
 
-.cpp.o:
-	$(COMPILER) $(CFLAGS) -c $< -o $(<:.cpp=.o)
+%.o : %.cpp
+	$(COMPILER) $(CFLAGS) $(NAMESPACE) -c $< -o $(<:.cpp=.o)
 
-all:	$(NAME_STD) $(NAME_FT)
+all:	 $(NAME) $(NAME_FT)
 
-$(NAME_STD): $(OBJS_MAIN) $(OBJS_MS) $(OBJS_VEC) $(OBJS_MAP) $(OBJS_STACK)
-	$(COMPILER) $(CFLAGS) -o $(NAME_STD) $(OBJS_MAIN) $(OBJS_MS) $(OBJS_VEC) $(OBJS_MAP) $(OBJS_STACK)
+$(NAME): NAMESPACE = -DNAMESPACE=std
+$(NAME): $(OBJS_MAIN) $(OBJS_VEC) $(OBJS_MAP) $(OBJS_STACK)
+	$(COMPILER) $(CFLAGS) $(NAMESPACE) -o $(NAME) $(OBJS_MAIN) $(OBJS_VEC) $(OBJS_MAP) $(OBJS_STACK)
 
-$(NAME_FT): $(OBJS_MAIN_FT) $(OBJS_MS_FT) $(OBJS_VEC_FT) $(OBJS_MAP_FT) $(OBJS_STACK_FT)
-	$(COMPILER) $(CFLAGS) -o $(NAME_FT) $(OBJS_MAIN_FT) $(OBJS_MS_FT) $(OBJS_VEC_FT) $(OBJS_MAP_FT) $(OBJS_STACK_FT)
+$(NAME_FT): NAMESPACE = -DNAMESPACE=ft
+$(NAME_FT): $(OBJS_MAIN) $(OBJS_VEC_FT) $(OBJS_MAP_FT) $(OBJS_STACK_FT)
+	$(COMPILER) $(CFLAGS) $(NAMESPACE) -o $(NAME_FT) $(OBJS_MAIN_FT) $(OBJS_VEC_FT) $(OBJS_MAP_FT) $(OBJS_STACK_FT)
 
 clean:
 	$(RM) $(OBJS_MAIN)
-	$(RM) $(OBJS_MS)
 	$(RM) $(OBJS_VEC)
 	$(RM) $(OBJS_MAP)
 	$(RM) $(OBJS_STACK)
 	$(RM) $(OBJS_MAIN_FT)
-	$(RM) $(OBJS_MS_FT)
 	$(RM) $(OBJS_VEC_FT)
 	$(RM) $(OBJS_MAP_FT)
 	$(RM) $(OBJS_STACK_FT)
 
 fclean:
-	$(RM) $(NAME_STD)
+	$(RM) $(NAME)
 	$(RM) $(NAME_FT)
 	make clean
 

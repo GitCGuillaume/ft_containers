@@ -34,7 +34,7 @@ namespace ft
             ++first1;
             ++first2;
         }
-        if (first2 != last2)
+        if (first2 != last2 && first1 == last1)
             return (true);
         return (false);
     }

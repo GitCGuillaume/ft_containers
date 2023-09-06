@@ -2,11 +2,78 @@
 
 void    equal_vector()
 {
-    std::cout << "Operator" << std::endl;
-    ft::vector<int>    vec_1;
-    ft::vector<int>    vec_2;
-    ft::vector<int>    vec_3;
-    ft::vector<int>    vec_4;
+    std::cout << "Operator VECTOR" << std::endl;
+    NAMESPACE::vector<std::string>    vec_1;
+    NAMESPACE::vector<std::string>    vec_2;
+    NAMESPACE::vector<std::string>    vec_3;
+    NAMESPACE::vector<std::string>    vec_4;
+
+    vec_1.push_back("one");
+    vec_1.push_back("two");
+    vec_1.push_back("three");
+    vec_2.push_back("four");
+    vec_2.push_back("five");
+    vec_3.push_back("one");
+    vec_3.push_back("two");
+    vec_3.push_back("three");
+    vec_4.push_back("four");
+    vec_4.push_back("five");
+    vec_4.push_back("six");
+    std::cout << "==" << std::endl;
+    std::cout << (vec_1[0] == vec_2[1]) << std::endl;
+    std::cout << (vec_2[1] == vec_1[0]) << std::endl;
+    std::cout << (vec_1[0] == vec_3[2]) << std::endl;
+    std::cout << (vec_1[0] == vec_4[0]) << std::endl;
+    std::cout << "!=" << std::endl;
+    std::cout << (vec_1[0] != vec_2[1]) << std::endl;
+    std::cout << (vec_2[1] != vec_1[0]) << std::endl;
+    std::cout << (vec_1[0] != vec_3[2]) << std::endl;
+    std::cout << (vec_1[0] != vec_4[0]) << std::endl;
+    std::cout << "<" << std::endl;
+    std::cout << (vec_1[0] < vec_2[1]) << std::endl;
+    std::cout << (vec_1[0] < vec_3[2]) << std::endl;
+    std::cout << (vec_2[1] < vec_1[0]) << std::endl;
+    std::cout << (vec_1[0] < vec_4[0]) << std::endl;
+    std::cout << (vec_4[0] < vec_1[0]) << std::endl;
+    std::cout << "<=" << std::endl;
+    std::cout << (vec_1[0] <= vec_2[1]) << std::endl;
+    std::cout << (vec_1[0] <= vec_3[2]) << std::endl;
+    std::cout << (vec_2[1] <= vec_1[0]) << std::endl;
+    std::cout << (vec_4[0] <= vec_1[0]) << std::endl;
+    std::cout << (vec_1[0] <= vec_4[0]) << std::endl;
+    std::cout << ">" << std::endl;
+    std::cout << (vec_1[0] > vec_2[1]) << std::endl;
+    std::cout << (vec_1[0] > vec_3[2]) << std::endl;
+    std::cout << (vec_2[1] > vec_1[0]) << std::endl;
+    std::cout << (vec_4[0] > vec_1[0]) << std::endl;
+    std::cout << (vec_1[0] > vec_4[0]) << std::endl;
+    std::cout << ">=" << std::endl;
+    std::cout << (vec_1[0] >= vec_2[1])<< std::endl;
+    std::cout << (vec_1[0] >= vec_3[2])<< std::endl;
+    std::cout << (vec_2[1] >= vec_1[0])<< std::endl;
+    std::cout << (vec_4[0] >= vec_1[0])<< std::endl;
+    std::cout << (vec_1[0] >= vec_4[0])<< std::endl;
+    std::cout << "<=" << std::endl;
+    std::cout << (vec_1[0] <= vec_2[1]) << std::endl;
+    std::cout << (vec_1[0] <= vec_3[2]) << std::endl;
+    std::cout << (vec_2[1] <= vec_1[0]) << std::endl;
+    std::cout << (vec_4[0] <= vec_1[0]) << std::endl;
+    std::cout << (vec_1[0] <= vec_4[0]) << std::endl;
+    std::cout << ">=" << std::endl;
+    std::cout << (vec_1[0] >= vec_2[1])<< std::endl;
+    std::cout << (vec_1[0] >= vec_3[2])<< std::endl;
+    std::cout << (vec_2[1] >= vec_1[0])<< std::endl;
+    std::cout << (vec_4[0] >= vec_1[0])<< std::endl;
+    std::cout << (vec_1[0] >= vec_4[0])<< std::endl;
+}
+
+void    non_member_operator_vector()
+{
+    std::cout << "Non Member Operator VECTOR" << std::endl;
+    NAMESPACE::vector<int>    vec_1;
+    NAMESPACE::vector<int>    vec_2;
+    NAMESPACE::vector<int>    vec_3;
+    NAMESPACE::vector<int>    vec_4;
 
     vec_1.push_back(1);
     vec_1.push_back(2);

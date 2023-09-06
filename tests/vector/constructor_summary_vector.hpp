@@ -2,6 +2,7 @@
 # define CONSTRUCTOR_SUMMARY_VECTOR_HPP
 
 #include <vector>
+#include "../../includes/containers/vector.hpp"
 #include <iostream>
 
 #include "at.hpp"

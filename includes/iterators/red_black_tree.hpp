@@ -4,12 +4,15 @@
 # define RED 0
 # define BLACK 1
 
+#include <iostream>
 #include "iterator_traits.hpp"
 #include "iterator.hpp"
 #include "../library_headers/is_integral.hpp"
 #include "../library_headers/enable_if.hpp"
 #include "../library_headers/is_same.hpp"
 #include "../library_headers/pair.hpp"
+#include "../library_headers/integral_constant.hpp"
+#include "../library_headers/utils.hpp"
 
 /*
         The iterator receive a ft::pair<>, but alone it won't do anything
@@ -54,7 +57,7 @@ namespace ft
                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::pointer    pointer;
                         typedef typename ft::iterator_traits<ft::iterator<std::bidirectional_iterator_tag, It> >::iterator_category    iterator_category;
                         typedef  Node       node;
-
+ 
                         bidirectionnal_iterator() : _ptr(NULL), _old(NULL), _root(NULL){}
                         bidirectionnal_iterator(node* ptr, node* iterator) : _ptr(ptr), _old(iterator), _root(iterator){}
                         template<typename U, typename V>
@@ -75,12 +78,12 @@ namespace ft
                         virtual ~bidirectionnal_iterator(){}
                         reference operator*() const
                         {
-                                return (*(&_ptr->pair));
+                                return (*(ft::addressof(_ptr->pair)));
                         }
                         pointer operator->() const
                         {
-                                return (&_ptr->pair);
-                        }
+                        	return (ft::addressof(_ptr->pair));
+			}
                         /* PREFIX */
                         /*
                                 _old->right == _ptr will loop until parent root(NULL)
@@ -107,7 +110,7 @@ namespace ft
                                         _old = _ptr->parent;
                                         while (_old && _old->right == _ptr)
                                         {
-                                                _ptr = _old;
+						_ptr = _old;
                                                 _old = _ptr->parent;
                                         }
                                         _ptr = _old;
@@ -176,47 +179,87 @@ namespace ft
                         typedef Compare key_compare;
                         typedef Allocator   allocator_type;
                         typedef s_node<It>       node;
+                        /* Allocate object of another type with new size than original template */
                         typedef typename Allocator::template rebind<s_node<It> >::other      rebind_node;
                         typedef ft::bidirectionnal_iterator<value_type, Container, node>      bi_iterator;
                         typedef ft::bidirectionnal_iterator<value_type const, Container, node>      const_bi_iterator;
-                        red_black_tree() : iterator(NULL), _size(0){}
-                        red_black_tree(const red_black_tree & rhs) : iterator(rhs.iterator)
+                        typedef std::size_t size_type;
+                        red_black_tree() : iterator(NULL), _size(0), _begin(NULL), _end(NULL){}
+                        red_black_tree(const red_black_tree & rhs) : iterator(NULL)
                                         , _rebind_node(rhs._rebind_node), _comp(rhs._comp), _allocator(rhs._allocator)
-                                        , _size(rhs._size){}
+                                        , _size(0), _begin(0), _end(0)
+                        {
+                                const_bi_iterator    it;
+                                const_bi_iterator    ite = const_bi_iterator(rhs.end(), rhs.iterator);
+
+                                if (!rhs.iterator)
+                                        it = const_bi_iterator(rhs.end(), rhs.iterator);
+                                else
+                                        it = const_bi_iterator(rhs.begin(), rhs.iterator);
+                                while (it != ite)
+                                        insert(*(it)++);
+                                if (iterator)
+                                        while (iterator->parent)
+                                                iterator = iterator->parent;
+                        }
                         red_black_tree & operator=(const red_black_tree & rhs)
                         {
                                 if (this != &rhs)
                                 {
-                                        iterator = rhs.iterator;
+                                        const_bi_iterator    it;
+                                        const_bi_iterator    ite = const_bi_iterator(end(), iterator);
+
                                         _rebind_node = rhs._rebind_node;
                                         _comp = rhs._comp;
                                         _allocator = rhs._allocator;
-                                        _size = rhs._size;
+                                        if (!iterator)
+                                                it = const_bi_iterator(end(), iterator);
+                                        else
+                                                it = const_bi_iterator(begin(), iterator);
+                                        while (it != ite)
+                                                this->delete_node((it++)->first);
+                                        _size = 0;
+                                        iterator = NULL;
+                                        _begin = NULL;
+                                        _end = NULL;
+                                        if (!rhs.iterator)
+                                                it = const_bi_iterator(rhs.end(), rhs.iterator);
+                                        else
+                                                it = const_bi_iterator(rhs.begin(), rhs.iterator);
+                                        ite = const_bi_iterator(rhs.end(), rhs.iterator);
+                                        while (it != ite)
+                                                insert(*(it)++);
+                                        if (iterator)
+                                                while (iterator->parent)
+                                                        iterator = iterator->parent;
                                 }
                                 return (*this);
                         }
-                        virtual ~red_black_tree(){}
+                        virtual ~red_black_tree()
+                        {
+                                const_bi_iterator    it;
+                                const_bi_iterator    ite = const_bi_iterator(end(), iterator);
+
+                                if (!iterator)
+                                        it = const_bi_iterator(end(), iterator);
+                                else
+                                        it = const_bi_iterator(begin(), iterator);
+                                while (it != ite)
+                                        this->delete_node((it++)->first);
+                        }
                         node*    search(Key const &key) const
                         {
                                 if (!iterator)
                                         return (NULL);
                                 node    *sub_root = iterator;
-                                Key     first_sub_root = sub_root->pair.first;
+
                                 while (sub_root)
                                 {
-                                        if (_comp(first_sub_root, key))
-                                        {
+                                        if (_comp(sub_root->pair.first, key))
                                                 sub_root = sub_root->right;
-                                                if (sub_root)
-                                                        first_sub_root = sub_root->pair.first;
-                                        }
-                                        else if (_comp(key, first_sub_root))
-                                        {
+                                        else if (_comp(key, sub_root->pair.first))
                                                 sub_root = sub_root->left;
-                                                if (sub_root)
-                                                        first_sub_root = sub_root->pair.first;
-                                        }
-                                        else if (key == first_sub_root)
+                                        else if (key == sub_root->pair.first)
                                                 return (sub_root);
                                 }
                                 return (NULL);
@@ -227,55 +270,35 @@ namespace ft
                                 if (!iterator)
                                         return (NULL);
                                 node    *sub_root = iterator;
-                                Key     first_sub_root = sub_root->pair.first;
 
                                 while (sub_root)
                                 {
-                                        if (_comp(first_sub_root, key))
-                                        {
+                                        if (_comp(sub_root->pair.first, key))
                                                 sub_root = sub_root->right;
-                                                if (sub_root)
-                                                        first_sub_root = sub_root->pair.first;
-                                        }
-                                        else if (_comp(key, first_sub_root))
-                                        {
+                                        else if (_comp(key, sub_root->pair.first))
                                                 sub_root = sub_root->left;
-                                                if (sub_root)
-                                                        first_sub_root = sub_root->pair.first;
-                                        }
-                                        else if (key == first_sub_root)
+                                        else if (key == sub_root->pair.first)
                                                 return (sub_root);
                                 }
                                 return (this->end());
                         }
-                        std::size_t     count(Key const &key) const
+                        size_type     count(Key const &key) const
                         {
                                 if (!iterator)
                                         return (0);
-                                std::size_t n = 0;
+                                size_type n = 0;
                                 node    *sub_root = iterator;
-                                Key     first_sub_root = sub_root->pair.first;
 
                                 while (sub_root)
                                 {
-                                        if (_comp(first_sub_root, key))
-                                        {
+                                        if (_comp(sub_root->pair.first, key))
                                                 sub_root = sub_root->right;
-                                                if (sub_root)
-                                                        first_sub_root = sub_root->pair.first;
-                                        }
-                                        else if (_comp(key, first_sub_root))
-                                        {
+                                        else if (_comp(key, sub_root->pair.first))
                                                 sub_root = sub_root->left;
-                                                if (sub_root)
-                                                        first_sub_root = sub_root->pair.first;
-                                        }
-                                        else if (key == first_sub_root)
+                                        else if (key == sub_root->pair.first)
                                         {
-                                                n++;
+                                                ++n;
                                                 sub_root = sub_root->left;
-                                                if (sub_root)
-                                                        first_sub_root = sub_root->pair.first;
                                         }
                                 }
                                 return (n);
@@ -291,6 +314,8 @@ namespace ft
                                         _new_node(iterator);
                                         iterator->colour = BLACK;
                                         ++_size;
+                                        _begin = iterator;
+                                        _end = iterator;
                                         return (iterator);
                                 }
                                 Key     first_sub_root = iterator->pair.first;
@@ -331,16 +356,16 @@ namespace ft
                                 }
                                 ++_size;
                                 new_node->colour = RED;
-                                _repear_tree_insert(new_node);
-				while (_get_parent(iterator))
-                                        iterator = iterator->parent;
+                                _repair_tree_insert(new_node);
+                                _set_begin(new_node);
+                                _set_end(new_node);
                                 return (new_node);
                         }
-			node*    insert_hint(const value_type& pair, const_bi_iterator hint)
+			node*    insert_hint(node *hint,
+                                const value_type& pair, const char side)
                         {
                                 node    *new_node = 0;
-                                node    *mem = 0;
-                                char    side = 0;
+                                node    *head = iterator;
 
                                 if (!iterator)
                                 {
@@ -349,41 +374,9 @@ namespace ft
                                         _new_node(iterator);
                                         iterator->colour = BLACK;
                                         ++_size;
+                                        _begin = iterator;
+                                        _end = iterator;
                                         return (iterator);
-                                }
-                                if (hint._ptr && hint->first == pair.first)//ok
-                                        return (hint._ptr);
-                                else if (!hint._ptr || _comp(pair.first, hint->first))
-                                {
-                                        mem = hint._ptr;
-                                        --hint;
-                                        if (hint._ptr && hint->first == pair.first)//ok
-                                                return (hint._ptr);
-                                        else if (hint._ptr && _comp(hint->first, pair.first))
-                                        {
-                                                if (mem && !mem->left)// 3 < 4 < 5
-                                                        side = 2;
-                                                else
-                                                        side = 3;
-                                        }
-                                        else
-                                                return (insert(pair));
-                                }
-                                else if (_comp(hint->first, pair.first))
-                                {
-                                        mem = hint._ptr;
-                                        ++hint;
-                                        if (hint._ptr && hint->first == pair.first)//ok
-                                                return (hint._ptr);
-                                        else if (!hint._ptr || _comp(pair.first, hint->first))
-                                        {
-                                                if (!hint._ptr || (mem && !mem->right)) //30 < 35 < 40
-                                                        side = 1;
-                                                else
-                                                        side = 4;
-                                        }
-                                        else
-                                                return (insert(pair));
                                 }
                                 new_node = _rebind_node.allocate(1);
                                 _rebind_node.construct(new_node, node(pair));
@@ -391,102 +384,34 @@ namespace ft
                                 switch (side)
                                 {
                                         case 1:
-                                                new_node->parent = mem;
-                                                if (mem->right)
-                                                        mem->right->parent = new_node;
-                                                mem->right = new_node;
+                                                new_node->parent = hint;
+                                                if (hint->left)
+                                                        hint->left->parent = new_node;
+                                                hint->left = new_node;
                                                 break ;
-                                        case 2:
-                                                new_node->parent = mem;
-                                                if (mem->left)
-                                                        mem->left->parent = new_node;
-                                                mem->left = new_node;
-                                                break ;
-                                        case 3 :
-                                                new_node->parent = hint._ptr;
-                                                if (hint._ptr->right)
-                                                        hint._ptr->right->parent = new_node;
-                                                hint._ptr->right = new_node;
-                                                break ;
-                                        case 4 :
-                                                new_node->parent = hint._ptr;
-                                                if (hint._ptr->left)
-                                                        hint._ptr->left->parent = new_node;
-                                                hint._ptr->left = new_node;
+                                        case 2 :
+                                                new_node->parent = hint;
+                                                if (hint->right)
+                                                        hint->right->parent = new_node;
+                                                hint->right = new_node;
                                                 break ;
                                         default:
-                                                break;
+                                                break ;
                                 }
                                 ++_size;
                                 new_node->colour = RED;
-                                _repear_tree_insert(new_node);
-				while (_get_parent(iterator))
+                                _repair_tree_insert(new_node);
+                                _set_begin(new_node);
+                                _set_end(new_node);
+                                iterator = head;
+				while (iterator->parent)
                                         iterator = iterator->parent;
                                 return (new_node);
                         }
-                        node*    normal_insert(const value_type& pair)
-                        {
-                                node    *new_node = NULL;
-
-                                if (!iterator)
-                                {
-                                        iterator = _rebind_node.allocate(1);
-                                        _rebind_node.construct(iterator, node(pair));
-                                        _new_node(iterator);
-                                        iterator->colour = BLACK;
-                                        ++_size;
-                                        return (iterator);
-                                }
-                                new_node = _rebind_node.allocate(1);
-                                _rebind_node.construct(new_node, node(pair));
-                                _new_node(new_node);
-				Key     first_sub_root = iterator->pair.first;
-                                Key     first_new_node = pair.first;
-                                //Search
-                                while (iterator)
-                                {
-                                        if (_comp(first_sub_root, first_new_node))
-                                        {
-                                                 if (!iterator->right)
-                                                 {
-                                                        new_node->parent = iterator;
-                                                        iterator->right = new_node;
-                                                        break ;
-                                                 }
-                                                iterator = iterator->right;
-                                                first_sub_root = iterator->pair.first;
-                                        }
-                                        else if (_comp(first_new_node, first_sub_root))
-                                        {
-                                                if (!iterator->left)
-                                                {
-                                                        new_node->parent = iterator;
-                                                        iterator->left = new_node;
-                                                        break ;
-                                                }
-                                                iterator = iterator->left;
-                                                first_sub_root = iterator->pair.first;
-                                        }
-                                        else if (first_new_node == first_sub_root)
-                                        {
-                                                _destroy_node(new_node);
-                                                return (iterator);
-                                        }
-                                }
-                                ++_size;
-			      	new_node->parent = iterator;
-                                new_node->colour = RED;
-                                _repear_tree_insert(new_node);
-                                while (_get_parent(iterator))
-                                        iterator = iterator->parent;
-                                return (new_node);
-                        }
-                        std::size_t    delete_node(Key const & key)
+                        size_type    delete_node(Key const & key)
                         {
                                 node            *current = NULL;
                                 node            *smallest_key = NULL;
-                                node            *left_child = NULL;
-                                node            *right_child = NULL;
                                 node            *null_node = NULL;
                                 int             memory_colour = 0;
                                 short int       nb_child = 0;
@@ -496,66 +421,56 @@ namespace ft
                                 current = search(key);
                                 if (!current)
                                         return (0);
+                                _repair_begin_end(current);
                                 --_size;
                                 memory_colour = current->colour;
                                 if (current->left)
-                                {
                                         ++nb_child;
-                                        left_child = current->left;
-                                }
                                 if (current->right)
-                                {
                                         ++nb_child;
-                                        right_child = current->right;
-                                }
                                 if (nb_child < 2)
                                 {
                                         memory_colour = current->colour;
-                                        null_node = _delete_one_child(&current, &left_child, &right_child
+                                        null_node = _delete_one_child(&current, current->left, current->right
                                                 , memory_colour);
-                                        if ((current && current->colour == RED) || (current && memory_colour == RED))
+                                        if ((current && current->colour == RED)
+                                                || (current && memory_colour == RED))
                                         {
                                                 current->colour = BLACK;
                                                 if (!current->parent)
                                                         iterator = current;
                                         }
-                                        else if (current && current->colour == BLACK && memory_colour == BLACK)
-                                                _repear_double_black(current);
+                                        else if (current && current->colour == BLACK
+                                                && memory_colour == BLACK)//double
+                                                _repair_double_black(current);
                                 }
                                 else if (nb_child == 2)
                                 {
-                                        //find smallest key of right (or left) subtree
+                                        //find smallest key of subtree
                                         smallest_key = _get_inorder(current);
                                         if (!current)
                                                 return (0);
-                                        //deleted node become smallest key node
-                                        node*   cpy = _rebind_node.allocate(1);
-                                        _rebind_node.construct(cpy, node(smallest_key->pair, current));
-                                        if (!cpy->parent)
-                                                iterator = cpy;
-                                        else if (cpy->parent->left == current)
-                                                cpy->parent->left = cpy;
-                                        else if (cpy->parent->right == current)
-                                                cpy->parent->right = cpy;
-                                        if (cpy->left->parent == current)
-                                                cpy->left->parent = cpy;
-                                        if (cpy->right->parent == current)
-                                                cpy->right->parent = cpy;
+                                        //copy content of smallest and take current place
+                                        node*   cpy = _copy_node(smallest_key, current);
+                                        if (cpy->pair.first == _begin->pair.first)
+                                                _begin = cpy;
                                         _destroy_node(current);
+					if (!cpy->parent)
+						iterator = cpy;
                                         //delete node from subtree
                                         memory_colour = smallest_key->colour;
-                                        left_child = smallest_key->left;
-                                        right_child = smallest_key->right;
-                                        null_node = _delete_one_child(&smallest_key, &left_child, &right_child
-                                                , memory_colour);                                        
-                                        if ((smallest_key && smallest_key->colour == RED) || (smallest_key && memory_colour == RED))
+                                        null_node = _delete_one_child(&smallest_key, smallest_key->left, smallest_key->right
+                                                , memory_colour); //delete then replace
+                                        if ((smallest_key && smallest_key->colour == RED)
+                                                || (smallest_key && memory_colour == RED))
                                         {
                                                 smallest_key->colour = BLACK;
                                                 if (!smallest_key->parent)
                                                         iterator = smallest_key;
                                         }
-                                        else if (smallest_key && smallest_key->colour == BLACK && memory_colour == BLACK)
-                                                _repear_double_black(smallest_key);
+                                        else if (smallest_key && smallest_key->colour == BLACK
+                                                && memory_colour == BLACK)//double
+                                                _repair_double_black(smallest_key);
                                 }
                                 if (null_node == iterator)
                                         iterator = NULL;
@@ -569,32 +484,22 @@ namespace ft
                         }
                         node*   begin() const
                         {
-                                node    *start = iterator;
-
-                                if (!start)
-                                        return (NULL);
-                                while (start->parent)
-                                        start = start->parent;
-                                while (start->left)
-                                        start = start->left;
-                                return (start);
+				return (_begin);
                         }
                         node*   end() const
                         {
-                                node    *start = iterator;
-
-                                if (!start)
-                                        return (NULL);
-                                while (start->parent)
-                                        start = start->parent;
-                                while (start->right)
-                                        start = start->right;
-                                return (start->right);
+				if (!_end)
+                                        return (_end);
+                                return (_end->right);
                         }
-                        std::size_t   max_size() const
+                        size_type   max_size() const
                         {
                                 return (_rebind_node.max_size());
                         }
+			/*
+			 *	seek 4, first elem is 5
+			 *	4 is not superior to 5 so go to left
+			*/
 			node*	lower_bound(Key const & key) const
 			{
 				node*	start = iterator;
@@ -629,317 +534,442 @@ namespace ft
 				}
 				return (ret);
 			}
-                        std::size_t     getSize() const
+                        size_type     getSize() const
                         {
                                 return (this->_size);
                         }
+                        void    swap(red_black_tree & tree)
+                        {
+                                std::swap(_rebind_node, tree._rebind_node);
+                                std::swap(_comp, tree._comp);
+                                std::swap(_allocator, tree._allocator);
+                                std::swap(_size, tree._size);
+                                std::swap(iterator, tree.iterator);
+                                std::swap(_begin, tree._begin);
+                                std::swap(_end, tree._end);
+                        }
                         node*  iterator;
 
-                        private:
-                                /* Seek previous value of current
-                                        since this function is used into a double child, I just need to seek 
-                                        previous value
-                                */
-                                node    *_get_inorder(node *current)
+                private:
+                        void    _set_begin(node *new_node)
+                        {
+                                if (_comp(new_node->pair.first, _begin->pair.first))
+                                        _begin = new_node;
+                        }
+                        void    _set_end(node *new_node)
+                        {
+                                if (_comp(_end->pair.first, new_node->pair.first))
+                                        _end = new_node;
+                        }
+                        void    _repair_begin_end(node *current)
+                        {
+                                if (current == _begin)
                                 {
-                                        if (!current)
-                                                return (NULL);
-                                        if (current->left)
+                                        if (_begin->right)
                                         {
-                                                current = current->left;
-                                                while (current->right)
-                                                        current = current->right;
+                                                _begin = _begin->right;
+                                                        while (_begin->left) //then go to leftest key
+                                                        _begin = _begin->left;
                                         }
-                                        return (current);
+                                        else
+                                                _begin = _begin->parent;
                                 }
-                                
-                                node*    _delete_one_child(node **current, node **left_child, node **right_child
-                                        , int memory_colour)
+                                if (current == _end)
                                 {
-                                        node*   parent = _get_parent(*current);
-
-                                        if (parent && parent->left == *current)
+                                        if (_end->left)
                                         {
-                                                parent->left = NULL;
-                                                if (*left_child)
-                                                        parent->left = *left_child;
-                                                else if (*right_child)
-                                                        parent->left = *right_child;
+                                                _end = _end->left;
+                                                while (_end->right) //then go to rightest key
+                                                        _end = _end->right;
                                         }
-                                        else if (parent && parent->right == *current)
-                                        {
-                                                parent->right = NULL;
-                                                if (*left_child)
-                                                        parent->right = *left_child;
-                                                else if (*right_child)
-                                                        parent->right = *right_child;
-                                        }
-                                        _destroy_node(*current);
-                                        *current = NULL;
-                                        if (*left_child)
-                                        {
-                                                (*left_child)->parent = parent;
-                                                *current = *left_child;
-                                        }
-                                        else if (*right_child)
-                                        {
-                                                (*right_child)->parent = parent;
-                                                *current = *right_child;
-                                        }
-                                        else if (memory_colour == BLACK)
-                                        {
-                                                *current = _rebind_node.allocate(1);
-                                                _rebind_node.construct(*current, node());
-                                                _new_node(*current);
-                                                (*current)->left = _rebind_node.allocate(1);
-                                                _rebind_node.construct((*current)->left, node());
-                                                _new_node((*current)->left);
-                                                (*current)->right = _rebind_node.allocate(1);
-                                                _rebind_node.construct((*current)->right, node());
-                                                _new_node((*current)->right);
-                                                (*current)->parent = parent;
-                                                (*current)->colour = BLACK;
-                                                (*current)->left->colour = BLACK;
-                                                (*current)->right->colour = BLACK;
-                                                return (*current);
-                                        }
+                                        else
+                                                _end = _end->parent;
+                                }
+                        }
+                        node    *_copy_node(node *smallest_key, node *current)
+                        {
+                                node*   cpy = _rebind_node.allocate(1);
+                                _rebind_node.construct(cpy, node(smallest_key->pair, current));
+                                if (!cpy->parent)//parent part
+                                        iterator = cpy;
+                                else if (cpy->parent->left == current)
+                                        cpy->parent->left = cpy;
+                                else if (cpy->parent->right == current)
+                                        cpy->parent->right = cpy;
+                                if (cpy->left->parent == current)//child part
+                                        cpy->left->parent = cpy;
+                                if (cpy->right->parent == current)
+                                        cpy->right->parent = cpy;
+                                return (cpy);
+                        }
+                        /* Seek previous value of current
+                                since this function is used into a double child, I just need to seek 
+                                previous value
+                        */
+                        node    *_get_inorder(node *current)
+                        {
+                                if (!current)
                                         return (NULL);
-                                }
-                                void    _repear_double_black(node *current)
+                                if (current->left)
                                 {
-                                        node    *sibling = _get_sibling(current);
+                                        current = current->left;
+                                        while (current->right)
+                                                current = current->right;
+                                }
+                                return (current);
+                        }
+                        /*
+                                delete current node
+                                then put next node at the deleted pos
+                                if current node color was red, just transform it into black
+                                memory_color == black create node 
+                        */
+                        node*    _delete_one_child(node **current, node *left_child, node *right_child
+                                , int memory_colour)
+                        {
+                                node*   parent = _get_parent(*current);
 
-                                        if (current && !current->parent)
-                                        {
-                                                iterator = current;
-                                                current->colour = BLACK;
-                                                return ;
-                                        }
-                                        else if (!sibling)
-                                                _repear_double_black(current->parent);
-                                        else if (current && current->parent && sibling)
-                                        {
-                                                if (sibling->colour == BLACK
-                                                        && ((sibling->left && sibling->left->colour == RED)
-                                                        || (sibling->right && sibling->right->colour == RED)))
-                                                {
-                                                        if (sibling->parent->left == sibling)
-                                                        {
-                                                                if (sibling->left && sibling->left->colour == RED) //left left case
-                                                                {
-                                                                        sibling->left->colour = BLACK;
-                                                                        sibling->colour = sibling->parent->colour;
-                                                                        _rotate_right(sibling->parent);
-                                                                }
-                                                                else if (sibling->right) //left right case
-                                                                {
-                                                                        sibling->right->colour = BLACK;
-                                                                        _rotate_left(sibling);
-                                                                        _rotate_right(current->parent);
-                                                                }
-                                                        }
-                                                        else
-                                                        {
-                                                                if (sibling->right && sibling->right->colour == RED) //right right case
-                                                                {
-                                                                        sibling->right->colour = BLACK;
-                                                                        sibling->colour = sibling->parent->colour;
-                                                                        _rotate_left(sibling->parent);
-                                                                }
-                                                                else if (sibling->left)//right left case
-                                                                {
-                                                                        sibling->left->colour = BLACK;
-                                                                        _rotate_right(sibling);
-                                                                        _rotate_left(current->parent);
-                                                                }
-                                                        }
-                                                        if (!sibling->parent)
-                                                                iterator = sibling;
-                                                        else if (!sibling->parent->parent)
-                                                                iterator = sibling->parent;
-                                                        
-                                                }
-                                                else if (sibling->colour == RED)
-                                                        _repear_double_blackTwo(current);
-                                                else if (sibling->colour == BLACK)
-                                                {
-                                                        sibling->colour = RED;
-                                                        if (current->parent && current->parent->colour == BLACK)
-                                                                _repear_double_black(current->parent);
-                                                        else if (current->parent)
-                                                                current->parent->colour = BLACK;
-                                                }
-                                        }
-                                }
-                                void    _repear_double_blackTwo(node *current)
+                                if (parent && parent->left == *current)
                                 {
-                                        node*   sibling = _get_sibling(current);
-
-                                        if (!sibling)
-                                                return ;
-                                        sibling->colour = BLACK;
-                                        current->parent->colour = RED;
-                                        if (sibling == sibling->parent->left)
-                                                _rotate_right(current->parent);
-                                        else if (sibling == sibling->parent->right)
-                                                _rotate_left(current->parent);
-                                        if (!_get_grand_parent(current)->parent)
-                                                iterator = _get_grand_parent(current);
-                                        _repear_double_black(current);
-                                }
-                                void    _destroy_node(node *current)
-                                {
-                                        if (!current)
-                                                return ;
-                                        _rebind_node.destroy(current);
-                                        _rebind_node.deallocate(current, 1);
-                                }
-                                void    _rotate_right(node *current)
-                                {
-                                        if (!current)
-                                                return ;
-                                        node    *parent = _get_parent(current);
-                                        node*    left_child = current->left; //cpy left child of parent
-
-                                        current->left = left_child->right; //give to left child it's right child
-                                        if (left_child->right) //check if left child has a right child
-                                                left_child->right->parent = current; //give this child head the parent address
-                                        left_child->parent = parent;
-                                        left_child->right = current;
-                                        if (parent && parent->left == current)
+                                        parent->left = NULL;
+                                        if (left_child)
                                                 parent->left = left_child;
-                                        else if (parent && parent->right == current)
-                                                parent->right = left_child;
-                                        current->parent = left_child;
-                                }
-                                void    _rotate_left(node *current)
-                                {
-                                        if (!current)
-                                                return ;
-                                        node    *parent = _get_parent(current);
-                                        node*    right_child = current->right; //cpy right child of current
-
-                                        current->right = right_child->left; //give to left child it's right child
-                                        if (right_child->left) //check if left child has a right child
-                                                right_child->left->parent = current; //give this child head the current address
-                                        right_child->parent = parent;
-                                        right_child->left = current;
-                                        if (parent && parent->left == current)
+                                        else if (right_child)
                                                 parent->left = right_child;
-                                        else if (parent && parent->right == current)
+                                }
+                                else if (parent && parent->right == *current)
+                                {
+                                        parent->right = NULL;
+                                        if (left_child)
+                                                parent->right = left_child;
+                                        else if (right_child)
                                                 parent->right = right_child;
-                                        current->parent = right_child;
                                 }
-                                node    *_get_grand_parent(node* current)
+                                _destroy_node(*current);
+                                *current = NULL;
+                                if (left_child)
                                 {
-                                        if (!current)
-                                                return (NULL);
-                                        if (!current->parent)
-                                                return (NULL);
-                                        return (current->parent->parent);
+                                        (left_child)->parent = parent;
+                                        *current = left_child;
                                 }
-                                node    *_get_parent(node* current)
+                                else if (right_child)
                                 {
-                                        if (!current)
-                                                return (NULL);
-                                        return (current->parent);
+                                        (right_child)->parent = parent;
+                                        *current = right_child;
                                 }
-                                node    *_get_uncle(node *current)
+                                else if (memory_colour == BLACK)//need "null" node to repair tree
                                 {
-                                        node*   parent = _get_parent(current);
-                                        node*   g_parent_node = _get_grand_parent(current);
-                                        if (!g_parent_node || !parent)
-                                                return (NULL);
-                                        if (g_parent_node->left != parent)
-                                                return (g_parent_node->left);
-                                        else if (g_parent_node->right != parent)
-                                                return (g_parent_node->right);
-                                        return (NULL);
+                                        *current = _rebind_node.allocate(1);
+                                        _rebind_node.construct(*current, node());
+                                        _new_node(*current);
+                                        (*current)->left = _rebind_node.allocate(1);
+                                        _rebind_node.construct((*current)->left, node());
+                                        _new_node((*current)->left);
+                                        (*current)->right = _rebind_node.allocate(1);
+                                        _rebind_node.construct((*current)->right, node());
+                                        _new_node((*current)->right);
+                                        (*current)->parent = parent;
+                                        (*current)->colour = BLACK;
+                                        (*current)->left->colour = BLACK;
+                                        (*current)->right->colour = BLACK;
+                                        return (*current);
                                 }
-                                node    *_get_sibling(node *current)
+                                return (NULL);
+                        }
+                        
+                        void    _repair_double_black(node *current)
+                        {
+                                node    *sibling = _get_sibling(current);
+                                //if current is root, just put it black and stop
+                                if (current && !current->parent)
                                 {
-                                        node    *parent = _get_parent(current);
-
-                                        if (!parent)
-                                                return (NULL);
-                                        if (parent->left && parent->left != current)
-                                                return (parent->left);
-                                        else if (parent->right && parent->right != current)
-                                                return (parent->right);
-                                        return (NULL);
+                                        iterator = current;
+                                        current->colour = BLACK;
+                                        return ;
                                 }
-                                void    _repear_case_one(node *current)
+                                else if (!sibling)
+                                        _repair_double_black(current->parent); //if no sibling, give parent then repair if red
+                                else if (current && current->parent && sibling)
                                 {
-                                        node    *parent = _get_parent(current);
-                                        node    *uncle = _get_uncle(current);
-                                        node    *g_parent_node = _get_grand_parent(current);
-
-                                        while (g_parent_node && g_parent_node->colour == BLACK)
+                                        if (sibling->colour == BLACK
+                                                && ((sibling->left && sibling->left->colour == RED)
+                                                || (sibling->right && sibling->right->colour == RED)))
                                         {
-                                                parent = _get_parent(current);
-                                                uncle = _get_uncle(current);
-                                                g_parent_node = _get_grand_parent(current);
-                                                if (parent)
-                                                        parent->colour = BLACK;
-                                                if (uncle)
-                                                        uncle->colour = BLACK;
-                                                if (g_parent_node)
-                                                        g_parent_node->colour = RED;
+                                                _repair_double_black_two(current, sibling);
                                         }
-                                        _repear_tree_insert(g_parent_node);
-                                }
-                                void    _repear_tree_insert(node *current)
-                                {
-                                        node    *uncle = _get_uncle(current);
-                                        node    *parent_node = NULL;
-                                        node    *g_parent_node = NULL;
-                                        parent_node = _get_parent(current);
-                                        g_parent_node = _get_grand_parent(current);
-
-					if (!current->parent)
-					{
-                                                current->colour = BLACK;
-						iterator = current;
-					}
-					else if (parent_node->colour == BLACK)
-                                                return ;
-                                        else if (uncle && uncle->colour == RED) //oncle and parent must be black
-                                                _repear_case_one(current);
-                                        else //parent red uncle black
+                                        else if (sibling->colour == RED) //since parent will be moved, you need to recolor this parent otherwise
+                                        {                                 //it will break tree (current is null node)
+                                                sibling->colour = BLACK;
+                                                sibling->parent->colour = RED;
+                                                //now sibling is black, now it's left left or right right case
+                                                //to repair tree
+                                                if (sibling->parent && sibling == sibling->parent->left)
+                                                        _rotate_right(sibling->parent);
+                                                else if (sibling->parent && sibling == sibling->parent->right)
+                                                        _rotate_left(sibling->parent);
+                                                if (!_get_grand_parent(current)->parent)
+                                                        iterator = _get_grand_parent(current);
+                                        }
+                                        else if (sibling->colour == BLACK) //all children are black
                                         {
-                                                if (g_parent_node->left && current == g_parent_node->left->right)
-                                                {
-                                                        _rotate_left(parent_node);
-                                                        parent_node = current; //parent is now current
-                                                        current = current->left; //current node is now it's old parent
-                                                }
-                                                else if (g_parent_node->right && current == g_parent_node->right->left)
-                                                {
-                                                        _rotate_right(parent_node);
-                                                        parent_node = current;
-                                                        current = current->right;
-                                                }
-                                                if (g_parent_node && current == parent_node->left)
-                                                        _rotate_right(g_parent_node);
-                                                else if (g_parent_node && current == parent_node->right)
-                                                        _rotate_left(g_parent_node);
+                                                sibling->colour = RED;
+                                                //now need to push black parent lvl
+                                                if (sibling->parent->colour == BLACK)
+                                                        _repair_double_black(sibling->parent); //already black, try recurse repair
+                                                else
+                                                        sibling->parent->colour = BLACK; //if parent is red
+                                        }
+                                }
+                        }
+                        void    _repair_double_black_two(node *current, node *sibling)
+                        {
+                                if (!current || !sibling)
+                                        return ;
+                                if (sibling->parent->left == sibling)
+                                {
+                                        if (sibling->left && sibling->left->colour == RED) //left left case                                        before:     3 (b)
+                                        {                                                  //                                                              2(b)     4 (b+b)
+                                                sibling->left->colour = BLACK;             //                                                           1(r) 2.5 (r)
+                                                sibling->colour = sibling->parent->colour; //need to take back parent colour
+                                                _rotate_right(sibling->parent);            //since it will be moved otherwise it will destroy tree  after:      2(b)
+                                        }                                                  //                                                               1(b)     3(b)
+                                        else if (sibling->right) //right child is 100% red no need to check (left right)                                           2.5(r) 4(b)
+                                        {
+                                                sibling->right->colour = BLACK; //it will be at sibling place
+                                                _rotate_left(sibling);
+                                                _rotate_right(current->parent); //need now to move parent otherwise it's a line
+                                        }
+                                }
+                                else
+                                {
+                                        if (sibling->right && sibling->right->colour == RED) //right right case
+                                        {
+                                                sibling->right->colour = BLACK;
+                                                sibling->colour = sibling->parent->colour; //need to take back parent colour
+                                                _rotate_left(sibling->parent);             //since it will be moved otherwise it will destroy tree
+                                        }
+                                        else if (sibling->left)//left child 100% red
+                                        {
+                                                sibling->left->colour = BLACK; //it will be at sibling place
+                                                _rotate_right(sibling);
+                                                _rotate_left(current->parent);//need now to move parent otherwise it's a line
+                                        }
+                                }
+                                if (!sibling->parent)
+                                        iterator = sibling;
+                                else if (!sibling->parent->parent)
+                                        iterator = sibling->parent;
+                        }
+                        void    _destroy_node(node *current)
+                        {
+                                if (!current)
+                                        return ;
+                                _rebind_node.destroy(current);
+                                _rebind_node.deallocate(current, 1);
+                        }
+                        void    _rotate_right(node *current)
+                        {
+                                if (!current)
+                                        return ;
+                                node *child = current->left;
+                                node *parent = _get_parent(current);
+
+                                if (parent && parent->left == current)
+                                        parent->left = child;
+                                else if (parent && parent->right == current)
+                                        parent->right = child;
+                                if (child)
+                                {
+                                        child->parent = parent;
+                                        if (child->right)
+                                                child->right->parent = current;
+                                        current->left = child->right;
+                                        child->right = current;
+                                }
+                                current->parent = child;
+                        }
+                        void    _rotate_left(node *current)
+                        {
+                                if (!current)
+                                        return ;
+                                node *child = current->right;
+                                node *parent = _get_parent(current);
+
+                                if (parent && parent->left == current)
+                                        parent->left = child;
+                                else if (parent && parent->right == current)
+                                        parent->right = child;
+                                if (child)
+                                {
+                                        child->parent = parent;
+                                        if (child->left)
+                                                child->left->parent = current;
+                                        current->right = child->left;
+                                        child->left = current;
+                                }
+                                current->parent = child;
+                        }
+                        node    *_get_grand_parent(node* current)
+                        {
+                                if (!current)
+                                        return (NULL);
+                                if (!current->parent)
+                                        return (NULL);
+                                return (current->parent->parent);
+                        }
+                        node    *_get_parent(node* current)
+                        {
+                                if (!current)
+                                        return (NULL);
+                                return (current->parent);
+                        }
+                        node    *_get_uncle(node *current)
+                        {
+                                node*   parent = _get_parent(current);
+                                node*   g_parent_node = _get_grand_parent(current);
+                                if (!g_parent_node || !parent)
+                                        return (NULL);
+                                if (g_parent_node->left != parent)
+                                        return (g_parent_node->left);
+                                else if (g_parent_node->right != parent)
+                                        return (g_parent_node->right);
+                                return (NULL);
+                        }
+                        node    *_get_sibling(node *current)
+                        {
+                                node    *parent = _get_parent(current);
+
+                                if (!parent)
+                                        return (NULL);
+                                if (parent->left && parent->left != current)
+                                        return (parent->left);
+                                else if (parent->right && parent->right != current)
+                                        return (parent->right);
+                                return (NULL);
+                        }
+                        void    _repear_case_one(node *current)
+                        {
+                                node    *parent = _get_parent(current);
+                                node    *uncle = _get_uncle(current);
+                                node    *g_parent_node = _get_grand_parent(current);
+
+                                while (g_parent_node && g_parent_node->colour == BLACK)
+                                {
+                                        parent = _get_parent(current);
+                                        uncle = _get_uncle(current);
+                                        g_parent_node = _get_grand_parent(current);
+                                        if (parent)
+                                                parent->colour = BLACK;
+                                        if (uncle)
+                                                uncle->colour = BLACK;
+                                        if (g_parent_node)
+                                                g_parent_node->colour = RED;
+                                }
+                                _repair_tree_insert(g_parent_node);
+                        }
+                        /* father and uncle node become black, grang_parent red*/
+                        void    _case_one(node *current)
+                        {
+                                node    *uncle = _get_uncle(current);
+                                node    *g_parent_node = _get_grand_parent(current);
+
+                                while (g_parent_node && g_parent_node->colour == RED)
+                                {
+                                        uncle = _get_uncle(current);
+                                        g_parent_node = _get_grand_parent(current);
+                                        if (uncle)
+                                                uncle->colour = BLACK;
+                                        if (current->parent)
+                                                current->parent->colour = BLACK;
+                                        if (g_parent_node)
+                                                g_parent_node->colour = RED;
+                                        current = g_parent_node->parent;
+                                }
+                                _repair_tree_insert(g_parent_node);//repair colour if needed
+                        }
+
+                        /*
+                                ex :
+                                        3 black              2 black (p)
+                                        2 red        ->   1 red        3 red (gp)
+                                        1 red (is new)
+                        */
+                        void    _case_two(node *current)
+                        {
+                                if (!current)
+                                        return ;
+                                node    *g_parent_node = _get_grand_parent(current);
+                                node    *parent_node = _get_parent(current);
+
+                                if (!g_parent_node || !parent_node)
+                                        return ;
+                                if (g_parent_node->left == parent_node)
+                                {
+                                        if (current == parent_node->left)
+                                        {
+                                                _rotate_right(g_parent_node);
                                                 parent_node->colour = BLACK;
                                                 g_parent_node->colour = RED;
-						if (!parent_node->parent)
-							iterator = parent_node;
-					}
+                                        }
+                                        else if (current == parent_node->right)
+                                        {
+                                                _rotate_left(parent_node);
+                                                _rotate_right(g_parent_node); // still form a red line so need to repair it with
+                                                current->colour = BLACK;        // rotate right
+                                                g_parent_node->colour = RED;
+                                        }
                                 }
-                                void    _new_node(node* current)
+                                else if (g_parent_node->right == parent_node)
                                 {
-                                        current->parent = NULL;
-                                        current->left = NULL;
-                                        current->right = NULL;
-                                        current->colour = 0;
+                                        if (current == parent_node->right)
+                                        {
+                                                _rotate_left(g_parent_node);
+                                                parent_node->colour = BLACK;
+                                                g_parent_node->colour = RED;
+                                        }
+                                        else if (current == parent_node->left)
+                                        {
+                                                _rotate_right(parent_node);
+                                                _rotate_left(g_parent_node);
+                                                current->colour = BLACK;
+                                                g_parent_node->colour = RED;
+                                        }
                                 }
-                                rebind_node     _rebind_node;
-                                key_compare     _comp;
-                                allocator_type	_allocator;
-                                std::size_t     _size;
+                        }
+                        void    _repair_tree_insert(node *current)
+                        {
+                                node    *uncle = _get_uncle(current);
+                                node    *parent_node = _get_parent(current);
+
+                                if (!current)
+                                        return ;
+                                if (!parent_node)
+                                {
+                                        current->colour = BLACK;
+                                        return ;
+                                }
+                                else if (parent_node->colour == BLACK)
+                                        return ;
+                                else if (uncle && uncle->colour == RED)
+                                {
+                                        _repear_case_one(current);
+                                        return ;
+                                }
+                                _case_two(current); //uncle black
+                        }
+                        void    _new_node(node* current)
+                        {
+                                current->parent = NULL;
+                                current->left = NULL;
+                                current->right = NULL;
+                                current->colour = 0;
+                        }
+                        rebind_node     _rebind_node;
+                        key_compare     _comp;
+                        allocator_type	_allocator;
+                        size_type     _size;
+                        node*  _begin;
+                        node*  _end;
         };
         
         /* NON CONST */

@@ -2,6 +2,7 @@
 # define ITERATOR_BACKWARD_HPP
 
 #include <vector>
+#include "../../includes/containers/vector.hpp"
 #include <iterator>
 #include <iostream>
 

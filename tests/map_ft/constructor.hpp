@@ -2,6 +2,8 @@
 # define CONSTRUCTOR_MAP_HPP
 
 #include <iostream>
+#include <map>
+#include <sstream>
 #include "../../includes/containers/map.hpp"
 
 void    default_constructor_map();

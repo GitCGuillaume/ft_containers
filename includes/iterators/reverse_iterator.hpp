@@ -2,6 +2,7 @@
 # define REVERSE_ITERATOR_HPP
 
 #include "iterator_traits.hpp"
+#include "../library_headers/utils.hpp"
 
 namespace ft
 {
@@ -14,7 +15,7 @@ namespace ft
             typedef typename ft::iterator_traits<Iter>::difference_type   difference_type;
             typedef typename ft::iterator_traits<Iter>::pointer       pointer;
             typedef typename ft::iterator_traits<Iter>::reference     reference;
-            reverse_iterator(){};
+            reverse_iterator() : _current(Iter()){};
             explicit    reverse_iterator(iterator_type it) : _current(it){}
             template<class U>
             reverse_iterator(const reverse_iterator<U>& rev_it) : _current(rev_it.base()){}
@@ -33,14 +34,14 @@ namespace ft
             }
             reference  operator*() const
             {
-                Iter    tmp(this->_current);
+                Iter    tmp = this->_current;
 
                 return (*--tmp);
             }
             pointer  operator->() const
             {
-                return (&this->operator*());
-            }
+            	return (ft::addressof(this->operator*()));
+	    }
             reference   operator[](difference_type n) const
             {
                 return (this->base()[-n - 1]);
@@ -60,14 +61,14 @@ namespace ft
             /* POST */
             reverse_iterator    operator++(int)
             {
-                reverse_iterator    tmp(*this);
+                reverse_iterator    tmp = *this;
 
                 --this->_current;
                 return (tmp);
             }
             reverse_iterator    operator--(int)
             {
-                reverse_iterator    tmp(*this);
+                reverse_iterator    tmp = *this;
 
                 ++this->_current;
                 return (tmp);

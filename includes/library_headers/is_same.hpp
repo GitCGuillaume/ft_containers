@@ -1,6 +1,8 @@
 #ifndef IS_SAME_HPP
 # define IS_SAME_HPP
 
+#include "integral_constant.hpp"
+
 namespace ft
 {
     /* False type and true type into is_integral.hpp */

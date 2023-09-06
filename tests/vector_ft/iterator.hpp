@@ -2,6 +2,7 @@
 # define ITERATOR_VECTOR_HPP
 
 #include <iostream>
+#include <vector>
 #include "../../includes/containers/vector.hpp"
 
 void    iterator_test();

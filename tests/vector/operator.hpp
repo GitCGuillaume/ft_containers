@@ -3,7 +3,9 @@
 
 #include <vector>
 #include <iostream>
+#include "../../includes/containers/vector.hpp"
 
 void    equal_vector();
+void    non_member_operator_vector();
 
 #endif

@@ -3,7 +3,7 @@
 void    stack_empty()
 {
     std::cout << "Stack empty" << std::endl;
-    std::stack<int> stack;
+    NAMESPACE::stack<int> stack;
 
     std::cout << stack.empty() << std::endl;
     stack.push(1);
@@ -13,7 +13,7 @@ void    stack_empty()
 void    stack_size()
 {
     std::cout << "Stack size" << std::endl;
-    std::stack<int> stack;
+    NAMESPACE::stack<int> stack;
 
     std::cout << stack.size() << std::endl;
     stack.push(1);
@@ -23,10 +23,10 @@ void    stack_size()
 void    stack_equal()
 {
     std::cout << "Operator stack" << std::endl;
-    std::stack<int>    stack_1;
-    std::stack<int>    stack_2;
-    std::stack<int>    stack_3;
-    std::stack<int>    stack_4;
+    NAMESPACE::stack<int>    stack_1;
+    NAMESPACE::stack<int>    stack_2;
+    NAMESPACE::stack<int>    stack_3;
+    NAMESPACE::stack<int>    stack_4;
 
     stack_1.push(1);
     stack_1.push(2);
@@ -73,7 +73,7 @@ void    stack_equal()
     std::cout << (stack_2 >= stack_1)<< std::endl;
     std::cout << (stack_4 >= stack_1)<< std::endl;
     std::cout << (stack_1 >= stack_4)<< std::endl;
-     std::cout << "<=" << std::endl;
+    std::cout << "<=" << std::endl;
     std::cout << (stack_1 <= stack_2) << std::endl;
     std::cout << (stack_1 <= stack_3) << std::endl;
     std::cout << (stack_2 <= stack_1) << std::endl;

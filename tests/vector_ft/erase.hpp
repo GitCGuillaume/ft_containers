@@ -1,6 +1,7 @@
 #ifndef ERASE_HPP
 # define ERASE_HPP
 
+#include <vector>
 #include <iostream>
 #include "../../includes/containers/vector.hpp"
 

@@ -1,6 +1,7 @@
 #ifndef CAPACITIES_HPP
 # define CAPACITIES_HPP
 
+#include <vector>
 #include "../../includes/containers/vector.hpp"
 #include <iostream>
 

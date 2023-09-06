@@ -2,6 +2,7 @@
 # define LOOKUP_HPP
 
 #include <iostream>
+#include <map>
 #include "../../includes/containers/map.hpp"
 
 void    lookup_find();

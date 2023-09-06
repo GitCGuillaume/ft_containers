@@ -2,11 +2,11 @@
 
 void    at_map()
 {
-    ft::map<std::string, std::string>   map;
+    NAMESPACE::map<std::string, std::string>   map;
 
     map["un"] = "value_un";
     std::cout << "at : " << map.at("un") << std::endl;
-    const ft::map<std::string, std::string>   map2(map.begin(), map.end());
+    const NAMESPACE::map<std::string, std::string>   map2(map.begin(), map.end());
     std::cout << "at : " << map.at("un") << std::endl;
     try{
         map.at("");

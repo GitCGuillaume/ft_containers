@@ -3,7 +3,7 @@
 void    empty_bracket()
 {
     std::cout << "Empty bracket MAP" << std::endl;
-    ft::map<int, int> map;
+    NAMESPACE::map<int, int> map;
     std::cout << map[0] << std::endl;
     std::cout << map[1] << std::endl;
     std::cout << map[2] << std::endl;
@@ -25,7 +25,7 @@ void    empty_bracket()
 void    bracket_map()
 {
     std::cout << "Bracket MAP" << std::endl;
-    ft::map<int, int> map;
+    NAMESPACE::map<int, int> map;
     map[0] = 1;
     std::cout << map[0] << std::endl;
     map[1] = 2;

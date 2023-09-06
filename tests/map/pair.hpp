@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <iostream>
+#include "../../includes/containers/map.hpp"
 
 void    pair_default();
 void    pair_equal();

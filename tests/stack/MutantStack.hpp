@@ -4,6 +4,9 @@
 #include <stack>
 #include <vector>
 #include <map>
+#include "../../includes/containers/stack.hpp"
+#include "../../includes/containers/vector.hpp"
+#include "../../includes/containers/map.hpp"
 #include <algorithm>
 #include "constructor.hpp"
 

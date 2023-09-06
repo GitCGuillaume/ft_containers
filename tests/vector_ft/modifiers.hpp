@@ -2,6 +2,8 @@
 # define MODIFIERS_HPP
 
 #include <iostream>
+#include <vector>
+#include <sstream>
 #include "../../includes/containers/vector.hpp"
 
 void    clear();
@@ -11,10 +13,10 @@ void    insert_reserve_100k();
 void    insert_return();
 void    count_insert_100();
 void    iterator_insert();
+void	iterator_input_insert_range();
 void    push_back_vector();
 void    pop_back_vector();
 void    resize();
 void    swap_vector();
 void    swap_vector_non_member();
-
 #endif
