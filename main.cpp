@@ -12,14 +12,14 @@ void	execute_function(void (*ft)(void), char timer)
 	}
 	else
 	{
-		clock_t start, end;
+		//clock_t start, end;
 
-		start = clock();
+		//start = clock();
 		ft();
-		end = clock();
-		double timing = end - start;
-		double seconds = (timing * 1000) / CLOCKS_PER_SEC;
-		std::cout << std::setprecision(4) << (seconds) << std::endl;
+		//end = clock();
+		//double timing = end - start;
+		//double seconds = (timing * 1000) / CLOCKS_PER_SEC;
+		//std::cout << std::setprecision(4) << (seconds) << std::endl;
 	}
 }
 

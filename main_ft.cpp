@@ -11,19 +11,19 @@
 
 void	execute_function(void (*ft)(void))
 {
-	struct timeval	start, end;
-	double		sum_time;
-	long int	mem_seconds;
-	long int	mem_micro_s;
+	//struct timeval	start, end;
+	//double		sum_time;
+	//long int	mem_seconds;
+	//long int	mem_micro_s;
 
-	gettimeofday(&start, NULL);
+	//gettimeofday(&start, NULL);
 	ft();
-	gettimeofday(&end, NULL);
-	mem_seconds = end.tv_sec - start.tv_sec;
-	mem_micro_s = end.tv_usec - start.tv_usec;
-	sum_time = mem_seconds + mem_micro_s * 1e-6;
-	std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
-	std::cout << std::setprecision(0);
+	//gettimeofday(&end, NULL);
+	//mem_seconds = end.tv_sec - start.tv_sec;
+	//mem_micro_s = end.tv_usec - start.tv_usec;
+	//sum_time = mem_seconds + mem_micro_s * 1e-6;
+	//std::cout << std::setprecision(17) << std::fixed << sum_time << std::endl;
+	//std::cout << std::setprecision(0);
 }
 
 void	execute_function_2(int argc, char** argv)
