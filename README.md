@@ -1,7 +1,7 @@
 # Projet Ft_containers
 
 Projet qui consiste à programmer des "containers" en C++, version 98, ces containers sont utilisés par la bibliothèque standard C++.
-Les containeurs sont un moyen de stocker des données avec à la clé différentes optimisations et techniques de stockage de données.
+Les containers sont un moyen de stocker des données avec à la clé différentes optimisations et techniques de stockage de données.
 
 Pour ce faire nous devons utiliser des concepts comme les templates et les interfaces.
 
